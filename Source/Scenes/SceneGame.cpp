@@ -104,7 +104,7 @@ void SceneGame::Render()
 
 		//	«Šû‚Ì‹î•`‰æ
 		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::SOLID);
-		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_OFF_ZW_OFF);
+		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
 		PieceManager::Instance().Render();
 

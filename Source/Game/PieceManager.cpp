@@ -4,8 +4,8 @@
 void PieceManager::Initialize(int index)
 {
 	//	駒の初期化	SceneGameのInitialize()でfor文回してるからここでやらなくていい
-	pieces_.at(index)->Initialize(index);
-	pieceCount_ += 1;
+	pieces_.at(index)->Initialize(index);	//	駒の初期化関数を実行
+	pieceCount_ += 1;						//	駒の数をカウント
 }
 
 //	更新処理

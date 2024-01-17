@@ -102,9 +102,12 @@ public:
 	void Initialize(int index);							//	初期化　位置設定とか
 	void Update(float elapsedTime);						//	更新処理
 	void Render();										//	描画処理
-	void DrawDebug();									//	デバッグ描画
 
 	void Destroy();										//	破棄処理
+
+	void DrawDebug();									//	デバッグ描画
+	void SetDebugStr();									//	駒の種類を
+
 	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
 private:
@@ -114,8 +117,10 @@ private:
 	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
 	float range_ = 2.5f;										//	駒と駒の間隔をどれくらい空けるか
 
-private:
-	static int num;		//	ImGuiデバッグ用
-	int myNum_ = 0;		//	ImGuiデバッグ用
+private:	//デバッグ用
+	static int num;				//	将棋の駒の要素番号
+	int myNum_ = 0;				//	将棋の駒の要素番号
+	std::string typeStr_ = "";	//	駒の種類
+
 };
 
