@@ -15,9 +15,12 @@ Piece::Piece(const char* filename, bool triangulate)
 //	‰Šú‰»
 void Piece::Initialize(int index)
 {
-	GetTransform()->SetPositionX(Stage::Instance().GetTransform()->GetPosition().x);
+	GetTransform()->SetPositionX(Stage::Instance().GetTransform()->GetPosition().x + pieceInfo_[index].posX_);
 	GetTransform()->SetPositionY(Stage::Instance().GetTransform()->GetPosition().y);
-	GetTransform()->SetPositionZ(Stage::Instance().GetTransform()->GetPosition().z);
+	GetTransform()->SetPositionZ(Stage::Instance().GetTransform()->GetPosition().z + pieceInfo_[index].posY_);
+
+	//	“G‚Ì‚Æ‚«‚¾‚¯ƒ‚ƒfƒ‹‚ÌŒü‚«‚ğ”½“]‚³‚¹‚é
+	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180));
 }
 
 //	XVˆ—

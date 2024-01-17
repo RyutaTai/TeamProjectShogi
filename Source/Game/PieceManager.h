@@ -34,7 +34,7 @@ private:
 	std::vector<Piece*> pieces_;	//	‹î‚Ì”z—ñ
 	std::set<Piece*> removes_;		//	”jŠüƒŠƒXƒg
 
-	int pieceCount_;				//	Œ»İ‚Ì‹î‚Ì”
+	int pieceCount_ = 0;			//	Œ»İ‚Ì‹î‚Ì”
 
 };
 

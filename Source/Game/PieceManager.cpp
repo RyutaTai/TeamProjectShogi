@@ -3,11 +3,9 @@
 //	‰Šú‰»
 void PieceManager::Initialize(int index)
 {
-	//‹î‚Ì‰Šú‰»
-	for (Piece* piece : pieces_)
-	{
-		piece->Initialize(index);
-	}
+	//	‹î‚Ì‰Šú‰»	SceneGame‚ÌInitialize()‚Åfor•¶‰ñ‚µ‚Ä‚é‚©‚ç‚±‚±‚Å‚â‚ç‚È‚­‚Ä‚¢‚¢
+	pieces_.at(index)->Initialize(index);
+	pieceCount_ += 1;
 }
 
 //	XVˆ—

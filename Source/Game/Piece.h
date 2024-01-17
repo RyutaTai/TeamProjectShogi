@@ -47,28 +47,28 @@ public:
 	PieceInfo pieceInfo_[PIECE_MAX] =
 	{
 		//	敵
-		{1,1,PIECE_TYPE::KYOUSHA,	false},
-		{2,1,PIECE_TYPE::KEIMA,		false},
-		{3,1,PIECE_TYPE::GINSHOU,	false},
-		{4,1,PIECE_TYPE::KINSHOU,	false},
-		{5,1,PIECE_TYPE::OUSHOU,	false},
-		{6,1,PIECE_TYPE::KINSHOU,	false},
-		{7,1,PIECE_TYPE::GINSHOU,	false},
-		{8,1,PIECE_TYPE::KEIMA,		false},
-		{9,1,PIECE_TYPE::KYOUSHA,	false},
-
-		{2,2,PIECE_TYPE::HISHA,		false},	//	10
-		{8,2,PIECE_TYPE::KAKUGYOU,	false},
-
-		{1,1,PIECE_TYPE::HUHYOU,	false},
-		{2,1,PIECE_TYPE::HUHYOU,	false},
-		{3,1,PIECE_TYPE::HUHYOU,	false},
-		{4,1,PIECE_TYPE::HUHYOU,	false},
-		{5,1,PIECE_TYPE::HUHYOU,	false},
-		{6,1,PIECE_TYPE::HUHYOU,	false},
-		{7,1,PIECE_TYPE::HUHYOU,	false},
-		{8,1,PIECE_TYPE::HUHYOU,	false},
-		{9,1,PIECE_TYPE::HUHYOU,	false},	//	20
+		{1,1,PIECE_TYPE::KYOUSHA,	true},
+		{2,1,PIECE_TYPE::KEIMA,		true},
+		{3,1,PIECE_TYPE::GINSHOU,	true},
+		{4,1,PIECE_TYPE::KINSHOU,	true},
+		{5,1,PIECE_TYPE::OUSHOU,	true},
+		{6,1,PIECE_TYPE::KINSHOU,	true},
+		{7,1,PIECE_TYPE::GINSHOU,	true},
+		{8,1,PIECE_TYPE::KEIMA,		true},
+		{9,1,PIECE_TYPE::KYOUSHA,	true},
+									
+		{2,2,PIECE_TYPE::HISHA,		true},	//	10
+		{8,2,PIECE_TYPE::KAKUGYOU,	true},
+									
+		{1,1,PIECE_TYPE::HUHYOU,	true},
+		{2,1,PIECE_TYPE::HUHYOU,	true},
+		{3,1,PIECE_TYPE::HUHYOU,	true},
+		{4,1,PIECE_TYPE::HUHYOU,	true},
+		{5,1,PIECE_TYPE::HUHYOU,	true},
+		{6,1,PIECE_TYPE::HUHYOU,	true},
+		{7,1,PIECE_TYPE::HUHYOU,	true},
+		{8,1,PIECE_TYPE::HUHYOU,	true},
+		{9,1,PIECE_TYPE::HUHYOU,	true},	//	20
 
 		//	味方
 		{1,7,PIECE_TYPE::KYOUSHA,	false},
@@ -114,7 +114,7 @@ private:
 	DirectX::XMFLOAT3 pieceOffset_ = { 10,10,10 };		//	駒を最初に描画するときのオフセット値
 
 private:
-	static int num;	//	ImGuiデバッグ用
-	int myNum_;		//	ImGuiデバッグ用
+	static int num;		//	ImGuiデバッグ用
+	int myNum_ = 0;		//	ImGuiデバッグ用
 };
 
