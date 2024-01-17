@@ -29,6 +29,7 @@ public:
 
 	int GetPieceCount() const { return static_cast<int>(pieces_.size()); }	//	現在の駒の数取得
 	Piece* GetPiece(int index) { return pieces_.at(index); }				//	駒を取得
+	const char& GetFilePath(int index);										//	要素番号のモデルのファイルパスを取得	
 
 private:
 	std::vector<Piece*> pieces_;	//	駒の配列

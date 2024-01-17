@@ -25,6 +25,61 @@ void Piece::Initialize(int index)
 	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180));
 }
 
+//	モデルのファイルパス取得
+const char& Piece::GetFilePath(int index)
+{
+	std::string filePath = "";
+	//	自分の駒の種類のファイルパスを返す
+	switch (pieceInfo_[index].pieceType_) {
+	case PIECE_TYPE::HUHYO:
+		filePath = "./Resources/Model/Shogi/hohei.fbx";
+		break;
+	case PIECE_TYPE::TOKIN:
+		filePath = "./Resources/Model/Shogi/hohei.fbx";
+		break;
+	case PIECE_TYPE::KYOUSHA:
+		filePath = "./Resources/Model/Shogi/kyousha.fbx";
+		break;
+	case PIECE_TYPE::NARIKYO:
+		filePath = "./Resources/Model/Shogi/kyousha.fbx";
+		break;
+	case PIECE_TYPE::KEIMA:
+		filePath = "./Resources/Model/Shogi/keima.fbx";
+		break;
+	case PIECE_TYPE::NARIKEI:
+		filePath = "./Resources/Model/Shogi/keima.fbx";
+		break;
+	case PIECE_TYPE::GINSHO:
+		filePath = "./Resources/Model/Shogi/ginsho.fbx";
+		break;
+	case PIECE_TYPE::NARIGIN:
+		filePath = "./Resources/Model/Shogi/ginsho.fbx";
+		break;
+	case PIECE_TYPE::HISHA:
+		filePath = "./Resources/Model/Shogi/hisha.fbx";
+		break;
+	case PIECE_TYPE::RYUO:
+		filePath = "./Resources/Model/Shogi/hisha.fbx";
+		break;
+	case PIECE_TYPE::KAKUGYO:
+		filePath = "./Resources/Model/Shogi/gyokusho.fbx";
+		break;
+	case PIECE_TYPE::RYUMA:
+		filePath = "./Resources/Model/Shogi/hu.fbx";
+		break;
+	case PIECE_TYPE::KINSHO:
+		filePath = "./Resources/Model/Shogi/kinsho.fbx";
+		break;
+	case PIECE_TYPE::OUSHO:
+		filePath = "./Resources/Model/Shogi/ohsho.fbx";
+		break;
+	case PIECE_TYPE::GYOKUSHO:
+		filePath = "./Resources/Model/Shogi/gyokusho.fbx";
+		break;
+	}
+	return *filePath.c_str();
+}
+
 //	更新処理
 void Piece::Update(float elapsedTime)
 {
@@ -58,11 +113,12 @@ void Piece::DrawDebug()
 	}
 }
 
+//	駒の種類文字列セット
 void Piece::SetDebugStr()
 {
 	//	駒の種類
 	switch (this->GetPieceInfo(this->myNum_).pieceType_) {
-	case PIECE_TYPE::HUHYOU:
+	case PIECE_TYPE::HUHYO:
 		typeStr_ = u8"歩兵HUHYOU";
 		break;
 	case PIECE_TYPE::TOKIN:
@@ -71,7 +127,7 @@ void Piece::SetDebugStr()
 	case PIECE_TYPE::KYOUSHA:
 		typeStr_ = u8"香車KYOUSHA";
 		break;
-	case PIECE_TYPE::NARIKYOU:
+	case PIECE_TYPE::NARIKYO:
 		typeStr_ = u8"成香NARIKYOU";
 		break;
 	case PIECE_TYPE::KEIMA:
@@ -80,7 +136,7 @@ void Piece::SetDebugStr()
 	case PIECE_TYPE::NARIKEI:
 		typeStr_ = u8"成桂NARIKEI";
 		break;
-	case PIECE_TYPE::GINSHOU:
+	case PIECE_TYPE::GINSHO:
 		typeStr_ = u8"銀将GINSHOU";
 		break;
 	case PIECE_TYPE::NARIGIN:
@@ -89,20 +145,23 @@ void Piece::SetDebugStr()
 	case PIECE_TYPE::HISHA:
 		typeStr_ = u8"飛車HISHA";
 		break;
-	case PIECE_TYPE::RYUOU:
+	case PIECE_TYPE::RYUO:
 		typeStr_ = u8"竜王RYUOU";
 		break;
-	case PIECE_TYPE::KAKUGYOU:
+	case PIECE_TYPE::KAKUGYO:
 		typeStr_ = u8"角行KAKUGYOU";
 		break;
 	case PIECE_TYPE::RYUMA:
 		typeStr_ = u8"竜馬RYUMA";
 		break;
-	case PIECE_TYPE::KINSHOU:
+	case PIECE_TYPE::KINSHO:
 		typeStr_ = u8"金将KINSHOU";
 		break;
-	case PIECE_TYPE::OUSHOU:
+	case PIECE_TYPE::OUSHO:
 		typeStr_ = u8"王将OUSHOU";
+		break;
+	case PIECE_TYPE::GYOKUSHO:
+		typeStr_ = u8"玉将GYOKUSHO";
 		break;
 	}
 }

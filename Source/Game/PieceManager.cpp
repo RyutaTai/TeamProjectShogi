@@ -8,6 +8,12 @@ void PieceManager::Initialize(int index)
 	pieceCount_ += 1;						//	駒の数をカウント
 }
 
+//	モデルのファイルパス取得
+const char& PieceManager::GetFilePath(int index)
+{
+	return pieces_.at(index)->GetFilePath(index);
+}
+
 //	更新処理
 void PieceManager::Update(float elapsedTime)
 {

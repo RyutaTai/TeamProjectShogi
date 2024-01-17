@@ -9,20 +9,21 @@ private:
 	//	構造体とか
 	enum class PIECE_TYPE		//	駒の種類を宣言する
 	{
-		HUHYOU,					//	歩兵
+		HUHYO,					//	歩兵
 		TOKIN,					//	と金（成った歩兵）
 		KYOUSHA,				//	香車
-		NARIKYOU,				//	成香（成った香車）
+		NARIKYO,				//	成香（成った香車）
 		KEIMA,					//	桂馬
 		NARIKEI,				//	成桂（成った桂馬）
-		GINSHOU,				//	銀将
+		GINSHO,					//	銀将
 		NARIGIN,				//	成銀（成った銀将）
 		HISHA,					//	飛車
-		RYUOU,					//	竜王（成った飛車）
-		KAKUGYOU,				//	角行
+		RYUO,					//	竜王（成った飛車）
+		KAKUGYO,				//	角行
 		RYUMA,					//	竜馬（成った角行）
-		KINSHOU,				//	金将
-		OUSHOU,					//	王将 玉将は定義してない
+		KINSHO,					//	金将
+		OUSHO,					//	王将
+		GYOKUSHO,				//	玉将	相手の王
 	};
 
 	//	駒の進行方向
@@ -49,54 +50,55 @@ public:
 		//	敵
 		{1,1,PIECE_TYPE::KYOUSHA,	true},
 		{2,1,PIECE_TYPE::KEIMA,		true},
-		{3,1,PIECE_TYPE::GINSHOU,	true},
-		{4,1,PIECE_TYPE::KINSHOU,	true},
-		{5,1,PIECE_TYPE::OUSHOU,	true},
-		{6,1,PIECE_TYPE::KINSHOU,	true},
-		{7,1,PIECE_TYPE::GINSHOU,	true},
+		{3,1,PIECE_TYPE::GINSHO,	true},
+		{4,1,PIECE_TYPE::KINSHO,	true},
+		{5,1,PIECE_TYPE::GYOKUSHO,	true},
+		{6,1,PIECE_TYPE::KINSHO,	true},
+		{7,1,PIECE_TYPE::GINSHO,	true},
 		{8,1,PIECE_TYPE::KEIMA,		true},
 		{9,1,PIECE_TYPE::KYOUSHA,	true},
 
 		{2,2,PIECE_TYPE::HISHA,		true},	//	10
-		{8,2,PIECE_TYPE::KAKUGYOU,	true},
+		{8,2,PIECE_TYPE::KAKUGYO,	true},
 
-		{1,3,PIECE_TYPE::HUHYOU,	true},
-		{2,3,PIECE_TYPE::HUHYOU,	true},
-		{3,3,PIECE_TYPE::HUHYOU,	true},
-		{4,3,PIECE_TYPE::HUHYOU,	true},
-		{5,3,PIECE_TYPE::HUHYOU,	true},
-		{6,3,PIECE_TYPE::HUHYOU,	true},
-		{7,3,PIECE_TYPE::HUHYOU,	true},
-		{8,3,PIECE_TYPE::HUHYOU,	true},
-		{9,3,PIECE_TYPE::HUHYOU,	true},	//	20
+		{1,3,PIECE_TYPE::HUHYO,	true},
+		{2,3,PIECE_TYPE::HUHYO,	true},
+		{3,3,PIECE_TYPE::HUHYO,	true},
+		{4,3,PIECE_TYPE::HUHYO,	true},
+		{5,3,PIECE_TYPE::HUHYO,	true},
+		{6,3,PIECE_TYPE::HUHYO,	true},
+		{7,3,PIECE_TYPE::HUHYO,	true},
+		{8,3,PIECE_TYPE::HUHYO,	true},
+		{9,3,PIECE_TYPE::HUHYO,	true},	//	20
 
 		//	味方
 		{1,7,PIECE_TYPE::KYOUSHA,	false},
 		{2,7,PIECE_TYPE::KEIMA,		false},
-		{3,7,PIECE_TYPE::GINSHOU,	false},
-		{4,7,PIECE_TYPE::KINSHOU,	false},
-		{5,7,PIECE_TYPE::OUSHOU,	false},
-		{6,7,PIECE_TYPE::KINSHOU,	false},
-		{7,7,PIECE_TYPE::GINSHOU,	false},
+		{3,7,PIECE_TYPE::GINSHO,	false},
+		{4,7,PIECE_TYPE::KINSHO,	false},
+		{5,7,PIECE_TYPE::OUSHO,	false},
+		{6,7,PIECE_TYPE::KINSHO,	false},
+		{7,7,PIECE_TYPE::GINSHO,	false},
 		{8,7,PIECE_TYPE::KEIMA,		false},
 		{9,7,PIECE_TYPE::KYOUSHA,	false},
 
-		{2,8,PIECE_TYPE::KAKUGYOU,	false},	//	30
+		{2,8,PIECE_TYPE::KAKUGYO,	false},	//	30
 		{8,8,PIECE_TYPE::HISHA,		false},
 
-		{1,9,PIECE_TYPE::HUHYOU,	false},
-		{2,9,PIECE_TYPE::HUHYOU,	false},
-		{3,9,PIECE_TYPE::HUHYOU,	false},
-		{4,9,PIECE_TYPE::HUHYOU,	false},
-		{5,9,PIECE_TYPE::HUHYOU,	false},
-		{6,9,PIECE_TYPE::HUHYOU,	false},
-		{7,9,PIECE_TYPE::HUHYOU,	false},
-		{8,9,PIECE_TYPE::HUHYOU,	false},
-		{9,9,PIECE_TYPE::HUHYOU,	false},	//	40
+		{1,9,PIECE_TYPE::HUHYO,	false},
+		{2,9,PIECE_TYPE::HUHYO,	false},
+		{3,9,PIECE_TYPE::HUHYO,	false},
+		{4,9,PIECE_TYPE::HUHYO,	false},
+		{5,9,PIECE_TYPE::HUHYO,	false},
+		{6,9,PIECE_TYPE::HUHYO,	false},
+		{7,9,PIECE_TYPE::HUHYO,	false},
+		{8,9,PIECE_TYPE::HUHYO,	false},
+		{9,9,PIECE_TYPE::HUHYO,	false},	//	40
 	};
 
 public:
 	Piece(const char* filename, bool triangulate = false);
+	Piece();
 	~Piece() {}
 
 	void Initialize(int index);							//	初期化　位置設定とか
@@ -104,9 +106,10 @@ public:
 	void Render();										//	描画処理
 
 	void Destroy();										//	破棄処理
+	const char& GetFilePath(int index);					//	要素番号のモデルのファイルパスを取得	
 
 	void DrawDebug();									//	デバッグ描画
-	void SetDebugStr();									//	駒の種類を
+	void SetDebugStr();									//	駒の種類を表示できるようtypeStr_にpieceType_をセット
 
 	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
