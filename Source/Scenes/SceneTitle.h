@@ -4,7 +4,7 @@
 
 #include "Scene.h"
 #include "../Resources/Sprite.h"
-#include "../Audio/audio.h"
+#include "../Audio/Audio.h"
 
 class SceneTitle : public Scene
 {
@@ -29,10 +29,11 @@ private:
 	std::unique_ptr<Sprite> sprite_[static_cast<int>(SPRITE_TITLE::MAX)];
 	
 
-//private:	//	オーディオ
-//	static const int SE_MAX_ = 8;
-//	static const int BGM_MAX_ = 4;
-//	std::unique_ptr<Audio> bgm_[BGM_MAX_];
-//	std::unique_ptr<Audio> se_[SE_MAX_];
+private:	//	オーディオ
+	Audio audioInstance_ = Audio::Instance();
+	static const int SE_MAX_ = 8;
+	static const int BGM_MAX_ = 4;
+	std::unique_ptr<Audio> bgm_[BGM_MAX_];
+	std::unique_ptr<Audio> se_[SE_MAX_];
 };
 

@@ -10,16 +10,15 @@
 //	初期化
 void SceneTitle::Initialize()
 {
-	//sprite_[static_cast<int>(SPRITE_TITLE::BACK)]		= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title.png");
-	//sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]	= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Fonts/font4.png");
+	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]		= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title.png");
+	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]	= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Fonts/font4.png");
 
 	// オーディオ初期化
-	//Audio audioInstance_ = Audio::Instance();
-	//audioInstance_.Initialize();
-	//bgm_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/BGM/009.wav");
-	//se_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0footsteps-of-a-runner-on-gravel.wav");
-	//se_[1] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0footsteps-dry-leaves-g.wav");
-	//se_[2] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0explosion-8-bit.wav");
+	audioInstance_.Initialize();
+	bgm_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/BGM/009.wav");
+	/*se_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0footsteps-of-a-runner-on-gravel.wav");
+	se_[1] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0footsteps-dry-leaves-g.wav");
+	se_[2] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0explosion-8-bit.wav");*/
 
 }
 
@@ -60,19 +59,19 @@ void SceneTitle::Update(const float& elapsedTime)
 		}
 	}
 	//	BGM再生
-	//bgm_[0]->Play();
+	bgm_[0]->Play();
 }
 
 //	描画処理
 void SceneTitle::Render()
 {	
 	// タイトルスプライト描画
-	//sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->Render();
-	//sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->Textout("Push to Enter Key.", 350, 600, 30, 25);
+	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->Render();
+	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->Textout("Push to Enter Key.", 350, 600, 30, 25);
 }
 
 //	デバッグ描画
 void SceneTitle::DrawDebug()
 {
-	//sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->DrawDebug();
+	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->DrawDebug();
 }

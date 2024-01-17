@@ -35,7 +35,7 @@ void Piece::Destroy()
 //	描画処理
 void Piece::Render()
 {
-	GameObject::Render(1000.0f);
+	GameObject::Render(1.0f);
 }
 
 //	デバッグ描画

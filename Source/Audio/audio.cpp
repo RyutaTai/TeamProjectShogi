@@ -49,8 +49,11 @@ Audio::Audio(IXAudio2* xaudio2, const wchar_t* filename)
 //	デストラクタ
 Audio::~Audio()
 {
-	sourceVoice_->DestroyVoice();
-	delete[] buffer_.pAudioData;
+	if (sourceVoice_)
+	{
+		sourceVoice_->DestroyVoice();
+		delete[] buffer_.pAudioData;
+	}
 }
 
 //	初期化
