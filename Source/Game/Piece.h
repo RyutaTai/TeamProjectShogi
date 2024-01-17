@@ -25,18 +25,19 @@ private:
 		OUSHOU,					//	王将 玉将は定義してない
 	};
 
-	enum class DIRECTION		//	駒の進行方向
+	//	駒の進行方向
+	enum class DIRECTION		
 	{
 
 	};
 
-	struct PieceInfo			//	駒の情報
+	//	駒の情報
+	struct PieceInfo			
 	{
 	public:
 		int posX_;						//	駒のx座標
 		int posY_;						//	駒のy座標
 		PIECE_TYPE pieceType_;			//	駒の種類
-		bool isPromote_ = false;		//	いらんかも？ 駒が成っているか	英語圏では将棋の成るを「promote:昇格する」を使って表現する
 		bool isEnemy_;					//	敵の駒か、味方の駒か 敵ならtrue
 	};
 
@@ -46,52 +47,52 @@ public:
 	PieceInfo pieceInfo_[PIECE_MAX] =
 	{
 		//	敵
-		{1,1,PIECE_TYPE::KYOUSHA,	false,	true},
-		{2,1,PIECE_TYPE::KEIMA,		false,	true},
-		{3,1,PIECE_TYPE::GINSHOU,	false,	true},
-		{4,1,PIECE_TYPE::KINSHOU,	false,	true},
-		{5,1,PIECE_TYPE::OUSHOU,	false,	true},
-		{6,1,PIECE_TYPE::KINSHOU,	false,	true},
-		{7,1,PIECE_TYPE::GINSHOU,	false,	true},
-		{8,1,PIECE_TYPE::KEIMA,		false,	true},
-		{9,1,PIECE_TYPE::KYOUSHA,	false,	true},
+		{1,1,PIECE_TYPE::KYOUSHA,	false},
+		{2,1,PIECE_TYPE::KEIMA,		false},
+		{3,1,PIECE_TYPE::GINSHOU,	false},
+		{4,1,PIECE_TYPE::KINSHOU,	false},
+		{5,1,PIECE_TYPE::OUSHOU,	false},
+		{6,1,PIECE_TYPE::KINSHOU,	false},
+		{7,1,PIECE_TYPE::GINSHOU,	false},
+		{8,1,PIECE_TYPE::KEIMA,		false},
+		{9,1,PIECE_TYPE::KYOUSHA,	false},
 
-		{2,2,PIECE_TYPE::HISHA,		false,	true},	//	10
-		{8,2,PIECE_TYPE::KAKUGYOU,	false,	true},
+		{2,2,PIECE_TYPE::HISHA,		false},	//	10
+		{8,2,PIECE_TYPE::KAKUGYOU,	false},
 
-		{1,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{2,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{3,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{4,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{5,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{6,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{7,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{8,1,PIECE_TYPE::HUHYOU,	false,	true},
-		{9,1,PIECE_TYPE::HUHYOU,	false,	true},	//	20
+		{1,1,PIECE_TYPE::HUHYOU,	false},
+		{2,1,PIECE_TYPE::HUHYOU,	false},
+		{3,1,PIECE_TYPE::HUHYOU,	false},
+		{4,1,PIECE_TYPE::HUHYOU,	false},
+		{5,1,PIECE_TYPE::HUHYOU,	false},
+		{6,1,PIECE_TYPE::HUHYOU,	false},
+		{7,1,PIECE_TYPE::HUHYOU,	false},
+		{8,1,PIECE_TYPE::HUHYOU,	false},
+		{9,1,PIECE_TYPE::HUHYOU,	false},	//	20
 
 		//	味方
-		{1,7,PIECE_TYPE::KYOUSHA,	false,	false},
-		{2,7,PIECE_TYPE::KEIMA,		false,	false},
-		{3,7,PIECE_TYPE::GINSHOU,	false,	false},
-		{4,7,PIECE_TYPE::KINSHOU,	false,	false},
-		{5,7,PIECE_TYPE::OUSHOU,	false,	false},
-		{6,7,PIECE_TYPE::KINSHOU,	false,	false},
-		{7,7,PIECE_TYPE::GINSHOU,	false,	false},
-		{8,7,PIECE_TYPE::KEIMA,		false,	false},
-		{9,7,PIECE_TYPE::KYOUSHA,	false,	false},
+		{1,7,PIECE_TYPE::KYOUSHA,	false},
+		{2,7,PIECE_TYPE::KEIMA,		false},
+		{3,7,PIECE_TYPE::GINSHOU,	false},
+		{4,7,PIECE_TYPE::KINSHOU,	false},
+		{5,7,PIECE_TYPE::OUSHOU,	false},
+		{6,7,PIECE_TYPE::KINSHOU,	false},
+		{7,7,PIECE_TYPE::GINSHOU,	false},
+		{8,7,PIECE_TYPE::KEIMA,		false},
+		{9,7,PIECE_TYPE::KYOUSHA,	false},
 
-		{2,8,PIECE_TYPE::KAKUGYOU,	false,	false},	//	30
-		{8,8,PIECE_TYPE::HISHA,		false,	false},
+		{2,8,PIECE_TYPE::KAKUGYOU,	false},	//	30
+		{8,8,PIECE_TYPE::HISHA,		false},
 
-		{1,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{2,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{3,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{4,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{5,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{6,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{7,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{8,9,PIECE_TYPE::HUHYOU,	false,	false},
-		{9,9,PIECE_TYPE::HUHYOU,	false,	false},	//	40
+		{1,9,PIECE_TYPE::HUHYOU,	false},
+		{2,9,PIECE_TYPE::HUHYOU,	false},
+		{3,9,PIECE_TYPE::HUHYOU,	false},
+		{4,9,PIECE_TYPE::HUHYOU,	false},
+		{5,9,PIECE_TYPE::HUHYOU,	false},
+		{6,9,PIECE_TYPE::HUHYOU,	false},
+		{7,9,PIECE_TYPE::HUHYOU,	false},
+		{8,9,PIECE_TYPE::HUHYOU,	false},
+		{9,9,PIECE_TYPE::HUHYOU,	false},	//	40
 	};
 
 public:
