@@ -1,0 +1,11 @@
+3dgp.vcxproj.user
+External/
+x64/
+*.png
+*.fbx
+*.cereal
+*.jpg
+Resources/old/
+Resources/Shader/
+*.wav
+Resources/Model/Court/
