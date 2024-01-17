@@ -1,5 +1,20 @@
 #include "SceneManager.h"
 
+//	デストラクタ
+SceneManager::~SceneManager()
+{
+	if (currentScene_) //	現在のシーン終了化
+	{
+		delete currentScene_;
+		currentScene_ = nullptr;
+	}
+	if (nextScene_)	//次のシーン終了化
+	{
+		delete nextScene_;
+		nextScene_ = nullptr;
+	}
+}
+
 //	更新処理
 void SceneManager::Update(const float& elapsedTime)
 {

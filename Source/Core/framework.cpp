@@ -85,5 +85,6 @@ void Framework::Render()
 //	I—¹‰»
 bool Framework::Uninitialize()
 {
+	SceneManager::Instance().
 	return true;
 }
