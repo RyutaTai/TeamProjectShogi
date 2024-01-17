@@ -31,8 +31,8 @@ private:
 
 private:	//	オーディオ
 	Audio audioInstance_ = Audio::Instance();
-	static const int SE_MAX_ = 8;
-	static const int BGM_MAX_ = 4;
+	static const int SE_MAX_	= 8;
+	static const int BGM_MAX_	= 4;
 	std::unique_ptr<Audio> bgm_[BGM_MAX_];
 	std::unique_ptr<Audio> se_[SE_MAX_];
 };

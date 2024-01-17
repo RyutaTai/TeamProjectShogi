@@ -15,9 +15,11 @@ Piece::Piece(const char* filename, bool triangulate)
 //	初期化
 void Piece::Initialize(int index)
 {
-	GetTransform()->SetPositionX(Stage::Instance().GetTransform()->GetPosition().x + pieceInfo_[index].posX_);
-	GetTransform()->SetPositionY(Stage::Instance().GetTransform()->GetPosition().y);
-	GetTransform()->SetPositionZ(Stage::Instance().GetTransform()->GetPosition().z + pieceInfo_[index].posY_);
+	//	駒の座標 = (将棋盤(9x9マス)上での座標 + pieceOffset) * range_
+
+	GetTransform()->SetPositionX((pieceInfo_[index].posX_ + pieceOffset_.x) * range_);
+	GetTransform()->SetPositionY(Stage::Instance().GetTransform()->GetPosition().y);	//将棋盤と高さ合わせるため補正とかしない
+	GetTransform()->SetPositionZ((pieceInfo_[index].posY_ + pieceOffset_.z) * range_);
 
 	//	敵のときだけモデルの向きを反転させる
 	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180));

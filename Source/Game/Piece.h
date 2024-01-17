@@ -35,7 +35,7 @@ private:
 	struct PieceInfo			
 	{
 	public:
-		int posX_;						//	駒のx座標
+		int posX_;						//	駒のx座標 座標を9x9マスの中で表記する
 		int posY_;						//	駒のy座標
 		PIECE_TYPE pieceType_;			//	駒の種類
 		bool isEnemy_;					//	敵の駒か、味方の駒か 敵ならtrue
@@ -56,19 +56,19 @@ public:
 		{7,1,PIECE_TYPE::GINSHOU,	true},
 		{8,1,PIECE_TYPE::KEIMA,		true},
 		{9,1,PIECE_TYPE::KYOUSHA,	true},
-									
+
 		{2,2,PIECE_TYPE::HISHA,		true},	//	10
 		{8,2,PIECE_TYPE::KAKUGYOU,	true},
-									
-		{1,1,PIECE_TYPE::HUHYOU,	true},
-		{2,1,PIECE_TYPE::HUHYOU,	true},
-		{3,1,PIECE_TYPE::HUHYOU,	true},
-		{4,1,PIECE_TYPE::HUHYOU,	true},
-		{5,1,PIECE_TYPE::HUHYOU,	true},
-		{6,1,PIECE_TYPE::HUHYOU,	true},
-		{7,1,PIECE_TYPE::HUHYOU,	true},
-		{8,1,PIECE_TYPE::HUHYOU,	true},
-		{9,1,PIECE_TYPE::HUHYOU,	true},	//	20
+
+		{1,3,PIECE_TYPE::HUHYOU,	true},
+		{2,3,PIECE_TYPE::HUHYOU,	true},
+		{3,3,PIECE_TYPE::HUHYOU,	true},
+		{4,3,PIECE_TYPE::HUHYOU,	true},
+		{5,3,PIECE_TYPE::HUHYOU,	true},
+		{6,3,PIECE_TYPE::HUHYOU,	true},
+		{7,3,PIECE_TYPE::HUHYOU,	true},
+		{8,3,PIECE_TYPE::HUHYOU,	true},
+		{9,3,PIECE_TYPE::HUHYOU,	true},	//	20
 
 		//	味方
 		{1,7,PIECE_TYPE::KYOUSHA,	false},
@@ -108,10 +108,11 @@ public:
 	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
 private:
-	static const int boradX_ = 9;						//	マス目x軸
-	static const int boardY_ = 9;						//	マス目y軸
-	static const int board_[boradX_][boardY_];			//	将棋盤のデータ 9x9
-	DirectX::XMFLOAT3 pieceOffset_ = { 10,10,10 };		//	駒を最初に描画するときのオフセット値
+	static const int boradX_ = 9;								//	マス目x軸
+	static const int boardY_ = 9;								//	マス目y軸
+	static const int board_[boradX_][boardY_];					//	将棋盤のデータ 9x9
+	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
+	float range_ = 2.5f;										//	駒と駒の間隔をどれくらい空けるか
 
 private:
 	static int num;		//	ImGuiデバッグ用
