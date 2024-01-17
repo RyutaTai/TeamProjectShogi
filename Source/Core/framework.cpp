@@ -50,7 +50,7 @@ void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 	IMGUI_CTRL_CLEAR_FRAME();
 
 	//	シーンの更新
-	SceneManager::Instance().Update(elapsedTime);
+	//SceneManager::Instance().Update(elapsedTime);
 
 }
 
@@ -70,7 +70,7 @@ void Framework::Render()
 	graphics_.GetShader()->SetSamplerState(graphics_.GetDeviceContext());
 
 	//	シーンの描画
-	SceneManager::Instance().Render();
+	//SceneManager::Instance().Render();
 
 	IMGUI_CTRL_DISPLAY();
 

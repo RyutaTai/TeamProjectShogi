@@ -10,8 +10,8 @@
 //	初期化
 void SceneTitle::Initialize()
 {
-	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]		= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title.png");
-	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]	= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Fonts/font4.png");
+	//sprite_[static_cast<int>(SPRITE_TITLE::BACK)]		= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title.png");
+	//sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]	= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Fonts/font4.png");
 
 	// オーディオ初期化
 	//Audio audioInstance_ = Audio::Instance();
@@ -67,12 +67,12 @@ void SceneTitle::Update(const float& elapsedTime)
 void SceneTitle::Render()
 {	
 	// タイトルスプライト描画
-	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->Render();
-	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->Textout("Push to Enter Key.", 350, 600, 30, 25);
+	//sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->Render();
+	//sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->Textout("Push to Enter Key.", 350, 600, 30, 25);
 }
 
 //	デバッグ描画
 void SceneTitle::DrawDebug()
 {
-	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->DrawDebug();
+	//sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->DrawDebug();
 }

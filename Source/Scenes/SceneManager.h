@@ -6,7 +6,17 @@ class SceneManager
 {
 private:
 	SceneManager() {}
-	~SceneManager() {}
+	~SceneManager() 
+	{ 
+		if (currentScene_) {
+			delete currentScene_;
+			currentScene_ = nullptr;
+		}
+		if (nextScene_) {
+			delete nextScene_;
+			nextScene_ = nullptr;
+		}
+	}
 
 public: 
 	static SceneManager& Instance()
