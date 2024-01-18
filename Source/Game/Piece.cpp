@@ -34,6 +34,13 @@ void Piece::Update(float elapsedTime)
 
 }
 
+//	DirectionInfo‚Ì•ûŒü‚É‹ó‚¢‚Ä‚¢‚éƒ}ƒX‚ª‚ ‚é‚©’²‚×‚é
+void Piece::Serch(int index)
+{
+
+}
+
+
 //	”jŠü
 void Piece::Destroy()
 {

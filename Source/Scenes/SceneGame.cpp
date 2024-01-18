@@ -15,7 +15,7 @@ void SceneGame::Initialize()
 	
 	//	ステージ初期化
 	//stage_ = std::make_unique<Stage>("./Resources/Model/cybercity-2099-v2/source/Cyber_City_2099_ANIM.fbx", true);//	シティモデル
-	stage_ = std::make_unique<Stage>("./Resources/Model/Shogi/shogiban.fbx",true);//	将棋盤
+	shogiboard_ = std::make_unique<ShogiBoard>("./Resources/Model/Shogi/shogiban.fbx",true);//	将棋盤
 	
 	D3D11_BUFFER_DESC desc;
 	desc.ByteWidth = (sizeof(Graphics::SceneConstants));
@@ -81,7 +81,8 @@ void SceneGame::Finalize()
 			sprite_[i] = nullptr;
 		}
 	}
-	stage_ = nullptr;	//	ステージ終了化
+	//stage_=nullptr;
+	shogiboard_ = nullptr;	//	ステージ終了化
 	//	エネミー終了化
 	PieceManager::Instance().Clear();
 }
@@ -92,7 +93,7 @@ void SceneGame::Update(const float& elapsedTime)
 	GamePad gamePad;
 	gamePad.Acquire();
 
-	Camera::Instance().SetTarget(stage_.get()->GetTransform()->GetPosition());
+	Camera::Instance().SetTarget(shogiboard_.get()->GetTransform()->GetPosition());
 	Camera::Instance().Update(elapsedTime);
 	PieceManager::Instance().Update(elapsedTime);
 }
@@ -125,12 +126,13 @@ void SceneGame::Render()
 		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::CULL_NONE);	//	両面描画するため
 		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
+		stage_->Render();
 #else	//	将棋盤用
 		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::SOLID);
 		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
 #endif
-		stage_->Render();										//	ステージ描画
+		shogiboard_->Render();	//	将棋盤描画
 
 		//	将棋の駒描画
 		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::SOLID);
@@ -147,6 +149,6 @@ void SceneGame::DrawDebug()
 {
 	Camera::Instance().DrawDebug();
 
-	stage_->DrawDebug();
+	shogiboard_->DrawDebug();
 	PieceManager::Instance().DrawDebug();
 }

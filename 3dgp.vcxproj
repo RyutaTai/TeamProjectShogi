@@ -205,6 +205,7 @@
     <ClCompile Include="Source\Game\GameObject.cpp" />
     <ClCompile Include="Source\Game\Piece.cpp" />
     <ClCompile Include="Source\Game\PieceManager.cpp" />
+    <ClCompile Include="Source\Game\ShogiBoard.cpp" />
     <ClCompile Include="Source\Game\Stage.cpp" />
     <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\FrameBuffer.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="Source\Game\GameObject.h" />
     <ClInclude Include="Source\Game\Piece.h" />
     <ClInclude Include="Source\Game\PieceManager.h" />
+    <ClInclude Include="Source\Game\ShogiBoard.h" />
     <ClInclude Include="Source\Game\Stage.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\FrameBuffer.h" />
