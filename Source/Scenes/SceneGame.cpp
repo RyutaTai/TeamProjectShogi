@@ -15,7 +15,7 @@ void SceneGame::Initialize()
 	
 	//	ステージ初期化
 	//stage_ = std::make_unique<Stage>("./Resources/Model/cybercity-2099-v2/source/Cyber_City_2099_ANIM.fbx", true);//	シティモデル
-	stage_ = std::make_unique<Stage>("./Resources/Model/Shogi/syougiban.fbx",true);//	将棋盤
+	stage_ = std::make_unique<Stage>("./Resources/Model/Shogi/shogiban.fbx",true);//	将棋盤
 	
 	D3D11_BUFFER_DESC desc;
 	desc.ByteWidth = (sizeof(Graphics::SceneConstants));
@@ -30,13 +30,43 @@ void SceneGame::Initialize()
 	Camera::Instance().Initialize();
 
 	//	将棋の駒生成
-	PieceManager& pieceManager = PieceManager::Instance();
-	for (int i = 0; i < Piece::PIECE_MAX; i++)
+	const int maxIndex = 9;	//駒の種類(モデルの数)
+	int pieceNum[maxIndex] =
 	{
-		Piece* piece = new Piece("./Resources/Model/Shogi/hu.fbx", true);
-		pieceManager.Register(piece);
-		pieceManager.Initialize(i);
+		18, // 歩
+		2,  // 角
+		2,  // 飛
+		4,  // 香
+		4,  // 桂
+		4,  // 銀
+		4,  // 金
+		1,  // 王
+		1,  // 玉
+	};
+
+	std::string filaname[maxIndex] =
+	{
+		"./Resources/Model/Shogi/hohei.fbx",	// 歩
+		"./Resources/Model/Shogi/kakugyo.fbx",	// 角
+		"./Resources/Model/Shogi/hisha.fbx",	// 飛
+		"./Resources/Model/Shogi/kyousha.fbx",	// 香
+		"./Resources/Model/Shogi/keima.fbx",	// 桂
+		"./Resources/Model/Shogi/ginsho.fbx",	// 銀
+		"./Resources/Model/Shogi/kinsho.fbx",	// 金
+		"./Resources/Model/Shogi/ohsho.fbx",	// 王
+		"./Resources/Model/Shogi/gyokusho.fbx",	// 玉
+	};
+
+	PieceManager& pieceManager = PieceManager::Instance();
+	for (int index = 0; index < maxIndex; index++)
+	{
+		for (int num = 0; num < pieceNum[index]; num++)
+		{
+			Piece* piece = new Piece(filaname[index].c_str(), true);
+			pieceManager.Register(piece);
+		}
 	}
+	pieceManager.Initialize();
 
 }
 
@@ -64,7 +94,7 @@ void SceneGame::Update(const float& elapsedTime)
 
 	Camera::Instance().SetTarget(stage_.get()->GetTransform()->GetPosition());
 	Camera::Instance().Update(elapsedTime);
-
+	PieceManager::Instance().Update(elapsedTime);
 }
 
 //	描画処理

@@ -12,72 +12,20 @@ Piece::Piece(const char* filename, bool triangulate)
 	myNum_ = num++;	//	デバッグ用
 }
 
+Piece::~Piece()
+{
+}
+
 //	初期化
 void Piece::Initialize(int index)
 {
 	//	駒の座標 = (将棋盤(9x9マス)上での座標 + pieceOffset) * range_
-
 	GetTransform()->SetPositionX((pieceInfo_[index].posX_ + pieceOffset_.x) * range_);
 	GetTransform()->SetPositionY(Stage::Instance().GetTransform()->GetPosition().y);	//将棋盤と高さ合わせるため補正とかしない
 	GetTransform()->SetPositionZ((pieceInfo_[index].posY_ + pieceOffset_.z) * range_);
 
 	//	敵のときだけモデルの向きを反転させる
 	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180));
-}
-
-//	モデルのファイルパス取得
-const char& Piece::GetFilePath(int index)
-{
-	std::string filePath = "";
-	//	自分の駒の種類のファイルパスを返す
-	switch (pieceInfo_[index].pieceType_) {
-	case PIECE_TYPE::HUHYO:
-		filePath = "./Resources/Model/Shogi/hohei.fbx";
-		break;
-	case PIECE_TYPE::TOKIN:
-		filePath = "./Resources/Model/Shogi/hohei.fbx";
-		break;
-	case PIECE_TYPE::KYOUSHA:
-		filePath = "./Resources/Model/Shogi/kyousha.fbx";
-		break;
-	case PIECE_TYPE::NARIKYO:
-		filePath = "./Resources/Model/Shogi/kyousha.fbx";
-		break;
-	case PIECE_TYPE::KEIMA:
-		filePath = "./Resources/Model/Shogi/keima.fbx";
-		break;
-	case PIECE_TYPE::NARIKEI:
-		filePath = "./Resources/Model/Shogi/keima.fbx";
-		break;
-	case PIECE_TYPE::GINSHO:
-		filePath = "./Resources/Model/Shogi/ginsho.fbx";
-		break;
-	case PIECE_TYPE::NARIGIN:
-		filePath = "./Resources/Model/Shogi/ginsho.fbx";
-		break;
-	case PIECE_TYPE::HISHA:
-		filePath = "./Resources/Model/Shogi/hisha.fbx";
-		break;
-	case PIECE_TYPE::RYUO:
-		filePath = "./Resources/Model/Shogi/hisha.fbx";
-		break;
-	case PIECE_TYPE::KAKUGYO:
-		filePath = "./Resources/Model/Shogi/gyokusho.fbx";
-		break;
-	case PIECE_TYPE::RYUMA:
-		filePath = "./Resources/Model/Shogi/hu.fbx";
-		break;
-	case PIECE_TYPE::KINSHO:
-		filePath = "./Resources/Model/Shogi/kinsho.fbx";
-		break;
-	case PIECE_TYPE::OUSHO:
-		filePath = "./Resources/Model/Shogi/ohsho.fbx";
-		break;
-	case PIECE_TYPE::GYOKUSHO:
-		filePath = "./Resources/Model/Shogi/gyokusho.fbx";
-		break;
-	}
-	return *filePath.c_str();
 }
 
 //	更新処理

@@ -18,7 +18,7 @@ public:
 		return instance_;
 	}
 
-	void Initialize(int index);		//	初期化
+	void Initialize();				//	初期化
 	void Update(float elapsedTime);	//	更新処理
 	void Render();					//	描画処理
 	void DrawDebug();				//	デバッグ描画
@@ -27,9 +27,8 @@ public:
 	void Clear();					//	駒を全て削除
 	void Remove(Piece* piece);		//	駒を削除
 
-	int GetPieceCount() const { return static_cast<int>(pieces_.size()); }	//	現在の駒の数取得
-	Piece* GetPiece(int index) { return pieces_.at(index); }				//	駒を取得
-	const char& GetFilePath(int index);										//	要素番号のモデルのファイルパスを取得	
+	int GetPieceCount() const { return static_cast<int>(pieces_.size()); }		//	現在の駒の数取得
+	Piece* GetPiece(int index) { return pieces_.at(index); }					//	駒を取得
 
 private:
 	std::vector<Piece*> pieces_;	//	駒の配列

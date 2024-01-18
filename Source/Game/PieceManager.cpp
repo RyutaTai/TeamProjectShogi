@@ -1,17 +1,13 @@
 #include "PieceManager.h"
 
 //	初期化
-void PieceManager::Initialize(int index)
+void PieceManager::Initialize()
 {
-	//	駒の初期化	SceneGameのInitialize()でfor文回してるからここでやらなくていい
-	pieces_.at(index)->Initialize(index);	//	駒の初期化関数を実行
-	pieceCount_ += 1;						//	駒の数をカウント
-}
-
-//	モデルのファイルパス取得
-const char& PieceManager::GetFilePath(int index)
-{
-	return pieces_.at(index)->GetFilePath(index);
+	for (Piece* piece : pieces_)
+	{
+		piece->Initialize(pieceCount_);
+		pieceCount_ += 1;		//	駒の数をカウント
+	}
 }
 
 //	更新処理

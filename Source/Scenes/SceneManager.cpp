@@ -23,7 +23,11 @@ void SceneManager::Update(const float& elapsedTime)
 		Clear();
 		currentScene_ = nextScene_;
 		nextScene_ = nullptr;
-		currentScene_->Initialize();
+
+		if (!currentScene_->IsReady())
+		{
+			currentScene_->Initialize();
+		}
 	}
 
 	if (currentScene_ != nullptr)
