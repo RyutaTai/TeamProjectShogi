@@ -12,6 +12,44 @@ ShogiBoard::ShogiBoard(const char* filename, bool triangulate)
 
 }
 
+//	初期化	PieceManagerのInitialize()の中で呼ぶ
+void ShogiBoard::Initialize(int index)
+{
+	RegisterBoard(index);
+}
+
+//	DirectionInfoの方向に空いているマスがあるか調べる
+void ShogiBoard::Serch(int index)
+{
+	Piece* piece = PieceManager::Instance().GetPiece(index);
+	
+
+}
+
+//	 Boardの配列に駒を登録
+void ShogiBoard::RegisterBoard(int index)
+{
+	Piece * piece = PieceManager::Instance().GetPiece(index);
+	int posX, posY;
+	posX = piece->GetPieceInfo(index).posX_;
+	posY = piece->GetPieceInfo(index).posY_;
+	board_[posX][posY] = static_cast<int>(SQUARE_STATE::EXIST);	//	存在していることを登録
+
+}
+
+//	指定したマスが空いているか調べる
+bool ShogiBoard::IsEmpty(float x, float y)
+{
+	for (int x = 0; x < boradX_; x++)
+	{
+		for (int y = 0; y < boardY_; y++)
+		{
+			
+		}
+	}
+	return false;
+}
+
 //デストラクタ
 ShogiBoard::~ShogiBoard()
 {

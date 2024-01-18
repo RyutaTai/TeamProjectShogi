@@ -138,7 +138,6 @@ public:
 	void Update(float elapsedTime);								//	更新処理
 	void Render();												//	描画処理
 
-	void Serch(int index);										//	空いているマスがあるかどうか調べる
 	void Destroy();												//	破棄処理
 
 	void DrawDebug();											//	デバッグ描画
@@ -147,9 +146,6 @@ public:
 	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
 private:
-	static const int boradX_ = 9;								//	マス目x軸
-	static const int boardY_ = 9;								//	マス目y軸
-	static const int board_[boradX_][boardY_];					//	将棋盤のデータ 9x9
 	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
 	float range_ = 2.4f;										//	駒と駒の間隔をどれくらい空けるか
 

@@ -1,11 +1,14 @@
 #include "PieceManager.h"
 
+#include "../Game/ShogiBoard.h"
+
 //	‰Šú‰»
 void PieceManager::Initialize()
 {
 	for (Piece* piece : pieces_)
 	{
 		piece->Initialize(pieceCount_);
+		ShogiBoard::Instance().Initialize(pieceCount_);	//	«Šû”Õ(board_)‚É‹î‚ğ“o˜^
 		pieceCount_ += 1;		//	‹î‚Ì”‚ğƒJƒEƒ“ƒg
 	}
 }

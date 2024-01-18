@@ -16,7 +16,7 @@ public:
 		return instance_;
 	}
 
-	void Render();
-	void DrawDebug();
+	void Render();		//	描画処理
+	void DrawDebug();	//	デバッグ描画
 
 };
