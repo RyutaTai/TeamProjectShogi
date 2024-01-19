@@ -5,7 +5,7 @@
 //	将棋の駒クラス
 class Piece :public GameObject
 {
-private:	
+public:	
 	//	構造体とか
 	enum class PIECE_TYPE		//	駒の種類を宣言する
 	{
@@ -29,18 +29,17 @@ private:
 	//	駒の進行方向名
 	enum class DIRECTION_NAME		
 	{
-		BACK_LEFT,			//	左下
-		BAXK,				//	下
-		BACK_RIGHT,			//	右下
+		BACK_LEFT,			//	左後ろ
+		BACK,				//	後ろ
+		BACK_RIGHT,			//	右後ろ
 		LEFT,				//	左
 		RIGHT,				//	右
-		UP_LEFT,			//	左上
-		UP,					//	上
-		UP_RIGHT,			//	右上
-		MY_KEIMA_RIGHT,		//	自分の桂馬右方向
-		MY_KEIMA_LEFT,		//	自分の桂馬右方向
-		ENEMY_KEIMA_RIGHT,	//	敵の桂馬右方向
-		ENEMY_KEIMA_LEFT,	//	敵の桂馬右方向
+		FRONT_LEFT,			//	左前
+		FRONT,				//	前
+		FRONT_RIGHT,		//	右前
+		KEIMA_RIGHT,		//	自分の桂馬右方向
+		KEIMA_LEFT,			//	自分の桂馬右方向
+		NONE,				//	方向なし
 	};
 
 	//	駒の方向の情報
@@ -51,6 +50,8 @@ private:
 		float directionY_;					//	動ける方向のy
 	};
 
+	static const int PIECE_DIRECTION_MAX = 8;	//	１つの駒が持てる駒の方向の最大数
+	static const int DIRECTION_MAX = 12;		//	駒の方向の最大数
 	//	駒の情報
 	struct PieceInfo			
 	{
@@ -59,29 +60,25 @@ private:
 		PIECE_TYPE pieceType_;			//	駒の種類
 		bool isEnemy_;					//	敵の駒か、自分の駒か 敵ならtrue
 		bool isDead_;					//	場にあるかないか
-		DirectionInfo direction_;		//	駒の方向情報を持つ(方向の名前、動けるマスを持ってる)
+		DirectionInfo direction_[PIECE_DIRECTION_MAX];		//	駒の方向情報を持つ(方向の名前、動けるマスを持ってる) まだ関連付けしてない
 	};
 
-public:
-	//	構造体とか
 	static const int PIECE_MAX = 40;		//	駒の最大数
-	static const int DIRECTION_MAX = 12;	//	駒の方向の最大数
-	static const int PIECE_TYPE_MAX = 15;	//	駒の種類の最大数(玉将も含んでる)
+	static const int PIECE_TYPE_MAX = 16;	//	駒の種類の最大数(玉将も含んでる)
 	//	駒が動ける方向
 	DirectionInfo	directionInfo_[DIRECTION_MAX] =
 	{
-		{DIRECTION_NAME::BACK_LEFT,		-1.0f,	-1.0f},		//	左下
-		{DIRECTION_NAME::BAXK,			 0.0f,	-1.0f},		//	下
-		{DIRECTION_NAME::BACK_RIGHT,	+1.0f,	-1.0f},		//	右下
+		{DIRECTION_NAME::BACK_LEFT,		-1.0f,	-1.0f},		//	左後ろ
+		{DIRECTION_NAME::BACK,			 0.0f,	-1.0f},		//	後ろ
+		{DIRECTION_NAME::BACK_RIGHT,	+1.0f,	-1.0f},		//	右後ろ
 		{DIRECTION_NAME::LEFT,			-1.0f,	 0.0f},		//	左
 		{DIRECTION_NAME::RIGHT,			+1.0f,	 0.0f},		//	右
-		{DIRECTION_NAME::BACK_LEFT,		-1.0f,	+1.0f},		//	左上
-		{DIRECTION_NAME::BACK_LEFT,		 0.0f,	+1.0f},		//	上
-		{DIRECTION_NAME::BACK_LEFT,		+1.0f,	+1.0f},		//	右上
-		{DIRECTION_NAME::BACK_LEFT,		+2.0f,	+1.0f},		//	自分の桂馬右方向
-		{DIRECTION_NAME::BACK_LEFT,		+2.0f,	+1.0f},		//	自分の桂馬右方向
-		{DIRECTION_NAME::BACK_LEFT,		+2.0f,	-1.0f},		//	敵の桂馬右方向
-		{DIRECTION_NAME::BACK_LEFT,		-2.0f,	-1.0f},		//	敵の桂馬右方向
+		{DIRECTION_NAME::FRONT_LEFT,	-1.0f,	+1.0f},		//	左前
+		{DIRECTION_NAME::FRONT,			 0.0f,	+1.0f},		//	前
+		{DIRECTION_NAME::FRONT_RIGHT,	+1.0f,	+1.0f},		//	右前
+		{DIRECTION_NAME::KEIMA_RIGHT,	+2.0f,	+1.0f},		//	桂馬右方向
+		{DIRECTION_NAME::KEIMA_LEFT,	+2.0f,	+1.0f},		//	桂馬左方向
+		{DIRECTION_NAME::NONE,			 0.0f,   0.0f},		//	方向なし
 	}
 	;
 	//	駒の初期座標
@@ -134,7 +131,7 @@ public:
 	Piece(const char* filename, bool triangulate = false);		//	コンストラクタ
 	~Piece();													//	デストラクタ
 
-	void Initialize(int index);									//	初期化　位置設定とか
+	void Initialize(int index);									//	初期化　　位置設定とか
 	void Update(float elapsedTime);								//	更新処理
 	void Render();												//	描画処理
 
@@ -143,6 +140,7 @@ public:
 	void DrawDebug();											//	デバッグ描画
 	void SetDebugStr();											//	駒の種類を表示できるようtypeStr_にpieceType_をセット
 
+	void SetPieceDirection(int index);							//	駒の方向direction_を駒の情報pieceInfo_に登録
 	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
 private:

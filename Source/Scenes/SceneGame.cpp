@@ -15,7 +15,7 @@ void SceneGame::Initialize()
 	
 	//	ステージ初期化
 	//stage_ = std::make_unique<Stage>("./Resources/Model/cybercity-2099-v2/source/Cyber_City_2099_ANIM.fbx", true);//	シティモデル
-	shogiboard_ = std::make_unique<ShogiBoard>("./Resources/Model/Shogi/shogiban.fbx",true);//	将棋盤
+	shogiBoard_ = std::make_unique<ShogiBoard>("./Resources/Model/Shogi/shogiban.fbx",true);//	将棋盤
 	
 	D3D11_BUFFER_DESC desc;
 	desc.ByteWidth = (sizeof(Graphics::SceneConstants));
@@ -82,7 +82,7 @@ void SceneGame::Finalize()
 		}
 	}
 	//stage_=nullptr;
-	shogiboard_ = nullptr;	//	ステージ終了化
+	shogiBoard_ = nullptr;	//	ステージ終了化
 	//	エネミー終了化
 	PieceManager::Instance().Clear();
 }
@@ -93,7 +93,7 @@ void SceneGame::Update(const float& elapsedTime)
 	GamePad gamePad;
 	gamePad.Acquire();
 
-	Camera::Instance().SetTarget(shogiboard_.get()->GetTransform()->GetPosition());
+	Camera::Instance().SetTarget(shogiBoard_.get()->GetTransform()->GetPosition());
 	Camera::Instance().Update(elapsedTime);
 	PieceManager::Instance().Update(elapsedTime);
 }
@@ -106,8 +106,8 @@ void SceneGame::Render()
 	Camera::Instance().SetPerspectiveFov();
 
 	DirectX::XMStoreFloat4x4(&sceneConstants.viewProjection_, Camera::Instance().GetViewMatrix() * Camera::Instance().GetProjectionMatrix());
-	sceneConstants.lightDirection_ = { 0, -1, 0, 0 };
-	sceneConstants.cameraPosition_ = { 0, 0, 1, 0 };
+	sceneConstants.lightDirection_ = { 0, -1,  0,  0 };
+	sceneConstants.cameraPosition_ = { 0,  0,  1,  0 };
 	Graphics::Instance().GetDeviceContext()->UpdateSubresource(sceneConstantBuffer_.Get(), 0, 0, &sceneConstants, 0, 0);
 	Graphics::Instance().GetDeviceContext()->VSSetConstantBuffers(1, 1, sceneConstantBuffer_.GetAddressOf());
 	Graphics::Instance().GetDeviceContext()->PSSetConstantBuffers(1, 1, sceneConstantBuffer_.GetAddressOf());
@@ -132,7 +132,7 @@ void SceneGame::Render()
 		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
 #endif
-		shogiboard_->Render();	//	将棋盤描画
+		shogiBoard_->Render();	//	将棋盤描画
 
 		//	将棋の駒描画
 		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::SOLID);
@@ -149,6 +149,6 @@ void SceneGame::DrawDebug()
 {
 	Camera::Instance().DrawDebug();
 
-	shogiboard_->DrawDebug();
+	shogiBoard_->DrawDebug();
 	PieceManager::Instance().DrawDebug();
 }

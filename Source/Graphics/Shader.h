@@ -42,6 +42,8 @@ public:
 		SOLID,
 		WIREFRAME,
 		CULL_NONE,
+		CULL_BACK,
+		WIREFRAME_CULL_NONE,
 		MAX,
 	};
 

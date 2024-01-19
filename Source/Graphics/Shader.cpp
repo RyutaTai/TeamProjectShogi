@@ -23,21 +23,21 @@ Shader::Shader()
 	samplerDesc.BorderColor[3] = 0;
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::POINT)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::POINT)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::LINEAR)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::LINEAR)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::ANISOTROPIC)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::ANISOTROPIC)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -48,7 +48,7 @@ Shader::Shader()
 	samplerDesc.BorderColor[1] = 0;
 	samplerDesc.BorderColor[2] = 0;
 	samplerDesc.BorderColor[3] = 0;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::LINEAR_BORDER_BLACK)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::LINEAR_BORDER_BLACK)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -59,7 +59,7 @@ Shader::Shader()
 	samplerDesc.BorderColor[1] = 1;
 	samplerDesc.BorderColor[2] = 1;
 	samplerDesc.BorderColor[3] = 1;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::LINEAR_BORDER_WHITE)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::LINEAR_BORDER_WHITE)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	// SHADOW
@@ -72,7 +72,7 @@ Shader::Shader()
 	samplerDesc.BorderColor[1] = 1;
 	samplerDesc.BorderColor[2] = 1;
 	samplerDesc.BorderColor[3] = 1;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::COMPARISON_LINEAR_BORDER_WHITE)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::COMPARISON_LINEAR_BORDER_WHITE)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -88,7 +88,7 @@ Shader::Shader()
 	samplerDesc.BorderColor[0] = 1;
 	samplerDesc.MinLOD = 0.0f;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::LINEAR_BORDER_OPAQUE_BLACK)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::LINEAR_BORDER_OPAQUE_BLACK)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
@@ -104,7 +104,7 @@ Shader::Shader()
 	samplerDesc.BorderColor[0] = 0;
 	samplerDesc.MinLOD = 0.0f;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<UINT>(SAMPLER_STATE::POINT_CLAMP)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateSamplerState(&samplerDesc, samplerStates_[static_cast<int>(SAMPLER_STATE::POINT_CLAMP)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	//	DepthStencilDesc
@@ -113,28 +113,25 @@ Shader::Shader()
 	depthStencilDesc.DepthEnable = TRUE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<UINT>(DEPTH_STENCIL_STATE::ZT_ON_ZW_ON)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<int>(DEPTH_STENCIL_STATE::ZT_ON_ZW_ON)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	//	Z-Test ON ,Z-Write OFF
-	depthStencilDesc = {};
 	depthStencilDesc.DepthEnable = TRUE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<UINT>(DEPTH_STENCIL_STATE::ZT_ON_ZW_OFF)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<int>(DEPTH_STENCIL_STATE::ZT_ON_ZW_OFF)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	//	Z-Test OFF ,Z-Write ON
-	depthStencilDesc = {};
 	depthStencilDesc.DepthEnable = FALSE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<UINT>(DEPTH_STENCIL_STATE::ZT_OFF_ZW_ON)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<int>(DEPTH_STENCIL_STATE::ZT_OFF_ZW_ON)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	//	Z-Test OFF ,Z-Write OFF
-	depthStencilDesc = {};
 	depthStencilDesc.DepthEnable = FALSE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<UINT>(DEPTH_STENCIL_STATE::ZT_OFF_ZW_OFF)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateDepthStencilState(&depthStencilDesc, depthStencilStates_[static_cast<int>(DEPTH_STENCIL_STATE::ZT_OFF_ZW_OFF)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	//	BlendDesc
@@ -150,7 +147,7 @@ Shader::Shader()
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	hr = Graphics::Instance().GetDevice()->CreateBlendState(&blendDesc, blendStates_[static_cast<UINT>(BLEND_STATE::ALPHA)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateBlendState(&blendDesc, blendStates_[static_cast<int>(BLEND_STATE::ALPHA)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	//	Add
 	blendDesc = {};
@@ -164,7 +161,7 @@ Shader::Shader()
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	hr = Graphics::Instance().GetDevice()->CreateBlendState(&blendDesc, blendStates_[static_cast<UINT>(BLEND_STATE::ADD)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateBlendState(&blendDesc, blendStates_[static_cast<int>(BLEND_STATE::ADD)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	//	Subtract
 	blendDesc = {};
@@ -178,7 +175,7 @@ Shader::Shader()
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	hr = Graphics::Instance().GetDevice()->CreateBlendState(&blendDesc, blendStates_[static_cast<UINT>(BLEND_STATE::SUBTRACT)].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateBlendState(&blendDesc, blendStates_[static_cast<int>(BLEND_STATE::SUBTRACT)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	//	RasterizerDesc
@@ -189,21 +186,28 @@ Shader::Shader()
 	rasterizerDesc.DepthBias = 0;
 	rasterizerDesc.DepthBiasClamp = 0;
 	rasterizerDesc.SlopeScaledDepthBias = 0;
+	rasterizerDesc.DepthClipEnable = TRUE;
 	rasterizerDesc.MultisampleEnable = FALSE;
 	rasterizerDesc.AntialiasedLineEnable = FALSE;
-	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[0].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[static_cast<int>(RASTERIZER_STATE::SOLID)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rasterizerDesc.CullMode = D3D11_CULL_BACK;
 	rasterizerDesc.AntialiasedLineEnable = TRUE;
-	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[1].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[static_cast<int>(RASTERIZER_STATE::WIREFRAME)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	rasterizerDesc.CullMode = D3D11_CULL_NONE;
 	rasterizerDesc.AntialiasedLineEnable = TRUE;
-	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[2].GetAddressOf());
+	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[static_cast<int>(RASTERIZER_STATE::CULL_NONE)].GetAddressOf());
+	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+
+	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.AntialiasedLineEnable = TRUE;
+	hr = Graphics::Instance().GetDevice()->CreateRasterizerState(&rasterizerDesc, rasterizerStates_[static_cast<int>(RASTERIZER_STATE::WIREFRAME_CULL_NONE)].GetAddressOf());
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 }

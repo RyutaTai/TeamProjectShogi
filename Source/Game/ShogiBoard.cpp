@@ -19,11 +19,36 @@ void ShogiBoard::Initialize(int index)
 }
 
 //	DirectionInfoの方向に空いているマスがあるか調べる
-void ShogiBoard::Serch(int index)
+DirectX::XMFLOAT2 ShogiBoard::Serch(int index)
 {
-	Piece* piece = PieceManager::Instance().GetPiece(index);
+	Piece* piece = PieceManager::Instance().GetPiece(index);				//	駒取得
+	Piece::PIECE_TYPE pieceType = piece->GetPieceInfo(index).pieceType_;	//	駒の種類
+	DirectX::XMFLOAT2 movablePos[Piece::PIECE_DIRECTION_MAX + 1] = {};		//	動けるマスをストック 動けない場合{0,0}を入れる
+	for (int i = 0; i < Piece::PIECE_DIRECTION_MAX; i++)
+	{
+		//	動くマスを指定してIsEmpty()を呼ぶ
+		//	動けるマスを全部チェックしたい。
+		float directionX = piece->GetPieceInfo(index).direction_[i].directionX_;	//	駒が動けるx方向 配列になるかも
+		float directionY = piece->GetPieceInfo(index).direction_[i].directionY_;	//	駒が動けるy方向
+		//	動ける方向がもし空いていたら
+		if (IsEmpty(directionX, directionY))
+		{
+			return movablePos[i] = { directionX,directionY };
+		}
+	}
 	
 
+	return movablePos[8];
+}
+
+//	指定したマスが空いているか調べる
+bool ShogiBoard::IsEmpty(int directionX, int directionY)
+{
+	if (board_[directionX][directionY] == static_cast<int>(SQUARE_STATE::EMPTY))	//	EMPTYならtrueを返す　条件式どうしよう
+	{
+		return true;
+	}
+	return false;
 }
 
 //	 Boardの配列に駒を登録
@@ -35,19 +60,6 @@ void ShogiBoard::RegisterBoard(int index)
 	posY = piece->GetPieceInfo(index).posY_;
 	board_[posX][posY] = static_cast<int>(SQUARE_STATE::EXIST);	//	存在していることを登録
 
-}
-
-//	指定したマスが空いているか調べる
-bool ShogiBoard::IsEmpty(float x, float y)
-{
-	for (int x = 0; x < boradX_; x++)
-	{
-		for (int y = 0; y < boardY_; y++)
-		{
-			
-		}
-	}
-	return false;
 }
 
 //デストラクタ

@@ -12,7 +12,7 @@ float4 main(VS_OUT pin) : SV_TARGET
     float4 color = texture_maps[0].Sample(sampler_states[ANISOTROPIC], pin.texcoord);
     float alpha = color.a;
     
-    return color;
+    return float4(color.rgb, 1);
     
 #if 1
     //Inverse gamma process(ãtÉKÉìÉ}ï‚ê≥)

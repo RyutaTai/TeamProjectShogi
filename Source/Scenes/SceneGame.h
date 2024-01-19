@@ -27,7 +27,7 @@ private:
 
 	std::unique_ptr<Sprite> sprite_[static_cast<int>(SPRITE_GAME::MAX)];
 	std::unique_ptr<Stage>	stage_;
-	std::unique_ptr<ShogiBoard>	shogiboard_;	//	«Šû”Õ
+	std::unique_ptr<ShogiBoard>	shogiBoard_;	//	«Šû”Õ
 	Microsoft::WRL::ComPtr<ID3D11Buffer> sceneConstantBuffer_;
 
 private:	//ƒQ[ƒ€—p•Ï”

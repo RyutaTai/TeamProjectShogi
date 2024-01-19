@@ -18,13 +18,13 @@ public:
 		return instance_;
 	}
 
-	void Initialize(int index);			//	初期化
-	void Render();						//	描画処理
-	void DrawDebug();					//	デバッグ描画
+	void Initialize(int index);						//	初期化
+	void Render();									//	描画処理
+	void DrawDebug();								//	デバッグ描画
 
-	void RegisterBoard(int index);		//	board_に駒を登録する
-	void Serch(int index);				//	index番目の駒が動ける方向に空いているマスがあるかどうか調べる
-	bool IsEmpty(float x, float y);		//	指定したマスが空いているか調べる
+	void RegisterBoard(int index);					//	board_に駒を登録する
+	DirectX::XMFLOAT2 Serch(int index);							//	index番目の駒が動ける方向に空いているマスがあるかどうか調べる
+	bool IsEmpty(int directionX, int directionY);	//	指定したマスが空いているか調べる
 
 private:
 	enum class SQUARE_STATE	//	マスの状態

@@ -100,10 +100,18 @@ void SkinnedMesh::FetchMeshes(FbxScene* fbxScene, std::vector<Mesh>& meshes)
 		FbxMesh* fbxMesh{ fbxNode->GetMesh() };
 
 		Mesh& mesh{ meshes.emplace_back() };
+#if 0
 		mesh.uniqueID_ = fbxMesh->GetNode()->GetUniqueID();
 		mesh.name_ = fbxMesh->GetNode()->GetName();
 		mesh.nodeIndex_ = sceneView_.indexof(mesh.uniqueID_);
 		mesh.defaultGlobalTransform_ = ToXmfloat4x4(fbxMesh->GetNode()->EvaluateGlobalTransform());
+#else
+		mesh.uniqueID_ = fbxNode->GetUniqueID();
+		mesh.name_ = fbxNode->GetName();
+		mesh.nodeIndex_ = sceneView_.indexof(mesh.uniqueID_);
+		mesh.defaultGlobalTransform_ = ToXmfloat4x4(fbxNode->EvaluateGlobalTransform());
+#endif
+
 
 		std::vector<BoneInfluencesPerControlPoint>boneInfluences;
 		FetchBoneInfluences(fbxMesh, boneInfluences);

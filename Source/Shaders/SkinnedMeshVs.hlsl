@@ -5,7 +5,8 @@ VS_OUT main(VS_IN vin)
     vin.normal.w = 0;
     float sigma = vin.tangent.w;
     vin.tangent.w = 0;
-    
+
+#if 0    
     float4 blended_position = { 0, 0, 0, 1 };
     float4 blended_normal = { 0, 0, 0, 0 };
     float4 blended_tangent = { 0, 0, 0, 0 };
@@ -21,7 +22,7 @@ VS_OUT main(VS_IN vin)
     vin.position = float4(blended_position.xyz, 1.0f);
     vin.normal = float4(blended_normal.xyz, 0.0f);
     vin.tangent = float4(blended_tangent.xyz, 0.0f);
-    
+#endif
     VS_OUT vout;
     vout.position = mul(vin.position, mul(world, view_projection));
     

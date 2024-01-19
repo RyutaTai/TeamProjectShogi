@@ -36,7 +36,7 @@ Graphics::Graphics(HWND hwnd)
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
 	//	DepthStencilView,Texture2dDesc
-#if 0
+#if 1
 	Microsoft::WRL::ComPtr <ID3D11Texture2D> depthStencilBuffer{};
 	D3D11_TEXTURE2D_DESC texture2dDesc{};
 	texture2dDesc.Width = SCREEN_WIDTH;

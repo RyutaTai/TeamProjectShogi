@@ -61,7 +61,7 @@ void Framework::Render()
 
 	ID3D11RenderTargetView* renderTargetView = Graphics::Instance().GetRenderTargetView();
 	graphics_.GetDeviceContext()->ClearRenderTargetView(Graphics::Instance().GetRenderTargetView(), color);
-#if 0
+#if 1
 	graphics_.GetDeviceContext()->ClearDepthStencilView(Graphics::Instance().GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 #endif
 	graphics_.GetDeviceContext()->OMSetRenderTargets(1, &renderTargetView, Graphics::Instance().GetDepthStencilView());
