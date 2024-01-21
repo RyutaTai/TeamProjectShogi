@@ -6,8 +6,8 @@
 int Piece::num = 0;	//	デバッグ用
 
 //	コンストラクタ
-Piece::Piece(const char* filename, bool triangulate)
-	:GameObject(filename, triangulate)
+Piece::Piece(const char* fileName, bool triangulate, bool usedAsCollider)
+	:GameObject(fileName, triangulate, usedAsCollider)
 {
 	myNum_ = num++;	//	デバッグ用
 }
@@ -159,28 +159,19 @@ void Piece::Destroy()
 	PieceManager::Instance().Remove(this);
 }
 
+//	選択フラグセット
+void Piece::SetPieceChoise(bool choise)
+{
+	this->pieceInfo_->isChoise_ = choise;
+}
+
 //	描画処理
 void Piece::Render()
 {
 	GameObject::Render(1.0f);
 }
 
-//	デバッグ描画
-void Piece::DrawDebug()
-{
-	//	駒の要素番号 何個目の駒か
-	std::string n = "piace" + std::to_string(myNum_);	
-	SetDebugStr();
-
-	if (ImGui::TreeNode(n.c_str()))	//	駒の要素番号
-	{
-		ImGui::Text(u8"State　%s", typeStr_.c_str());	//	駒の種類
-		GetTransform()->DrawDebug();
-		ImGui::TreePop();
-	}
-}
-
-//	駒の種類文字列セット
+//	デバッグ用駒の種類文字列セット
 void Piece::SetDebugStr()
 {
 	//	駒の種類
@@ -230,5 +221,31 @@ void Piece::SetDebugStr()
 	case PIECE_TYPE::GYOKUSHO:
 		typeStr_ = u8"玉将GYOKUSHO";
 		break;
+	}
+
+	switch (this->GetPieceInfo(this->myNum_).isChoise_)
+	{
+	case true:
+		choiseStr_ = u8"選択されている";
+		break;
+	case false:
+		choiseStr_ = u8"選択されていない";
+		break;
+	}
+}
+
+//	デバッグ描画
+void Piece::DrawDebug()
+{
+	//	駒の要素番号 何個目の駒か
+	std::string n = "piace" + std::to_string(myNum_);
+	SetDebugStr();
+
+	if (ImGui::TreeNode(n.c_str()))	//	駒の要素番号
+	{
+		ImGui::Text(u8"State　%s", typeStr_.c_str());		//	駒の種類
+		ImGui::Text(u8"IsChoise　%s", choiseStr_.c_str());	//	駒が選択されているか
+		GetTransform()->DrawDebug();
+		ImGui::TreePop();
 	}
 }

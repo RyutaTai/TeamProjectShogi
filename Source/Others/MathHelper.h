@@ -119,6 +119,11 @@ inline DirectX::XMFLOAT4 operator-(const DirectX::XMFLOAT4& f1, const DirectX::X
 	return ret;
 }
 
+inline DirectX::XMVECTOR operator-(const DirectX::XMVECTOR& v1,const DirectX::XMVECTOR& v2)
+{
+	return DirectX::XMVectorSubtract(v1, v2);
+}
+
 inline DirectX::XMFLOAT4 Max(const DirectX::XMFLOAT4& f1, const DirectX::XMFLOAT4& f2)
 {
 	DirectX::XMFLOAT4 ret{};

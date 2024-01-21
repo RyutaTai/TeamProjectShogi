@@ -35,7 +35,7 @@ void SceneTitle::Finalize()
 }
 	
 //	XVˆ—
-void SceneTitle::Update(const float& elapsedTime)
+void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 {
 	GamePad gamePad;
 	gamePad.Acquire();

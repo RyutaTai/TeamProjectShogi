@@ -3,8 +3,8 @@
 #include "../Graphics/Graphics.h"
 
 //	コンストラクタ
-ShogiBoard::ShogiBoard(const char* filename, bool triangulate)
-	: GameObject(filename, triangulate)
+ShogiBoard::ShogiBoard(const char* fileName, bool triangulate, bool usedAsCollider)
+	: GameObject(fileName, triangulate, usedAsCollider)
 {
 	GetTransform()->SetPosition(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
 	GetTransform()->SetScale(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
@@ -37,7 +37,6 @@ DirectX::XMFLOAT2 ShogiBoard::Serch(int index)
 		}
 	}
 	
-
 	return movablePos[8];
 }
 

@@ -33,7 +33,7 @@ void SceneLoading::Finalize()
 }
 
 //	更新処理
-void SceneLoading::Update(const float& elapsedTime)
+void SceneLoading::Update(const float& elapsedTime, HWND hwnd)
 {
 	//	次のシーンの準備が完了したらシーンを切り替える
 	if (nextScene_->IsReady()) {

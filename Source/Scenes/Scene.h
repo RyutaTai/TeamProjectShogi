@@ -1,5 +1,7 @@
 #pragma once
 
+#include <windows.h>
+
 class Scene
 {
 public:
@@ -8,7 +10,7 @@ public:
 
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
-	virtual void Update(const float& elapsedTime) = 0;
+	virtual void Update(const float& elapsedTime, HWND hwnd) = 0;
 	virtual void Render() = 0;
 	virtual void DrawDebug() = 0;
 

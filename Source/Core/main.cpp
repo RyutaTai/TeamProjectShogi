@@ -1,6 +1,7 @@
 #include <time.h>
 
 #include "Framework.h"
+#include "../Game/Player.h"
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {

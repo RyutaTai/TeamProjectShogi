@@ -13,6 +13,8 @@
 #include <cereal/types/set.hpp>
 #include <cereal/types/unordered_map.hpp>
 
+#include "../Collision/Raycast.h"
+
 namespace DirectX
 {
 	template<class T>
@@ -250,6 +252,18 @@ public:
 			uint32_t startIndexLocation_{ 0 };
 			uint32_t indexCount_{ 0 };
 		}; std::vector<Subset>subsets_;
+		// RAYCAST
+		const Subset* findSubset(uint32_t index) const
+		{
+			for (const Subset& subset : subsets_)
+			{
+				if (subset.startIndexLocation_ <= index && subset.startIndexLocation_ + subset.indexCount_ > index)
+				{
+					return &subset;
+				}
+			}
+			return nullptr;
+		}
 
 		template<class T>
 		void serialize(T& archive)
@@ -294,20 +308,24 @@ public:
 	std::vector<Animation>animationClips_;
 
 public:
-	SkinnedMesh(ID3D11Device* device, const char* fbxFilename, bool triangulate = false, float SamplingRate = 0);
+	SkinnedMesh(ID3D11Device* device, const char* fbxFilename, bool triangulate = false, float SamplingRate = 0, bool usedAsCollider = false/*RAYCAST*/);
 	virtual ~SkinnedMesh() = default;
-
 	void Render(const DirectX::XMMATRIX& world, const DirectX::XMFLOAT4& materialColor, const Animation::Keyframe* keyframe);
 
 	void UpdateAnimation(Animation::Keyframe& keyframe);
 	bool AppendAnimations(const char* animationFilename, float samplingRate);
 	void BlendAnimations(const Animation::Keyframe* keyframes[2], float factor, Animation::Keyframe& keyframe);
 
+	// RAYCAST
+	// The coordinate system of all function arguments is world space.
+	bool Raycast(const DirectX::XMFLOAT3& position/*ray position*/, const DirectX::XMFLOAT3& direction/*ray direction*/, const DirectX::XMFLOAT4X4& worldTransform, DirectX::XMFLOAT4& closestPoint, DirectX::XMFLOAT3& intersectedNormal,
+		std::string& intersectedMesh, std::string& intersectedMaterial);
+
 private:
-	void FetchMeshes(FbxScene* fbxScene, std::vector<Mesh>& meshes);
-	void CreateComObjects(ID3D11Device* device, const char* fbxFileName);
-	void FetchMaterials(FbxScene* fbxScene, std::unordered_map<uint64_t, Material>& materials);
-	void FetchSkeleton(FbxMesh* fbxMesh, Skeleton& bindPose);
+	void CreateComObjects(ID3D11Device* device, const char* fbxFileName, bool usedAsCollider/*RAYCAST*/);
+	void FetchSkeleton	(FbxMesh* fbxMesh,   Skeleton& bindPose);
+	void FetchMaterials	(FbxScene* fbxScene, std::unordered_map<uint64_t, Material>& materials);
+	void FetchMeshes	(FbxScene* fbxScene, std::vector<Mesh>& meshes);
 	void FetchAnimations(FbxScene* fbxScene, std::vector<Animation>& animationClips,
 		float samplingRate /*If this value is 0, the animation data will be sampled at the default frame rate.*/);
 

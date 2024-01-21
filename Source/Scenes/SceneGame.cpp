@@ -63,7 +63,7 @@ void SceneGame::Initialize()
 	{
 		for (int num = 0; num < pieceNum[index]; num++)
 		{
-			Piece* piece = new Piece(filaname[index].c_str(), true);
+			Piece* piece = new Piece(filaname[index].c_str(), true, true);	//	駒だけレイキャストtrue
 			pieceManager.Register(piece);
 		}
 	}
@@ -89,7 +89,7 @@ void SceneGame::Finalize()
 }
 
 //	更新処理
-void SceneGame::Update(const float& elapsedTime)
+void SceneGame::Update(const float& elapsedTime,HWND hwnd)
 {
 	GamePad gamePad;
 	gamePad.Acquire();
@@ -97,6 +97,7 @@ void SceneGame::Update(const float& elapsedTime)
 	Camera::Instance().SetTarget(shogiBoard_.get()->GetTransform()->GetPosition());
 	Camera::Instance().Update(elapsedTime);
 	PieceManager::Instance().Update(elapsedTime);
+	player_.Update(elapsedTime,hwnd);
 }
 
 //	描画処理

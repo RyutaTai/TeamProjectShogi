@@ -19,11 +19,11 @@ Camera::~Camera()
 //	初期化
 void Camera::Initialize()
 {
-	eye_ = { 0.0f, 25.0f, 100.0f };	//	カメラの視点
-	focus_ = { 0,0,0 };				//	カメラの注視点
-	up_ = { 0,1,0 };				//	カメラの上方向
-	angle_ = { 0,0,0 };				//	カメラの回転値
-	fov_ = 30.0f;					//	視野角
+	eye_	= { 0.0f,	25.0f,	100.0f };	//	カメラの視点
+	focus_	= { 0,		0.0f,	0.0f };				//	カメラの注視点
+	up_		= { 0,		0.0f,	-0.0f };				//	カメラの上方向
+	angle_	= { -0.20f,		0,		0 };				//	カメラの回転値
+	fov_	= 60.0f;					//	視野角 60からだんだん30にする
 
 }
 
@@ -223,8 +223,6 @@ void Camera::Reset()
 //	デバッグ描画
 void Camera::DrawDebug()
 {
-    if (ImGui::TreeNode("Camera"))
-    {
         GetTransform()->DrawDebug();
 		ImGui::DragFloat3("Eye", &eye_.x, 0.01f, -FLT_MAX, FLT_MAX);
 		ImGui::DragFloat3("Focus", &focus_.x, 0.01f, -FLT_MAX, FLT_MAX);
@@ -235,6 +233,4 @@ void Camera::DrawDebug()
 		{
 			Reset();
 		}
-        ImGui::TreePop();
-    }
 }

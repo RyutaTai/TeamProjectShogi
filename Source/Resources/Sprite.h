@@ -68,7 +68,7 @@ private:	// ç\ë¢ëÃ
 	};
 
 public:
-	Sprite(ID3D11Device* device, const wchar_t* filename);
+	Sprite(ID3D11Device* device, const wchar_t* fileName);
 	~Sprite();
 
 	void Render();

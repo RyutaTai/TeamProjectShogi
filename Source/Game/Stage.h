@@ -5,7 +5,7 @@
 class Stage : public GameObject
 {
 public:
-	Stage(const char* filename, bool triangulate = false);
+	Stage(const char* fileName, bool triangulate = false, bool usedAsCollider = false);
 	Stage(){}
 	~Stage();
 

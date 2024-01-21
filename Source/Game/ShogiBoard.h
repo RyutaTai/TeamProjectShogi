@@ -7,7 +7,7 @@
 class ShogiBoard : public GameObject
 {
 public:
-	ShogiBoard(const char* filename, bool triangulate = false);
+	ShogiBoard(const char* fileName, bool triangulate = false, bool usedAsCollider = false);
 	ShogiBoard() {}
 	~ShogiBoard();
 

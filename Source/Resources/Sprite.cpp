@@ -4,7 +4,7 @@
 #include "../../imgui/ImGuiCtrl.h"
 
 //	コンストラクタ
-Sprite::Sprite(ID3D11Device* device, const wchar_t* filename)
+Sprite::Sprite(ID3D11Device* device, const wchar_t* fileName)
 {
 	HRESULT hr = S_OK;
 
@@ -47,7 +47,7 @@ Sprite::Sprite(ID3D11Device* device, const wchar_t* filename)
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	
 	// テクスチャ読み込み
-	LoadTextureFromFile(device, filename, shaderResourceView_.GetAddressOf(), &texture2dDesc_);
+	LoadTextureFromFile(device, fileName, shaderResourceView_.GetAddressOf(), &texture2dDesc_);
 
 	GetTransform()->SetSize(texture2dDesc_.Width, texture2dDesc_.Height);
 	GetTransform()->SetTexSize(texture2dDesc_.Width, texture2dDesc_.Height);

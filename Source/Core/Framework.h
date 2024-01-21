@@ -12,7 +12,6 @@
 #include "../Graphics/Graphics.h"
 #include "../../External/Imgui/ImGuiCtrl.h"
 
-
 CONST LONG SCREEN_WIDTH{ 1280 };
 CONST LONG SCREEN_HEIGHT{ 720 };
 CONST BOOL FULLSCREEN{ FALSE };

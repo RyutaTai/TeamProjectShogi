@@ -16,7 +16,7 @@ SceneManager::~SceneManager()
 }
 
 //	更新処理
-void SceneManager::Update(const float& elapsedTime)
+void SceneManager::Update(const float& elapsedTime, HWND hwnd)
 {
 	if (nextScene_ != nullptr)//	次のシーンが設定されていたらクリア
 	{
@@ -32,7 +32,7 @@ void SceneManager::Update(const float& elapsedTime)
 
 	if (currentScene_ != nullptr)
 	{
-		currentScene_->Update(elapsedTime);
+		currentScene_->Update(elapsedTime,hwnd);
 #ifdef USE_IMGUI
 		currentScene_->DrawDebug();
 #endif// USE_IMGUI

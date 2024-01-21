@@ -3,9 +3,9 @@
 #include "../Graphics/Graphics.h"
 
 //	コンストラクタ
-GameObject::GameObject(const char* fbxFilename,bool triangulate)
+GameObject::GameObject(const char* fbxFileName,bool triangulate, bool usedAsCollider)
 {
-	model_ = std::make_unique<SkinnedMesh>(Graphics::Instance().GetDevice(), fbxFilename,triangulate);
+	model_ = std::make_unique<SkinnedMesh>(Graphics::Instance().GetDevice(), fbxFileName, triangulate, usedAsCollider);
 }
 
 //	描画処理

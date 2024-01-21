@@ -60,6 +60,7 @@ public:
 		PIECE_TYPE pieceType_;			//	駒の種類
 		bool isEnemy_;					//	敵の駒か、自分の駒か 敵ならtrue
 		bool isDead_;					//	場にあるかないか
+		bool isChoise_;					//	選択されているか
 		DirectionInfo direction_[PIECE_DIRECTION_MAX];		//	駒の方向情報を持つ(方向の名前、動けるマスを持ってる) まだ関連付けしてない
 	};
 
@@ -84,51 +85,51 @@ public:
 	//	駒の初期座標
 	PieceInfo pieceInfo_[PIECE_MAX] =
 	{
-		{1,3,PIECE_TYPE::HUHYO,		true,	true},		//	敵歩兵
-		{2,3,PIECE_TYPE::HUHYO,		true,	true},
-		{3,3,PIECE_TYPE::HUHYO,		true,	true},
-		{4,3,PIECE_TYPE::HUHYO,		true,	true},
-		{5,3,PIECE_TYPE::HUHYO,		true,	true},
-		{6,3,PIECE_TYPE::HUHYO,		true,	true},
-		{7,3,PIECE_TYPE::HUHYO,		true,	true},
-		{8,3,PIECE_TYPE::HUHYO,		true,	true},
-		{9,3,PIECE_TYPE::HUHYO,		true,	true},	
-		{1,7,PIECE_TYPE::HUHYO,		false,	true},		//	味方歩兵
-		{2,7,PIECE_TYPE::HUHYO,		false,	true},
-		{3,7,PIECE_TYPE::HUHYO,		false,	true},
-		{4,7,PIECE_TYPE::HUHYO,		false,	true},
-		{5,7,PIECE_TYPE::HUHYO,		false,	true},
-		{6,7,PIECE_TYPE::HUHYO,		false,	true},
-		{7,7,PIECE_TYPE::HUHYO,		false,	true},
-		{8,7,PIECE_TYPE::HUHYO,		false,	true},
-		{9,7,PIECE_TYPE::HUHYO,		false,	true},
-		{8,2,PIECE_TYPE::KAKUGYO,	true,	true},		//	敵角行
-		{8,8,PIECE_TYPE::KAKUGYO,	false,	true},		//	味方角行
-		{2,2,PIECE_TYPE::HISHA,		true,	true},		//	敵飛車
-		{2,8,PIECE_TYPE::HISHA,		false,	true},		//	味方飛車
-		{1,1,PIECE_TYPE::KYOUSHA,	true,	true},		//	敵香車
-		{9,1,PIECE_TYPE::KYOUSHA,	true,	true},
-		{1,9,PIECE_TYPE::KYOUSHA,	false,	true},		//	味方香車
-		{9,9,PIECE_TYPE::KYOUSHA,	false,	true},
-		{2,1,PIECE_TYPE::KEIMA,		true,	true},		//	敵桂馬
-		{8,1,PIECE_TYPE::KEIMA,		true,	true},
-		{2,9,PIECE_TYPE::KEIMA,		false,	true},		//	味方桂馬
-		{8,9,PIECE_TYPE::KEIMA,		false,	true},
-		{3,1,PIECE_TYPE::GINSHO,	true,	true},		//	敵銀将
-		{7,1,PIECE_TYPE::GINSHO,	true,	true},
-		{3,9,PIECE_TYPE::GINSHO,	false,	true},		//	味方銀将
-		{7,9,PIECE_TYPE::GINSHO,	false,	true},
-		{4,1,PIECE_TYPE::KINSHO,	true,	true},		//	敵金将
-		{6,1,PIECE_TYPE::KINSHO,	true,	true},
-		{4,9,PIECE_TYPE::KINSHO,	false,	true},		//	味方金将
-		{6,9,PIECE_TYPE::KINSHO,	false,	true},
-		{5,1,PIECE_TYPE::GYOKUSHO,	true,	true},		//	玉将
-		{5,9,PIECE_TYPE::OUSHO,		false,	true},		//	王将
+		{1,3,PIECE_TYPE::HUHYO,		true,	true,	false},		//	敵歩兵
+		{2,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{3,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{4,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{5,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{6,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{7,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{8,3,PIECE_TYPE::HUHYO,		true,	true,	false},
+		{9,3,PIECE_TYPE::HUHYO,		true,	true,	false},	
+		{1,7,PIECE_TYPE::HUHYO,		false,	true,	false},		//	味方歩兵
+		{2,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{3,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{4,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{5,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{6,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{7,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{8,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{9,7,PIECE_TYPE::HUHYO,		false,	true,	false},
+		{8,2,PIECE_TYPE::KAKUGYO,	true,	true,	false},		//	敵角行
+		{8,8,PIECE_TYPE::KAKUGYO,	false,	true,	false},		//	味方角行
+		{2,2,PIECE_TYPE::HISHA,		true,	true,	false},		//	敵飛車
+		{2,8,PIECE_TYPE::HISHA,		false,	true,	false},		//	味方飛車
+		{1,1,PIECE_TYPE::KYOUSHA,	true,	true,	false},		//	敵香車
+		{9,1,PIECE_TYPE::KYOUSHA,	true,	true,	false},
+		{1,9,PIECE_TYPE::KYOUSHA,	false,	true,	false},		//	味方香車
+		{9,9,PIECE_TYPE::KYOUSHA,	false,	true,	false},
+		{2,1,PIECE_TYPE::KEIMA,		true,	true,	false},		//	敵桂馬
+		{8,1,PIECE_TYPE::KEIMA,		true,	true,	false},
+		{2,9,PIECE_TYPE::KEIMA,		false,	true,	false},		//	味方桂馬
+		{8,9,PIECE_TYPE::KEIMA,		false,	true,	false},
+		{3,1,PIECE_TYPE::GINSHO,	true,	true,	false},		//	敵銀将
+		{7,1,PIECE_TYPE::GINSHO,	true,	true,	false},
+		{3,9,PIECE_TYPE::GINSHO,	false,	true,	false},		//	味方銀将
+		{7,9,PIECE_TYPE::GINSHO,	false,	true,	false},
+		{4,1,PIECE_TYPE::KINSHO,	true,	true,	false},		//	敵金将
+		{6,1,PIECE_TYPE::KINSHO,	true,	true,	false},
+		{4,9,PIECE_TYPE::KINSHO,	false,	true,	false},		//	味方金将
+		{6,9,PIECE_TYPE::KINSHO,	false,	true,	false},
+		{5,1,PIECE_TYPE::GYOKUSHO,	true,	true,	false},		//	玉将
+		{5,9,PIECE_TYPE::OUSHO,		false,	true,	false},		//	王将
 
 	};
 
 public:
-	Piece(const char* filename, bool triangulate = false);		//	コンストラクタ
+	Piece(const char* fileName, bool triangulate = false, bool usedAsCollider = false);	//	コンストラクタ
 	~Piece();													//	デストラクタ
 
 	void Initialize(int index);									//	初期化　　位置設定とか
@@ -137,20 +138,24 @@ public:
 
 	void Destroy();												//	破棄処理
 
+	void SetPieceChoise(bool choise);										//	選択フラグセット
+	void SetPieceDirection(int index);										//	駒の方向direction_を駒の情報pieceInfo_に登録
+	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
+
+
+	//	デバッグ用
 	void DrawDebug();											//	デバッグ描画
 	void SetDebugStr();											//	駒の種類を表示できるようtypeStr_にpieceType_をセット
-
-	void SetPieceDirection(int index);							//	駒の方向direction_を駒の情報pieceInfo_に登録
-	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
 private:
 	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
 	float range_ = 2.4f;										//	駒と駒の間隔をどれくらい空けるか
 
 private:	//デバッグ用
-	static int num;				//	将棋の駒の要素番号
-	int myNum_ = 0;				//	将棋の駒の要素番号
-	std::string typeStr_ = "";	//	駒の種類
+	static int num;					//	将棋の駒の要素番号
+	int myNum_ = 0;					//	将棋の駒の要素番号
+	std::string typeStr_ = "";		//	駒の種類
+	std::string choiseStr_ = "";	//	選択されているか
 
 };
 

@@ -3,7 +3,7 @@
 #include "../Graphics/Graphics.h"
 
 //	コンストラクタ
-SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t maxSprites)
+SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* fileName, size_t maxSprites)
 	:maxVertices_(maxSprites * 6)
 {
 	HRESULT hr{ S_OK };
@@ -33,8 +33,14 @@ SpriteBatch::SpriteBatch(ID3D11Device* device, const wchar_t* filename, size_t m
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
 		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 } ,
 	};
+
+	//	シェーダー読み込み
 	Graphics::Instance().GetShader()->CreateVsFromCso(device, "./Resources/Shader/SpriteVs.cso", vertexShader_.GetAddressOf(), inputLayout_.GetAddressOf(), inputElementDesc, _countof(inputElementDesc));
 	Graphics::Instance().GetShader()->CreatePsFromCso(device, "./Resources/Shader/SpritePs.cso", pixelShader_.GetAddressOf());
+
+	//	テクスチャ読み込み
+	// テクスチャ読み込み
+	LoadTextureFromFile(device, fileName, shaderResourceView_.GetAddressOf(), &texture2dDesc_);
 
 }
 

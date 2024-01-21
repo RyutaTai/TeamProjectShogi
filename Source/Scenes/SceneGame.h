@@ -4,6 +4,8 @@
 #include "../Resources/Sprite.h"
 #include "../Game/Stage.h"
 #include "../Game/ShogiBoard.h"
+#include "../Input/Input.h"
+#include "../Game/Player.h"
 
 class SceneGame : public Scene
 {
@@ -14,9 +16,12 @@ public:
 	void Initialize()						override;
 	void Finalize()							override;
 
-	void Update(const float& elapsedTime)	override;
+	void Update(const float& elapsedTime, HWND hwnd)	override;
 	void Render()							override;
 	void DrawDebug()						override;
+
+	//	ターン切り替え (Player,Enemy,マイク入力の３つ？)
+	void ChangeTurn();
 
 private:
 	enum class SPRITE_GAME	//	スプライト
@@ -31,9 +36,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> sceneConstantBuffer_;
 
 private:	//ゲーム用変数
-	bool isMyTurn_ = true;			//	自分のターンかどうか
-	float  allottedTime = 30.0f;	//	各プレイヤーの一手ごとの持ち時間
-
+	bool	isMyTurn_ = true;			//	自分のターンかどうか
+	float	allottedTime = 30.0f;	//	各プレイヤーの一手ごとの持ち時間
+	Player player_;
 
 };
 

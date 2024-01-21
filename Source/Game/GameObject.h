@@ -8,9 +8,9 @@
 class GameObject
 {
 public:
-	GameObject(const char* fbxFilename, bool triangulate = false);
+	GameObject(const char* fbxFileName, bool triangulate = false, bool usedAsCollider = false);
 	GameObject() {}
-	~GameObject() {}
+	virtual ~GameObject() {}
 
 	void Render(const float& scale);
 

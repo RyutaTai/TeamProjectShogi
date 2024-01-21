@@ -48,9 +48,8 @@ bool Framework::Initialize()
 void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 {
 	IMGUI_CTRL_CLEAR_FRAME();
-
 	//	シーンの更新
-	SceneManager::Instance().Update(elapsedTime);
+	SceneManager::Instance().Update(elapsedTime,hwnd_);
 
 }
 

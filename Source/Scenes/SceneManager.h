@@ -14,7 +14,7 @@ public:
 		static SceneManager instance;
 		return instance;
 	}
-	void Update(const float& elapsedTime);
+	void Update(const float& elapsedTime, HWND hwnd);
 	void Render();
 	void Clear();
 	void ChangeScene(Scene* scene);

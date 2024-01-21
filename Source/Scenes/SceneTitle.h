@@ -15,7 +15,7 @@ public:
 	void Initialize()						override;
 	void Finalize()							override;
 
-	void Update(const float& elapsedTime)	override;
+	void Update(const float& elapsedTime, HWND hwnd)	override;
 	void Render()							override;
 	void DrawDebug()						override;
 

@@ -35,11 +35,17 @@
     <Filter Include="TAI\Audio">
       <UniqueIdentifier>{edc006d7-41ba-4a35-af78-be429e0963e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TAI\Game\Shogi">
-      <UniqueIdentifier>{39f8843e-b2b9-4ad8-93de-64b04cc1b152}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TAI\Collision">
       <UniqueIdentifier>{651edd14-41af-4c51-9515-37fcd776b7aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TAI\Game\ShogiGame">
+      <UniqueIdentifier>{d1436346-baf3-44a7-9832-c19216c2a160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TAI\Game\ShogiGame\Shogi">
+      <UniqueIdentifier>{39f8843e-b2b9-4ad8-93de-64b04cc1b152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TAI\Game\ShogiGame\Character">
+      <UniqueIdentifier>{51bcedd7-94a7-489b-8cb1-3087cb2e968a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -134,16 +140,31 @@
       <Filter>TAI\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Piece.cpp">
-      <Filter>TAI\Game\Shogi</Filter>
+      <Filter>TAI\Game\ShogiGame\Shogi</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\PieceManager.cpp">
-      <Filter>TAI\Game\Shogi</Filter>
+      <Filter>TAI\Game\ShogiGame\Shogi</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\ShogiBoard.cpp">
-      <Filter>TAI\Game\Shogi</Filter>
+      <Filter>TAI\Game\ShogiGame\Shogi</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision\Collision.cpp">
+    <ClCompile Include="Source\Collision\Raycast.cpp">
       <Filter>TAI\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Character.cpp">
+      <Filter>TAI\Game\ShogiGame\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Enemy.cpp">
+      <Filter>TAI\Game\ShogiGame\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Player.cpp">
+      <Filter>TAI\Game\ShogiGame\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Mouse.cpp">
+      <Filter>TAI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Input.cpp">
+      <Filter>TAI\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,16 +271,31 @@
       <Filter>TAI\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\PieceManager.h">
-      <Filter>TAI\Game\Shogi</Filter>
+      <Filter>TAI\Game\ShogiGame\Shogi</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Piece.h">
-      <Filter>TAI\Game\Shogi</Filter>
+      <Filter>TAI\Game\ShogiGame\Shogi</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\ShogiBoard.h">
-      <Filter>TAI\Game\Shogi</Filter>
+      <Filter>TAI\Game\ShogiGame\Shogi</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collision\Collision.h">
+    <ClInclude Include="Source\Collision\Raycast.h">
       <Filter>TAI\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Character.h">
+      <Filter>TAI\Game\ShogiGame\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Enemy.h">
+      <Filter>TAI\Game\ShogiGame\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player.h">
+      <Filter>TAI\Game\ShogiGame\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\Mouse.h">
+      <Filter>TAI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\Input.h">
+      <Filter>TAI\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
