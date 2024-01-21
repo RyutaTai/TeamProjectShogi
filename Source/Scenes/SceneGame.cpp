@@ -11,10 +11,11 @@
 void SceneGame::Initialize()
 {
 	//	スプライト初期化
-	sprite_[static_cast<int>(SPRITE_GAME::BACK)] = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Game.png");
+	//sprite_[static_cast<int>(SPRITE_GAME::BACK)] = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Game.png");
 	
 	//	ステージ初期化
 	//stage_ = std::make_unique<Stage>("./Resources/Model/cybercity-2099-v2/source/Cyber_City_2099_ANIM.fbx", true);//	シティモデル
+	stage_ = std::make_unique<Stage>("./Resources/Model/tyasitu.fbx", true);//	茶室		
 	shogiBoard_ = std::make_unique<ShogiBoard>("./Resources/Model/Shogi/shogiban.fbx",true);//	将棋盤
 	
 	D3D11_BUFFER_DESC desc;
@@ -74,14 +75,14 @@ void SceneGame::Initialize()
 void SceneGame::Finalize()
 {
 	//	スプライト終了化
-	for (int i = 0; i < static_cast<int>(SPRITE_GAME::MAX); i++)
-	{
-		if (sprite_[i] != nullptr)
-		{
-			sprite_[i] = nullptr;
-		}
-	}
-	//stage_=nullptr;
+	//for (int i = 0; i < static_cast<int>(SPRITE_GAME::MAX); i++)
+	//{
+	//	if (sprite_[i] != nullptr)
+	//	{
+	//		sprite_[i] = nullptr;
+	//	}
+	//}
+	stage_=nullptr;
 	shogiBoard_ = nullptr;	//	ステージ終了化
 	//	エネミー終了化
 	PieceManager::Instance().Clear();
@@ -114,8 +115,8 @@ void SceneGame::Render()
 
 	//	Sprite
 	{
-		sprite_[static_cast<int>(SPRITE_GAME::BACK)]->GetTransform()->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-		sprite_[static_cast<int>(SPRITE_GAME::BACK)]->Render();	//	ゲームスプライト描画
+		//sprite_[static_cast<int>(SPRITE_GAME::BACK)]->GetTransform()->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		//sprite_[static_cast<int>(SPRITE_GAME::BACK)]->Render();	//	ゲームスプライト描画
 	}
 
 	// Model
@@ -126,12 +127,16 @@ void SceneGame::Render()
 		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::CULL_NONE);	//	両面描画するため
 		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
-		stage_->Render();
-#else	//	将棋盤用
-		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::SOLID);
+#else	//	茶室用
+		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::CULL_NONE);
 		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
 #endif
+		stage_->Render();
+		//	将棋盤描画
+		Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::SOLID);
+		Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
+		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
 		shogiBoard_->Render();	//	将棋盤描画
 
 		//	将棋の駒描画
@@ -147,8 +152,20 @@ void SceneGame::Render()
 //	デバッグ描画
 void SceneGame::DrawDebug()
 {
-	Camera::Instance().DrawDebug();
-
-	shogiBoard_->DrawDebug();
+	if (ImGui::TreeNode(u8"Cameraカメラ"))	//	カメラ
+	{
+		Camera::Instance().DrawDebug();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode(u8"Tyasitu茶室"))	//	茶室
+	{
+		stage_->DrawDebug();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode(u8"ShogiBoard将棋盤"))	//	将棋盤
+	{
+		shogiBoard_->DrawDebug();
+		ImGui::TreePop();
+	}
 	PieceManager::Instance().DrawDebug();
 }

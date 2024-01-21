@@ -79,8 +79,8 @@ public:
 		{DIRECTION_NAME::KEIMA_RIGHT,	+2.0f,	+1.0f},		//	桂馬右方向
 		{DIRECTION_NAME::KEIMA_LEFT,	+2.0f,	+1.0f},		//	桂馬左方向
 		{DIRECTION_NAME::NONE,			 0.0f,   0.0f},		//	方向なし
-	}
-	;
+	};
+	
 	//	駒の初期座標
 	PieceInfo pieceInfo_[PIECE_MAX] =
 	{

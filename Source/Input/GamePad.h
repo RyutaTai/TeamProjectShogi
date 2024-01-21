@@ -69,7 +69,7 @@ private:
 	enum class Axis { X, Y };	//	xé≤,yé≤
 	enum class DeadzoneMode { INDEPENDENT_AXES, CIRCULAR, NONE };
 public:
-	enum class Button { A, B, X, Y, LEFT_THUMB, RIGHT_THUMB, LEFT_SHOULDER, RIGHT_SHOULDER, START, BACK, UP, DOWN, LEFT, RIGHT, END };
+	enum class Button { A, B, X, Y, LEFT_THUMB, RIGHT_THUMB, LEFT_SHOULDER, RIGHT_SHOULDER, START, BACK, UP, DOWN, LEFT, RIGHT,ENTER ,END };
 private:
 	static const size_t buttonCount_ = static_cast<size_t>(Button::END);
 

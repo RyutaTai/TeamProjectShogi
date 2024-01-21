@@ -23,7 +23,8 @@ public:
 	void DrawDebug();								//	デバッグ描画
 
 	void RegisterBoard(int index);					//	board_に駒を登録する
-	DirectX::XMFLOAT2 Serch(int index);							//	index番目の駒が動ける方向に空いているマスがあるかどうか調べる
+	void RemoveFromBoard(int index);				//	board_から駒を削除
+	DirectX::XMFLOAT2 Serch(int index);				//	index番目の駒が動ける方向に空いているマスがあるかどうか調べる
 	bool IsEmpty(int directionX, int directionY);	//	指定したマスが空いているか調べる
 
 private:

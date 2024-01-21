@@ -38,6 +38,9 @@
     <Filter Include="TAI\Game\Shogi">
       <UniqueIdentifier>{39f8843e-b2b9-4ad8-93de-64b04cc1b152}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TAI\Collision">
+      <UniqueIdentifier>{651edd14-41af-4c51-9515-37fcd776b7aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\Framework.cpp">
@@ -138,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="Source\Game\ShogiBoard.cpp">
       <Filter>TAI\Game\Shogi</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collision.cpp">
+      <Filter>TAI\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\ShogiBoard.h">
       <Filter>TAI\Game\Shogi</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collision.h">
+      <Filter>TAI\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

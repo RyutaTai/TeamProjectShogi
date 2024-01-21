@@ -62,6 +62,17 @@ void ShogiBoard::RegisterBoard(int index)
 
 }
 
+//	 Boardの配列から駒を削除
+void ShogiBoard::RemoveFromBoard(int index)
+{
+	Piece* piece = PieceManager::Instance().GetPiece(index);
+	int posX, posY;
+	posX = piece->GetPieceInfo(index).posX_;
+	posY = piece->GetPieceInfo(index).posY_;
+	board_[posX][posY] = static_cast<int>(SQUARE_STATE::EMPTY);	//	マスを空いている状態にする
+
+}
+
 //デストラクタ
 ShogiBoard::~ShogiBoard()
 {

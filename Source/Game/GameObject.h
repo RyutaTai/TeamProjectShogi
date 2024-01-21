@@ -15,6 +15,7 @@ public:
 	void Render(const float& scale);
 
 	Transform* GetTransform() { return &transform_; }
+	SkinnedMesh* GetModel() { return model_.get(); }
 
 private:
 	std::unique_ptr<SkinnedMesh>	model_;

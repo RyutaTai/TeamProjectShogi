@@ -200,6 +200,7 @@
     <ClCompile Include="External\imgui\imgui_tables.cpp" />
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Audio\Audio.cpp" />
+    <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\Core\Framework.cpp" />
     <ClCompile Include="Source\Core\Main.cpp" />
     <ClCompile Include="Source\Game\GameObject.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="External\imgui\imstb_textedit.h" />
     <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Audio\Audio.h" />
+    <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\Core\Framework.h" />
     <ClInclude Include="Source\Core\HighResolutionTimer.h" />
     <ClInclude Include="Source\Game\GameObject.h" />

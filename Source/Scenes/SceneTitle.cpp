@@ -58,6 +58,13 @@ void SceneTitle::Update(const float& elapsedTime)
 			break;
 		}
 	}
+
+	//	Enterキーを押したらゲームシーンへ切り替え
+	if (gamePad.ButtonState(GamePad::Button::ENTER, TriggerMode::NONE))
+	{
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+	}
+
 	//	BGM再生
 	bgm_[0]->Play();
 }
@@ -73,5 +80,17 @@ void SceneTitle::Render()
 //	デバッグ描画
 void SceneTitle::DrawDebug()
 {
-	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->DrawDebug();
+	if (ImGui::TreeNode("Sprite"))	//	タイトル画面
+	{
+		if (ImGui::TreeNode("Back"))	//	タイトル画面
+		{
+			sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->DrawDebug();
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("TextKey"))	//	キーテキスト
+		{
+			sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->DrawDebug();
+			ImGui::TreePop();
+		}
+	}
 }
