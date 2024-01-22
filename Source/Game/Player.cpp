@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "../Input/Mouse.h"
+#include "../Game/ShogiBoard.h"
 
 // RAYCAST
 // Convert a position in screen space to a position on near plane in world space.
@@ -34,6 +35,7 @@ Player::Player(const char* fileName, bool triangulate, bool usedAsCollider)
 void Player::Update(float elapsedTime,HWND hwnd) 
 {
 	ChoisePiece(hwnd);
+	MovePiece();
 }
 
 //	駒を選択
@@ -61,16 +63,16 @@ void Player::ChoisePiece(HWND hwnd)
 		DirectX::XMFLOAT3 l0;
 		DirectX::XMStoreFloat3(&l0, L0);
 		DirectX::XMFLOAT3 l;
-		using namespace DirectX;
-		DirectX::XMStoreFloat3(&l, XMLoadFloat3(&positionOnNearPlane) - L0);
+		DirectX::XMStoreFloat3(&l, DirectX::XMVectorSubtract(XMLoadFloat3(&positionOnNearPlane),  L0));
 
 		std::string intersectedMesh;
 		std::string intersectedMaterial;
 		DirectX::XMFLOAT3 intersectedNormal = {};
+		PieceManager& pieceManager = PieceManager::Instance();
 		Piece* piece;
 		for (int i = 0; i < Piece::PIECE_MAX; i++)
 		{
-			piece = PieceManager::Instance().GetPiece(i);
+			piece = pieceManager.GetPiece(i);
 			DirectX::XMFLOAT4X4 pieceTransform = {};
 			const DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(piece->GetTransform()->GetScale().x, piece->GetTransform()->GetScale().y, piece->GetTransform()->GetScale().z)
 				* DirectX::XMMatrixScaling(piece->GetTransform()->GetScaleFactor(), piece->GetTransform()->GetScaleFactor(), piece->GetTransform()->GetScaleFactor()) };
@@ -87,7 +89,8 @@ void Player::ChoisePiece(HWND hwnd)
 				OutputDebugStringA(" : ");
 				OutputDebugStringA(intersectedMaterial.c_str());
 				OutputDebugStringA("\n");
-				piece->SetPieceChoise(true);
+				pieceManager.SetChoicePiece(i);	//	選んでいる駒をセット
+
 			}
 			else
 			{
@@ -99,8 +102,25 @@ void Player::ChoisePiece(HWND hwnd)
 }
 
 //	選んだ駒を動かす
+//	選んだ駒を登録したあとに呼ぶ
 void Player::MovePiece()
 {
-
+	if (PieceManager::Instance().GetChoicePiece() != nullptr)
+	{
+		PieceManager& pieceManager = PieceManager::Instance();
+		Piece::DirectionInfo direction[8] = {};
+		int choicePieceIndex = pieceManager.GetChoicePieceIndex();
+		for (int i = 0; i < Piece::PIECE_DIRECTION_MAX; i++)	//	選択されている駒が動ける方向取得(PIECE_DIRECTION_MAXになるまでに0が入る場合もある)
+		{
+			direction[i] = pieceManager.GetChoicePiece()->GetPieceInfo(choicePieceIndex).direction_[i];
+		}
+		ShogiBoard::Instance().EmptySquareRender();	//	動けるマス、かつ、空いているマスにエフェクト出したい
+		
+		Piece* choicePiece = pieceManager.GetChoicePiece();	//	選んだ駒
+		choicePiece->Move(choicePieceIndex, direction[0].directionX_, direction[0].directionY_);	//	駒を動かす
+		choicePiece->PieceInfoUpdate(pieceManager.GetChoicePieceIndex());	//	駒を更新する
+	}
 }
+
+
 

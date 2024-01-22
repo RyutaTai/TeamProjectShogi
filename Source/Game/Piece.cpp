@@ -12,12 +12,28 @@ Piece::Piece(const char* fileName, bool triangulate, bool usedAsCollider)
 	myNum_ = num++;	//	デバッグ用
 }
 
+//	デストラクタ
 Piece::~Piece()
 {
 }
 
 //	初期化
 void Piece::Initialize(int index)
+{
+	//	駒の方向セット
+	SetPieceDirection(index);
+
+	//	駒の座標 = (将棋盤(9x9マス)上での座標 + pieceOffset) * range_
+	this->GetTransform()->SetPositionX((static_cast<float>(pieceInfo_[index].posX_) + pieceOffset_.x) * range_);
+	this->GetTransform()->SetPositionY(Stage::Instance().GetTransform()->GetPosition().y);	//将棋盤と高さ合わせるため補正とかしない
+	this->GetTransform()->SetPositionZ((static_cast<float>(pieceInfo_[index].posY_) + pieceOffset_.z) * range_);
+
+	//	敵のときだけモデルの向きを反転させる
+	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180.0f));
+}
+
+//	駒データ更新
+void Piece::PieceInfoUpdate(int index)
 {
 	//	駒の座標 = (将棋盤(9x9マス)上での座標 + pieceOffset) * range_
 	this->GetTransform()->SetPositionX((static_cast<float>(pieceInfo_[index].posX_) + pieceOffset_.x) * range_);
@@ -153,6 +169,13 @@ void Piece::Update(float elapsedTime)
 
 }
 
+//	移動処理
+void Piece::Move(int index,int x,int y)
+{
+	pieceInfo_[index].posX_ = x;
+	pieceInfo_[index].posY_ = y;
+}
+
 //	破棄
 void Piece::Destroy()
 {
@@ -160,9 +183,9 @@ void Piece::Destroy()
 }
 
 //	選択フラグセット
-void Piece::SetPieceChoise(bool choise)
+void Piece::SetChoicePiece(bool choice)
 {
-	this->pieceInfo_->isChoise_ = choise;
+	this->pieceInfo_->isChoice_ = choice;
 }
 
 //	描画処理
@@ -223,13 +246,13 @@ void Piece::SetDebugStr()
 		break;
 	}
 
-	switch (this->GetPieceInfo(this->myNum_).isChoise_)
+	switch (this->GetPieceInfo(this->myNum_).isChoice_)
 	{
 	case true:
-		choiseStr_ = u8"選択されている";
+		choiceStr_ = u8"選択されている";
 		break;
 	case false:
-		choiseStr_ = u8"選択されていない";
+		choiceStr_ = u8"選択されていない";
 		break;
 	}
 }
@@ -244,7 +267,7 @@ void Piece::DrawDebug()
 	if (ImGui::TreeNode(n.c_str()))	//	駒の要素番号
 	{
 		ImGui::Text(u8"State　%s", typeStr_.c_str());		//	駒の種類
-		ImGui::Text(u8"IsChoise　%s", choiseStr_.c_str());	//	駒が選択されているか
+		ImGui::Text(u8"IsChoise　%s", choiceStr_.c_str());	//	駒が選択されているか
 		GetTransform()->DrawDebug();
 		ImGui::TreePop();
 	}

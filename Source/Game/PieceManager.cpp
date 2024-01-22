@@ -59,6 +59,14 @@ void PieceManager::Remove(Piece* piece)
 	removes_.insert(piece);	//	破棄リストに追加
 }
 
+// 選択されている駒セット
+void PieceManager::SetChoicePiece(int index)
+{
+	choicePiece_ = pieces_.at(index);	//	選択されている駒をセット
+	choiceIndex_ = index;				//	選択されている駒のインデックスをセット
+	pieces_.at(index)->pieceInfo_->isChoice_ = !pieces_.at(index)->pieceInfo_->isChoice_;	//	選択フラグ反転
+}
+
 //	描画処理
 void PieceManager::Render()
 {

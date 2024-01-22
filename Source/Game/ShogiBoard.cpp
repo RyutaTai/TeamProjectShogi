@@ -78,6 +78,12 @@ ShogiBoard::~ShogiBoard()
 
 }
 
+//	©•ª‚ª“®‚¯‚éƒ}ƒX‚É•`‰æ
+void ShogiBoard::EmptySquareRender()
+{
+
+}
+
 //	•`‰æˆ—
 void ShogiBoard::Render()
 {

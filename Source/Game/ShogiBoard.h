@@ -19,6 +19,7 @@ public:
 	}
 
 	void Initialize(int index);						//	初期化
+	void EmptySquareRender();						//	自分が動けるマスにわかりやすい何かを描画
 	void Render();									//	描画処理
 	void DrawDebug();								//	デバッグ描画
 

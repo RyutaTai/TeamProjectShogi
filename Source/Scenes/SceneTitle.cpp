@@ -66,7 +66,7 @@ void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 	}
 
 	//	BGMÄ¶
-	bgm_[0]->Play();
+	//bgm_[0]->Play();
 }
 
 //	•`‰æˆ—

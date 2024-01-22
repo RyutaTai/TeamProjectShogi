@@ -29,7 +29,7 @@ public:
 	//	駒の進行方向名
 	enum class DIRECTION_NAME		
 	{
-		BACK_LEFT,			//	左後ろ
+		BACK_LEFT=0,			//	左後ろ
 		BACK,				//	後ろ
 		BACK_RIGHT,			//	右後ろ
 		LEFT,				//	左
@@ -51,7 +51,7 @@ public:
 	};
 
 	static const int PIECE_DIRECTION_MAX = 8;	//	１つの駒が持てる駒の方向の最大数
-	static const int DIRECTION_MAX = 12;		//	駒の方向の最大数
+	static const int DIRECTION_MAX = 11;		//	駒の方向の最大数
 	//	駒の情報
 	struct PieceInfo			
 	{
@@ -60,7 +60,7 @@ public:
 		PIECE_TYPE pieceType_;			//	駒の種類
 		bool isEnemy_;					//	敵の駒か、自分の駒か 敵ならtrue
 		bool isDead_;					//	場にあるかないか
-		bool isChoise_;					//	選択されているか
+		bool isChoice_;					//	選択されているか
 		DirectionInfo direction_[PIECE_DIRECTION_MAX];		//	駒の方向情報を持つ(方向の名前、動けるマスを持ってる) まだ関連付けしてない
 	};
 
@@ -137,10 +137,12 @@ public:
 	void Render();												//	描画処理
 
 	void Destroy();												//	破棄処理
+	void Move(int index,int x, int y);									//	移動処理
 
-	void SetPieceChoise(bool choise);										//	選択フラグセット
+	void SetChoicePiece(bool choice);										//	選択フラグセット
 	void SetPieceDirection(int index);										//	駒の方向direction_を駒の情報pieceInfo_に登録
-	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
+	void PieceInfoUpdate(int index);										//	駒データ更新
+	PieceInfo& GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
 	//	デバッグ用
 	void DrawDebug();											//	デバッグ描画
@@ -154,7 +156,7 @@ private:	//デバッグ用
 	static int num;					//	将棋の駒の要素番号
 	int myNum_ = 0;					//	将棋の駒の要素番号
 	std::string typeStr_ = "";		//	駒の種類
-	std::string choiseStr_ = "";	//	選択されているか
+	std::string choiceStr_ = "";	//	選択されているか
 
 };
 
