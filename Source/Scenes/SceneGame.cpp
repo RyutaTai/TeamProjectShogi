@@ -96,6 +96,14 @@ void SceneGame::Update(const float& elapsedTime,HWND hwnd)
 
 	Camera::Instance().SetTarget(shogiBoard_.get()->GetTransform()->GetPosition());
 	Camera::Instance().Update(elapsedTime);
+
+#if 1 ŽÀŒ±—p
+	if (gamePad.ButtonState(GamePad::Button::A))
+		Camera::Instance().LaunchCameraMove(DirectX::XMFLOAT3(0.0f, 25.0f, 3.0f), DirectX::XMFLOAT3(-1.5f, 0.0f, 0.0f), 10.0f);
+
+#endif
+
+
 	PieceManager::Instance().Update(elapsedTime);
 	player_.Update(elapsedTime,hwnd);
 }

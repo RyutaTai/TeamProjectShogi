@@ -18,6 +18,8 @@ public:
 	void Initialize();
 	void Update(float elapsedTime);	//	更新処理
 
+	void LaunchCameraMove(DirectX::XMFLOAT3 targetEye_, DirectX::XMFLOAT3 targetAngle, float moveTime_);
+
 	//	デバッグ用
 	void DrawDebug();	//	デバッグ描画
 	void Reset();		//	リセット
@@ -36,7 +38,7 @@ public:
 	const DirectX::XMFLOAT3& GetUp()	const { return up_; }		//	カメラ上方向取得
 	const DirectX::XMFLOAT3& GetFront() const { return front_; }	//	カメラ前方向取得
 	const DirectX::XMFLOAT3& GetRight() const { return right_; }	//	カメラ右方向取得
-	
+
 private:
 	Transform transform_;
 
@@ -62,7 +64,13 @@ private:
 	DirectX::XMFLOAT3 right_;								//	カメラの右方向
 
 
-	bool CameraMove(DirectX::XMFLOAT3 target_pos,DirectX::XMFLOAT3 target_angle,float move_time_);
-	float move_time;
+	bool CameraMove();
+	bool cameraMove = false;
+	float moveTime;
+	float moveTimer;
+	DirectX::XMFLOAT3 moveTargetEye;
+	DirectX::XMFLOAT3 moveTargetAngle;
+	DirectX::XMFLOAT3 cashPos;
+	DirectX::XMFLOAT3 cashAngle;
 };
 

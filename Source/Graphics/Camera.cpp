@@ -5,7 +5,7 @@
 #include "../Core/Framework.h"
 #include "../Input/Gamepad.h"
 #include "../Others/MathHelper.h"
-
+#include "../Easing.h"
 //	コンストラクタ
 Camera::Camera()
 {
@@ -80,16 +80,51 @@ void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& fo
 
 }
 
-bool Camera::CameraMove(DirectX::XMFLOAT3 target_pos, DirectX::XMFLOAT3 target_angle, float move_time_)
+void Camera::LaunchCameraMove(DirectX::XMFLOAT3 targetEye_, DirectX::XMFLOAT3 targetAngle, float moveTime_)
 {
-	move_time = move_time_;
-	
+	moveTime = moveTime_;
+	moveTimer = 0.0f;
+
+	cashPos = eye_;
+	cashAngle = angle_;
+	moveTargetEye = targetEye_;
+	moveTargetAngle = targetAngle;
+
+	cameraMove = true;
+}
+
+bool Camera::CameraMove()
+{
+	if (!cameraMove)return false;
+
+	if(moveTimer>=moveTime)
+	{
+		eye_ = moveTargetEye;
+		angle_ = moveTargetAngle;
+		cameraMove = false;
+		return false;
+	}
+
+	eye_.x = Dante::Math::Easing::InCirc(moveTimer, moveTime, moveTargetEye.x, cashPos.x);
+	eye_.y = Dante::Math::Easing::InCirc(moveTimer, moveTime, moveTargetEye.y, cashPos.y);
+	eye_.z = Dante::Math::Easing::InCirc(moveTimer, moveTime, moveTargetEye.z, cashPos.z);
+	angle_.x = Dante::Math::Easing::InCirc(moveTimer, moveTime, moveTargetAngle.x, cashAngle.x);
+	angle_.y = Dante::Math::Easing::InCirc(moveTimer, moveTime, moveTargetAngle.y, cashAngle.y);
+	angle_.z = Dante::Math::Easing::InCirc(moveTimer, moveTime, moveTargetAngle.z, cashAngle.z);
+
+	float time = HighResolutionTimer::Instance().GetDeltaTime();
+	moveTimer += HighResolutionTimer::Instance().GetDeltaTime();
+
+    return true;
 }
 
 //	更新処理
 void Camera::Update(float elapsedTime)
 {
-	GamePad gamePad;
+	// カメラを演出で移動中は動かない
+	if (CameraMove())return;
+
+    GamePad gamePad;
 	gamePad.Acquire();
 	float RX = gamePad.ThumbStateRx();
 	float RY = gamePad.ThumbStateRy();
