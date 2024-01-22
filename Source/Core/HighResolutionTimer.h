@@ -5,6 +5,12 @@
 class HighResolutionTimer
 {
 public:
+	static HighResolutionTimer& Instance()
+	{
+		static HighResolutionTimer instance_;
+		return instance_;
+	}
+
 	HighResolutionTimer()
 	{
 		LONGLONG countsPerSec;
@@ -120,6 +126,8 @@ public:
 			deltaTime_ = 0.0;
 		}
 	}
+
+	double GetDeltaTime() { return deltaTime_; }
 
 private:
 	LONGLONG baseTime_{ 0LL };

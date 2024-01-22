@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Character.h"
+#include "../Core/HighResolutionTimer.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/Camera.h"
 #include "../Game/PieceManager.h"

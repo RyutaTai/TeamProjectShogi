@@ -640,7 +640,8 @@ void SkinnedMesh::BlendAnimations(const Animation::Keyframe* keyframes[2], float
 }
 
 // The coordinate system of all function arguments is world space.
-bool SkinnedMesh::Raycast(const DirectX::XMFLOAT3& position/*ray position*/, const DirectX::XMFLOAT3& direction/*ray direction*/, const DirectX::XMFLOAT4X4& worldTransform, DirectX::XMFLOAT4& closesPoint, DirectX::XMFLOAT3& intersectedNormal,
+bool SkinnedMesh::Raycast(const DirectX::XMFLOAT3& position/*ray position*/, const DirectX::XMFLOAT3& direction/*ray direction*/, const DirectX::XMFLOAT4X4& worldTransform, 
+	DirectX::XMFLOAT4& closesPoint, DirectX::XMFLOAT3& intersectedNormal,
 	std::string& intersectedMesh, std::string& intersectedMaterial)
 {
 	float closest_distance{ FLT_MAX };
