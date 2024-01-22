@@ -297,6 +297,7 @@
     <ClInclude Include="Source\Input\Input.h">
       <Filter>TAI\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Easing.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source\Shaders\GeometricPrimitivePs.hlsl">

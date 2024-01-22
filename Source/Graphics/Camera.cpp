@@ -80,6 +80,12 @@ void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& fo
 
 }
 
+bool Camera::CameraMove(DirectX::XMFLOAT3 target_pos, DirectX::XMFLOAT3 target_angle, float move_time_)
+{
+	move_time = move_time_;
+	
+}
+
 //	XVˆ—
 void Camera::Update(float elapsedTime)
 {

@@ -61,5 +61,8 @@ private:
 	DirectX::XMFLOAT3 front_;								//	カメラの前方向
 	DirectX::XMFLOAT3 right_;								//	カメラの右方向
 
+
+	bool CameraMove(DirectX::XMFLOAT3 target_pos,DirectX::XMFLOAT3 target_angle,float move_time_);
+	float move_time;
 };
 
