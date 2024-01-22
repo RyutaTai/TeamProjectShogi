@@ -45,6 +45,13 @@ void Camera::SetPerspectiveFov()
 
 }
 
+//	ビュープロジェクション行列算出
+const DirectX::XMMATRIX& Camera::CalcViewProjectionMatrix()
+{
+	viewProjectionMatrix_ = viewMatrix_* projectionMatrix_;
+	return viewProjectionMatrix_;
+}
+
 //	指定方向を向く
 void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& focus, const DirectX::XMFLOAT3& up)
 {

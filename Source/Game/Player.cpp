@@ -33,7 +33,6 @@ Player::Player(const char* fileName, bool triangulate, bool usedAsCollider)
 //	 XVˆ—
 void Player::Update(float elapsedTime,HWND hwnd) 
 {
-	float time = HighResolutionTimer::Instance().GetDeltaTime();
 	ChoisePiece(hwnd);
 }
 
@@ -52,9 +51,9 @@ void Player::ChoisePiece(HWND hwnd)
 		Graphics::Instance().GetDeviceContext()->RSGetViewports(&viewportCount, viewports);
 		UINT num_viewports{ 1 };
 
-		DirectX::XMFLOAT4X4 viewFloat4x4;
-		DirectX::XMStoreFloat4x4(&viewFloat4x4, Camera::Instance().GetViewMatrix());
-		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewFloat4x4);
+		DirectX::XMFLOAT4X4 viewProjectionMatrix;
+		DirectX::XMStoreFloat4x4(&viewProjectionMatrix, Camera::Instance().CalcViewProjectionMatrix());
+		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewProjectionMatrix);
 
 		DirectX::XMFLOAT3 cameraPosition;
 		cameraPosition = { Camera::Instance().GetEye() };
@@ -67,10 +66,10 @@ void Player::ChoisePiece(HWND hwnd)
 		std::string intersectedMesh;
 		std::string intersectedMaterial;
 		DirectX::XMFLOAT3 intersectedNormal = {};
-
+		Piece* piece;
 		for (int i = 0; i < Piece::PIECE_MAX; i++)
 		{
-			Piece* piece = PieceManager::Instance().GetPiece(i);
+			piece = PieceManager::Instance().GetPiece(i);
 			DirectX::XMFLOAT4X4 pieceTransform = {};
 			DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
 			//	ƒŒƒC‚ª“–‚½‚Á‚Ä‚¢‚½‚ç

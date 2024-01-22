@@ -261,10 +261,11 @@ void SkinnedMesh::CreateComObjects(ID3D11Device* device, const char* fbxFilename
 		hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.indexBuffer_.ReleaseAndGetAddressOf());
 		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
-#if 1
-		mesh.vertices_.clear();
-		mesh.indices_.clear();
-#endif
+		if (!usedAsCollider)
+		{
+			mesh.vertices_.clear();
+			mesh.indices_.clear();
+		}
 	}
 
 	for (std::unordered_map<uint64_t, Material>::iterator iterator = materials_.begin();
@@ -660,7 +661,7 @@ bool SkinnedMesh::Raycast(const DirectX::XMFLOAT3& position/*ray position*/, con
 		XMStoreFloat3(&rayPosition, DirectX::XMVector3TransformCoord(XMLoadFloat3(&rayPosition), inverseConcatenatedMatrix));
 		XMStoreFloat3(&rayDirection, DirectX::XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&rayDirection), inverseConcatenatedMatrix)));
 
-#if 1
+#if 0
 		const float* min{ reinterpret_cast<const float*>(&mesh.boundingBox_[0]) };
 		const float* max{ reinterpret_cast<const float*>(&mesh.boundingBox_[1]) };
 		if (!IntersectRayAABB(reinterpret_cast<const float*>(&rayPosition), reinterpret_cast<const float*>(&rayDirection), min, max))
