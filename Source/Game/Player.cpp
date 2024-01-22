@@ -17,7 +17,7 @@ DirectX::XMFLOAT3 ConvertScreenToWorld(LONG x/*screen*/, LONG y/*screen*/, float
 						0.0f, -vp.Height * 0.5f, 0.0f, 0.0f,
 						0.0f, 0.0f, vp.MaxDepth - vp.MinDepth, 0.0f,
 						vp.TopLeftX + vp.Width * 0.5f, vp.Height * 0.5f + vp.TopLeftY, vp.MinDepth, 1.0f))
-			), XMMatrixInverse(NULL, XMLoadFloat4x4(&view_projection))
+			), DirectX::XMMatrixInverse(NULL, XMLoadFloat4x4(&view_projection))
 		)
 	);
 	return p;
@@ -49,12 +49,11 @@ void Player::ChoisePiece(HWND hwnd)
 		D3D11_VIEWPORT viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
 		UINT viewport_count = { D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE };
 		Graphics::Instance().GetDeviceContext()->RSGetViewports(&viewport_count, viewports);
-		D3D11_VIEWPORT viewport;
 		UINT num_viewports{ 1 };
 
-		DirectX::XMFLOAT4X4 viewFloat;
-		DirectX::XMStoreFloat4x4(&viewFloat, Camera::Instance().GetViewMatrix());
-		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewFloat);
+		DirectX::XMFLOAT4X4 viewFloat4x4;
+		DirectX::XMStoreFloat4x4(&viewFloat4x4, Camera::Instance().GetViewMatrix());
+		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewFloat4x4);
 
 		DirectX::XMFLOAT4 cameraPosition;
 		cameraPosition = { Camera::Instance().GetEye().x,Camera::Instance().GetEye().y,Camera::Instance().GetEye().z,1.0f };
@@ -73,6 +72,7 @@ void Player::ChoisePiece(HWND hwnd)
 			Piece* piece = PieceManager::Instance().GetPiece(i);
 			DirectX::XMFLOAT4X4 pieceTransform;
 			DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorldMatrix(1.0f));
+			//	ƒŒƒC‚ª“–‚½‚Á‚Ä‚¢‚½‚ç
 			if (piece->GetModel()->Raycast(l0, l, pieceTransform, intersectionPoint, intersectedNormal, intersectedMesh, intersectedMaterial))
 			{
 				OutputDebugStringA("Intersected : ");
