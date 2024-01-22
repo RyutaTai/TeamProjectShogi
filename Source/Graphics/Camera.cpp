@@ -5,7 +5,7 @@
 #include "../Core/Framework.h"
 #include "../Input/Gamepad.h"
 #include "../Others/MathHelper.h"
-
+#include "../Easing.h"
 //	コンストラクタ
 Camera::Camera()
 {
@@ -87,129 +87,176 @@ void Camera::SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& fo
 
 }
 
+bool Camera::LaunchCameraMove(DirectX::XMFLOAT3 targetEye_, DirectX::XMFLOAT3 targetAngle, float moveTime_)
+{
+	if (cameraMove)return false;
+
+	moveTime = moveTime_;
+	moveTimer = 0.0f;
+
+	cashPos = eye_;
+	cashAngle = angle_;
+	moveTargetEye = targetEye_;
+	moveTargetAngle = targetAngle;
+
+	cameraMove = true;
+
+	return true;
+}
+
+bool Camera::CameraMove()
+{
+	if (!cameraMove)return false;
+
+	if(moveTimer>=moveTime)
+	{
+		eye_ = moveTargetEye;
+		angle_ = moveTargetAngle;
+		cameraMove = false;
+		return false;
+	}
+
+	eye_.x = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetEye.x, cashPos.x);
+	eye_.y = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetEye.y, cashPos.y);
+	eye_.z = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetEye.z, cashPos.z);
+	angle_.x = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetAngle.x, cashAngle.x);
+	angle_.y = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetAngle.y, cashAngle.y);
+	angle_.z = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetAngle.z, cashAngle.z);
+
+	//float time = HighResolutionTimer::Instance().GetDeltaTime();
+	moveTimer += HighResolutionTimer::Instance().GetDeltaTime();
+
+    return true;
+}
+
 //	更新処理
 void Camera::Update(float elapsedTime)
 {
-	GamePad gamePad;
-	gamePad.Acquire();
-	float RX = gamePad.ThumbStateRx();
-	float RY = gamePad.ThumbStateRy();
-	float LY = gamePad.ThumbStateLy();
-
-	//	カメラの回転速度
-	float aSpeed = rollSpeed_ * elapsedTime;
-	float moveSpeed = moveSpeed_ * elapsedTime;
-
-	//	カメラ移動(X軸、Y軸)
-	//	左のShiftキーと右スティック(IJKLキー)いずれかを押しているとき、
-	//	カメラの視点をスティックの入力値に合わせてX,Y軸方向に移動
-	if (gamePad.TriggerStateL() && (RX != 0 || RY != 0))
+	// カメラを演出で移動中は動かない
+	if (!CameraMove())
 	{
-		eyeOffset_.x -= RX * moveSpeed;
-		eyeOffset_.y += RY * moveSpeed;
-	}
-	else	//	カメラ回転　右スティックの入力値に合わせてX軸とY軸を回転(注視点を回転させる)
-	{
-		angle_.x += RY * aSpeed;
-		angle_.y += RX * aSpeed;
-		eyeOffset_.x = 0;	//	X,Y軸のカメラ移動値をリセット
-		eyeOffset_.y = 0;
-	}
 
-	//	カメラ移動(Z軸)　左スティック(W,Aキー)の入力値に合わせてZ軸方向に移動
-	//	入力がなかったらリセット
-	if (gamePad.ThumbStateLy() != 0)//	左スティック
-	{
-		eyeOffset_.z -= LY * moveSpeed;
-	}
-	else	eyeOffset_.z = 0;
+		GamePad gamePad;
+		gamePad.Acquire();
+		float RX = gamePad.ThumbStateRx();
+		float RY = gamePad.ThumbStateRy();
+		float LY = gamePad.ThumbStateLy();
+
+		//	カメラの回転速度
+		float aSpeed = rollSpeed_ * elapsedTime;
+		float moveSpeed = moveSpeed_ * elapsedTime;
+
+		//	カメラ移動(X軸、Y軸)
+		//	左のShiftキーと右スティック(IJKLキー)いずれかを押しているとき、
+		//	カメラの視点をスティックの入力値に合わせてX,Y軸方向に移動
+		if (gamePad.TriggerStateL() && (RX != 0 || RY != 0))
+		{
+			eyeOffset_.x -= RX * moveSpeed;
+			eyeOffset_.y += RY * moveSpeed;
+		}
+		else	//	カメラ回転　右スティックの入力値に合わせてX軸とY軸を回転(注視点を回転させる)
+		{
+			angle_.x += RY * aSpeed;
+			angle_.y += RX * aSpeed;
+			eyeOffset_.x = 0;	//	X,Y軸のカメラ移動値をリセット
+			eyeOffset_.y = 0;
+		}
+
+		//	カメラ移動(Z軸)　左スティック(W,Aキー)の入力値に合わせてZ軸方向に移動
+		//	入力がなかったらリセット
+		if (gamePad.ThumbStateLy() != 0)//	左スティック
+		{
+			eyeOffset_.z -= LY * moveSpeed;
+		}
+		else	eyeOffset_.z = 0;
 
 #if 1 //	これを外すと向いてる方向に行かなくなる
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	DirectX::XMFLOAT3 cameraRight = this->GetRight();
-	DirectX::XMFLOAT3 cameraFront = this->GetFront();
-	DirectX::XMFLOAT3 cameraUp = this->GetUp();
+		//////////////////////////////////////////////////////////////////////////////////////////////////
+		DirectX::XMFLOAT3 cameraRight = this->GetRight();
+		DirectX::XMFLOAT3 cameraFront = this->GetFront();
+		DirectX::XMFLOAT3 cameraUp = this->GetUp();
 
-	//	カメラ右方向ベクトルを単位ベクトルに変換
-	float Rlength;
-	DirectX::XMStoreFloat(&Rlength, DirectX::XMVector3Length(DirectX::XMLoadFloat3(&cameraRight)));
-	float cameraRightLength = DirectX::XMVectorGetX(DirectX::XMVectorSqrt(DirectX::XMLoadFloat3(&cameraRight)));
-	if (cameraRightLength > 0.0f)
-	{
-		//	単位ベクトル化
-		DirectX::XMVECTOR cameraRightVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraRight));
-		DirectX::XMStoreFloat3(&cameraRight, cameraRightVec);
-	}
+		//	カメラ右方向ベクトルを単位ベクトルに変換
+		float Rlength;
+		DirectX::XMStoreFloat(&Rlength, DirectX::XMVector3Length(DirectX::XMLoadFloat3(&cameraRight)));
+		float cameraRightLength = DirectX::XMVectorGetX(DirectX::XMVectorSqrt(DirectX::XMLoadFloat3(&cameraRight)));
+		if (cameraRightLength > 0.0f)
+		{
+			//	単位ベクトル化
+			DirectX::XMVECTOR cameraRightVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraRight));
+			DirectX::XMStoreFloat3(&cameraRight, cameraRightVec);
+		}
 
-	//	カメラ前方向ベクトルを単位ベクトルに変換
-	float Zlength;
-	DirectX::XMStoreFloat(&Zlength, DirectX::XMVector3Length(DirectX::XMLoadFloat3(&cameraFront)));
-	float cameraFrontLength = DirectX::XMVectorGetX(DirectX::XMVectorSqrt(DirectX::XMLoadFloat3(&cameraFront)));
-	if (cameraFrontLength > 0.0f)
-	{
-		//	単位ベクトル化
-		DirectX::XMVECTOR cameraFrontVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraFront));
-		DirectX::XMStoreFloat3(&cameraFront, cameraFrontVec);
-	}
+		//	カメラ前方向ベクトルを単位ベクトルに変換
+		float Zlength;
+		DirectX::XMStoreFloat(&Zlength, DirectX::XMVector3Length(DirectX::XMLoadFloat3(&cameraFront)));
+		float cameraFrontLength = DirectX::XMVectorGetX(DirectX::XMVectorSqrt(DirectX::XMLoadFloat3(&cameraFront)));
+		if (cameraFrontLength > 0.0f)
+		{
+			//	単位ベクトル化
+			DirectX::XMVECTOR cameraFrontVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraFront));
+			DirectX::XMStoreFloat3(&cameraFront, cameraFrontVec);
+		}
 
-	//	カメラ上方向ベクトルを単位ベクトルに変換
-	float Ulength;
-	DirectX::XMStoreFloat(&Ulength, DirectX::XMVector3Length(DirectX::XMLoadFloat3(&cameraUp)));
-	float cameraUpLength = DirectX::XMVectorGetX(DirectX::XMVectorSqrt(DirectX::XMLoadFloat3(&cameraUp)));
-	if (cameraUpLength > 0.0f)
-	{
-		//	単位ベクトル化
-		DirectX::XMVECTOR cameraUpVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraUp));
-		DirectX::XMStoreFloat3(&cameraUp, cameraUpVec);
-	}
+		//	カメラ上方向ベクトルを単位ベクトルに変換
+		float Ulength;
+		DirectX::XMStoreFloat(&Ulength, DirectX::XMVector3Length(DirectX::XMLoadFloat3(&cameraUp)));
+		float cameraUpLength = DirectX::XMVectorGetX(DirectX::XMVectorSqrt(DirectX::XMLoadFloat3(&cameraUp)));
+		if (cameraUpLength > 0.0f)
+		{
+			//	単位ベクトル化
+			DirectX::XMVECTOR cameraUpVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraUp));
+			DirectX::XMStoreFloat3(&cameraUp, cameraUpVec);
+		}
 
-	//	スティックの水平入力値をカメラ右方向に反映し、
-	//	スティック垂直入力値をカメラ前方向に反映し、
-	//	進行ベクトルを計算する
-	eyeOffset_.x = cameraFront.x * LY * moveSpeed_ + cameraRight.x * RX * moveSpeed_ + cameraUp.x * RY * moveSpeed_;
-	eyeOffset_.y = cameraFront.y * LY * moveSpeed_ + cameraRight.y * RX * moveSpeed_ + cameraUp.y * RY * moveSpeed_;
-	eyeOffset_.z = cameraFront.z * LY * moveSpeed_ + cameraRight.z * RX * moveSpeed_ + cameraUp.z * RY * moveSpeed_;
-	////////////////////////////////////////////////////////////////////////////////////////////
+		//	スティックの水平入力値をカメラ右方向に反映し、
+		//	スティック垂直入力値をカメラ前方向に反映し、
+		//	進行ベクトルを計算する
+		eyeOffset_.x = cameraFront.x * LY * moveSpeed_ + cameraRight.x * RX * moveSpeed_ + cameraUp.x * RY * moveSpeed_;
+		eyeOffset_.y = cameraFront.y * LY * moveSpeed_ + cameraRight.y * RX * moveSpeed_ + cameraUp.y * RY * moveSpeed_;
+		eyeOffset_.z = cameraFront.z * LY * moveSpeed_ + cameraRight.z * RX * moveSpeed_ + cameraUp.z * RY * moveSpeed_;
+		////////////////////////////////////////////////////////////////////////////////////////////
 #endif
-	
+
 	//	カメラ移動(X軸、Y軸)
 	//	左のShiftキーと右スティック(IJKLキー)いずれかを押しているとき、
 	//	カメラの視点をスティックの入力値に合わせてX,Y軸方向に移動
-	if (gamePad.TriggerStateL() && (RX != 0 || RY != 0))
-	{
-		eyeOffset_.x -= RX * moveSpeed;
-		eyeOffset_.y += RY * moveSpeed;
-	}
-	else	//	カメラ回転　右スティックの入力値に合わせてX軸とY軸を回転(注視点を回転させる)
-	{
-		angle_.x += RY * aSpeed;
-		angle_.y += RX * aSpeed;
-		eyeOffset_.x = 0;	//	X,Y軸のカメラ移動値をリセット
-		eyeOffset_.y = 0;
-	}
+		if (gamePad.TriggerStateL() && (RX != 0 || RY != 0))
+		{
+			eyeOffset_.x -= RX * moveSpeed;
+			eyeOffset_.y += RY * moveSpeed;
+		}
+		else	//	カメラ回転　右スティックの入力値に合わせてX軸とY軸を回転(注視点を回転させる)
+		{
+			angle_.x += RY * aSpeed;
+			angle_.y += RX * aSpeed;
+			eyeOffset_.x = 0;	//	X,Y軸のカメラ移動値をリセット
+			eyeOffset_.y = 0;
+		}
 
-	//	カメラ移動(Z軸)　左スティック(W,Aキー)の入力値に合わせてZ軸方向に移動
-	//	入力がなかったらリセット
-	if (gamePad.ThumbStateLy() != 0)//	左スティック
-	{
-		eyeOffset_.z -= LY * moveSpeed;
-	}
-	else	eyeOffset_.z = 0;
+		//	カメラ移動(Z軸)　左スティック(W,Aキー)の入力値に合わせてZ軸方向に移動
+		//	入力がなかったらリセット
+		if (gamePad.ThumbStateLy() != 0)//	左スティック
+		{
+			eyeOffset_.z -= LY * moveSpeed;
+		}
+		else	eyeOffset_.z = 0;
 
+	}
 
 	//	カメラ回転値を回転行列に変換
 	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle_.x, angle_.y, angle_.z);
-	
+
 	//	回転行列から前方向ベクトルを取り出す
 	//	Transform.r[2]で行列の３行目のデータを取り出している
 	DirectX::XMVECTOR Front = Transform.r[2];
 	DirectX::XMFLOAT3 front;
 	DirectX::XMStoreFloat3(&front, Front);
-	
+
 	focus_.x = eye_.x - (front.x * range_);
 	focus_.y = eye_.y - (front.y * range_);
 	focus_.z = eye_.z - (front.z * range_);
-	
+
 	eye_ = eye_ + eyeOffset_;	//	カメラ視点の更新
 
 	//	カメラの視点と注視点を設定
