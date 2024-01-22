@@ -99,7 +99,7 @@ void SceneGame::Update(const float& elapsedTime,HWND hwnd)
 
 #if 1 ŽÀŒ±—p
 	if (gamePad.ButtonState(GamePad::Button::A))
-		Camera::Instance().LaunchCameraMove(DirectX::XMFLOAT3(0.0f, 25.0f, 3.0f), DirectX::XMFLOAT3(-1.5f, 0.0f, 0.0f), 10.0f);
+		Camera::Instance().LaunchCameraMove(DirectX::XMFLOAT3(0.0f, 25.0f, 3.0f), DirectX::XMFLOAT3(-1.5f, 0.0f, 0.0f), 3.0f);
 
 #endif
 

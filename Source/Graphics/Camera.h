@@ -18,7 +18,11 @@ public:
 	void Initialize();
 	void Update(float elapsedTime);	//	更新処理
 
-	void LaunchCameraMove(DirectX::XMFLOAT3 targetEye_, DirectX::XMFLOAT3 targetAngle, float moveTime_);
+	// この関数をコールすればカメラ移動がイージングで始まります。
+	//第一引数：目標座標
+	//第二引数：目標角度
+	//第三引数：何秒で移動するか
+	bool LaunchCameraMove(DirectX::XMFLOAT3 targetEye_, DirectX::XMFLOAT3 targetAngle, float moveTime_);
 
 	//	デバッグ用
 	void DrawDebug();	//	デバッグ描画
