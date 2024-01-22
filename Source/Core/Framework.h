@@ -49,7 +49,7 @@ public:
 			{
 				tictoc_.Tick();
 				CalculateFrameStats();
-				Update(tictoc_.TimeInterval());
+				Update(tictoc_.GetDeltaTime());
 				Render();
 			}
 		}
@@ -132,7 +132,7 @@ public:
 	Graphics graphics_;
 
 private:
-	HighResolutionTimer tictoc_;
+	HighResolutionTimer& tictoc_ = HighResolutionTimer::Instance();
 	uint32_t frames_{ 0 };
 	float elapsedTime_{ 0.0f };
 
