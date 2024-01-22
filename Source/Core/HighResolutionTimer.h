@@ -60,7 +60,7 @@ public:
 		}
 	}
 
-	float TimeInterval() const  // in seconds
+	float GetDeltaTime() const  // in seconds
 	{
 		return static_cast<float>(deltaTime_);
 	}
@@ -126,8 +126,6 @@ public:
 			deltaTime_ = 0.0;
 		}
 	}
-
-	double GetDeltaTime() { return deltaTime_; }
 
 private:
 	LONGLONG baseTime_{ 0LL };

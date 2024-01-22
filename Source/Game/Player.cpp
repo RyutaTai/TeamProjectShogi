@@ -33,6 +33,7 @@ Player::Player(const char* fileName, bool triangulate, bool usedAsCollider)
 //	 XVˆ—
 void Player::Update(float elapsedTime,HWND hwnd) 
 {
+	float time = HighResolutionTimer::Instance().GetDeltaTime();
 	ChoisePiece(hwnd);
 }
 
@@ -70,8 +71,8 @@ void Player::ChoisePiece(HWND hwnd)
 		for (int i = 0; i < Piece::PIECE_MAX; i++)
 		{
 			Piece* piece = PieceManager::Instance().GetPiece(i);
-			DirectX::XMFLOAT4X4 pieceTransform;
-			DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorldMatrix(1.0f));
+			DirectX::XMFLOAT4X4 pieceTransform = {};
+			DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
 			//	ƒŒƒC‚ª“–‚½‚Á‚Ä‚¢‚½‚ç
 			if (piece->GetModel()->Raycast(l0, l, pieceTransform, intersectionPoint, intersectedNormal, intersectedMesh, intersectedMaterial))
 			{
