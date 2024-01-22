@@ -52,7 +52,7 @@ void Player::ChoisePiece(HWND hwnd)
 		UINT num_viewports{ 1 };
 
 		DirectX::XMFLOAT4X4 viewProjectionMatrix;
-		DirectX::XMStoreFloat4x4(&viewProjectionMatrix, Camera::Instance().CalcViewProjectionMatrix());
+		DirectX::XMStoreFloat4x4(&viewProjectionMatrix, Camera::Instance().GetViewMatrix() * Camera::Instance().GetProjectionMatrix());
 		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewProjectionMatrix);
 
 		DirectX::XMFLOAT3 cameraPosition;
@@ -61,7 +61,8 @@ void Player::ChoisePiece(HWND hwnd)
 		DirectX::XMFLOAT3 l0;
 		DirectX::XMStoreFloat3(&l0, L0);
 		DirectX::XMFLOAT3 l;
-		DirectX::XMStoreFloat3(&l, DirectX::XMVectorSubtract(L0, XMLoadFloat3(&positionOnNearPlane)));
+		using namespace DirectX;
+		DirectX::XMStoreFloat3(&l, XMLoadFloat3(&positionOnNearPlane) - L0);
 
 		std::string intersectedMesh;
 		std::string intersectedMaterial;
@@ -71,7 +72,13 @@ void Player::ChoisePiece(HWND hwnd)
 		{
 			piece = PieceManager::Instance().GetPiece(i);
 			DirectX::XMFLOAT4X4 pieceTransform = {};
-			DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
+			const DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(piece->GetTransform()->GetScale().x, piece->GetTransform()->GetScale().y, piece->GetTransform()->GetScale().z)
+				* DirectX::XMMatrixScaling(piece->GetTransform()->GetScaleFactor(), piece->GetTransform()->GetScaleFactor(), piece->GetTransform()->GetScaleFactor()) };
+			const DirectX::XMMATRIX R{ DirectX::XMMatrixRotationRollPitchYaw(piece->GetTransform()->GetRotationX(), piece->GetTransform()->GetRotationY(), piece->GetTransform()->GetRotationZ()) };
+			const DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(piece->GetTransform()->GetPositionX(), piece->GetTransform()->GetPositionY(), piece->GetTransform()->GetPositionZ()) };
+			//DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
+			DirectX::XMStoreFloat4x4(&pieceTransform, S * R * T);
+			
 			//	ƒŒƒC‚ª“–‚½‚Á‚Ä‚¢‚½‚ç
 			if (piece->GetModel()->Raycast(l0, l, pieceTransform, intersectionPoint, intersectedNormal, intersectedMesh, intersectedMaterial))
 			{

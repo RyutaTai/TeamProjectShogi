@@ -261,11 +261,11 @@ void SkinnedMesh::CreateComObjects(ID3D11Device* device, const char* fbxFilename
 		hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.indexBuffer_.ReleaseAndGetAddressOf());
 		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
-		if (!usedAsCollider)
+	/*	if (!usedAsCollider)
 		{
 			mesh.vertices_.clear();
 			mesh.indices_.clear();
-		}
+		}*/
 	}
 
 	for (std::unordered_map<uint64_t, Material>::iterator iterator = materials_.begin();

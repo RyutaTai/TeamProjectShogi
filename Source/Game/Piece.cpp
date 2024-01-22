@@ -25,7 +25,7 @@ void Piece::Initialize(int index)
 	this->GetTransform()->SetPositionZ((static_cast<float>(pieceInfo_[index].posY_) + pieceOffset_.z) * range_);
 
 	//	“G‚Ì‚Æ‚«‚¾‚¯ƒ‚ƒfƒ‹‚ÌŒü‚«‚ð”½“]‚³‚¹‚é
-	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180));
+	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180.0f));
 }
 
 //	‹î‚Ì•ûŒü“o˜^(pieceInfo_‚É“o˜^)
