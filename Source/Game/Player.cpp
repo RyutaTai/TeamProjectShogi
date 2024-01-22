@@ -47,17 +47,17 @@ void Player::ChoisePiece(HWND hwnd)
 		ScreenToClient(hwnd, &p);
 
 		D3D11_VIEWPORT viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-		UINT viewport_count = { D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE };
-		Graphics::Instance().GetDeviceContext()->RSGetViewports(&viewport_count, viewports);
+		UINT viewportCount = { D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE };
+		Graphics::Instance().GetDeviceContext()->RSGetViewports(&viewportCount, viewports);
 		UINT num_viewports{ 1 };
 
 		DirectX::XMFLOAT4X4 viewFloat4x4;
 		DirectX::XMStoreFloat4x4(&viewFloat4x4, Camera::Instance().GetViewMatrix());
 		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewFloat4x4);
 
-		DirectX::XMFLOAT4 cameraPosition;
-		cameraPosition = { Camera::Instance().GetEye().x,Camera::Instance().GetEye().y,Camera::Instance().GetEye().z,1.0f };
-		DirectX::XMVECTOR L0 = DirectX::XMLoadFloat4(&cameraPosition);
+		DirectX::XMFLOAT3 cameraPosition;
+		cameraPosition = { Camera::Instance().GetEye() };
+		DirectX::XMVECTOR L0 = DirectX::XMLoadFloat3(&cameraPosition);
 		DirectX::XMFLOAT3 l0;
 		DirectX::XMStoreFloat3(&l0, L0);
 		DirectX::XMFLOAT3 l;
@@ -65,7 +65,7 @@ void Player::ChoisePiece(HWND hwnd)
 
 		std::string intersectedMesh;
 		std::string intersectedMaterial;
-		DirectX::XMFLOAT3 intersectedNormal;
+		DirectX::XMFLOAT3 intersectedNormal = {};
 
 		for (int i = 0; i < Piece::PIECE_MAX; i++)
 		{

@@ -142,7 +142,6 @@ public:
 	void SetPieceDirection(int index);										//	駒の方向direction_を駒の情報pieceInfo_に登録
 	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 
-
 	//	デバッグ用
 	void DrawDebug();											//	デバッグ描画
 	void SetDebugStr();											//	駒の種類を表示できるようtypeStr_にpieceType_をセット
