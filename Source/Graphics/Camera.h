@@ -69,7 +69,7 @@ private:
 	DirectX::XMFLOAT3 right_;								//	ƒJƒƒ‰‚Ì‰E•ûŒü
 
 
-	bool CameraMove();
+	bool CameraMove(const float& elapsedTime);
 	bool cameraMove = false;
 	float moveTime;
 	float moveTimer;

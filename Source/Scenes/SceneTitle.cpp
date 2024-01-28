@@ -11,7 +11,7 @@
 void SceneTitle::Initialize()
 {
 	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]		= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title.png");
-	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]	= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Fonts/font4.png");
+	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]	= std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Fonts/font6.png");
 
 	// オーディオ初期化
 	audioInstance_.Initialize();
@@ -37,30 +37,21 @@ void SceneTitle::Finalize()
 //	更新処理
 void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 {
-	GamePad gamePad;
-	gamePad.Acquire();
-	static const int BUTTON_MAX = 4;
+	GamePad& gamePad = Input::Instance().GetGamePad();
 
-	GamePad::Button anyButton[BUTTON_MAX] =
-	{ 
-		GamePad::Button::A,		//	Z
-		GamePad::Button::B,		//	X
-		GamePad::Button::X,		//	C
-		GamePad::Button::Y,		//	V
-	};
+	const GamePadButton anyButton =
+		GamePad::BTN_A  //Z
+		| GamePad::BTN_B  //X
+		| GamePad::BTN_X  //C
+		| GamePad::BTN_Y; //V
 
-	//	なにかボタンを押したらゲームシーンへ切り替え
-	for (int i = 0; i < BUTTON_MAX; i++)
-	{
-		if (gamePad.ButtonState(anyButton[i], TriggerMode::NONE))
-		{
-			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
-			break;
-		}
+	//	TODO:なにかボタンを押したらゲームシーンへ切り替え
+	if (gamePad.GetButtonDown() & anyButton) {
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 	}
 
 	//	Enterキーを押したらゲームシーンへ切り替え
-	if (gamePad.ButtonState(GamePad::Button::ENTER, TriggerMode::NONE))
+	if (GetAsyncKeyState(VK_RETURN))
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 	}
@@ -74,7 +65,7 @@ void SceneTitle::Render()
 {	
 	// タイトルスプライト描画
 	sprite_[static_cast<int>(SPRITE_TITLE::BACK)]->Render();
-	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->Textout("Push to Enter Key.", 350, 600, 30, 25);
+	sprite_[static_cast<int>(SPRITE_TITLE::TEXT_KEY)]->Textout("12345.", 350, 600, 30, 25);
 }
 
 //	デバッグ描画

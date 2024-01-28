@@ -9,7 +9,7 @@ public:
 	Enemy() {}
 
 protected:
-	void ChoisePiece()	;	//	‹î‚ð‘I‘ð
+	void ChoisePiece()	;			//	‹î‚ð‘I‘ð
 	void MovePiece()	override;	//	‘I‚ñ‚¾‹î‚ð“®‚©‚·
 
 };

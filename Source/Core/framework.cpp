@@ -7,10 +7,13 @@
 #include "../Scenes/SceneManager.h"
 #include "../Scenes/SceneTitle.h"
 
+HighResolutionTimer Framework::tictoc_ = {};
+
 //	コンストラクタ
 Framework::Framework(HWND hwnd) 
 	: hwnd_(hwnd),
-	graphics_(hwnd)
+	graphics_(hwnd),
+	input_(hwnd)
 {
 }
 
@@ -48,6 +51,10 @@ bool Framework::Initialize()
 void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 {
 	IMGUI_CTRL_CLEAR_FRAME();
+
+	//	Input初期化
+	input_.Update();
+
 	//	シーンの更新
 	SceneManager::Instance().Update(elapsedTime,hwnd_);
 

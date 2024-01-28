@@ -2,18 +2,18 @@
 
 #include <windows.h>
 
-Input* Input::instance = nullptr;
+Input* Input::instance_ = nullptr;
 
 // コンストラクタ
 Input::Input(HWND hWnd)
-	: mouse(hWnd)
+	: mouse_(hWnd)
 {
-	instance = this;
+	instance_ = this;
 }
 
 // 更新処理
 void Input::Update()
 {
-	//gamePad.Update();
-	mouse.Update();
+	gamePad_.Update();
+	mouse_.Update();
 }

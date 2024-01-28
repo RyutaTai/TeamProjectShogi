@@ -5,12 +5,6 @@
 class HighResolutionTimer
 {
 public:
-	static HighResolutionTimer& Instance()
-	{
-		static HighResolutionTimer instance_;
-		return instance_;
-	}
-
 	HighResolutionTimer()
 	{
 		LONGLONG countsPerSec;

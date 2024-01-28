@@ -2,6 +2,7 @@
 
 #include "../Input/Mouse.h"
 #include "../Game/ShogiBoard.h"
+#include "Judge.h"
 
 // RAYCAST
 // Convert a position in screen space to a position on near plane in world space.
@@ -34,15 +35,15 @@ Player::Player(const char* fileName, bool triangulate, bool usedAsCollider)
 //	 更新処理
 void Player::Update(float elapsedTime,HWND hwnd) 
 {
-	ChoisePiece(hwnd);
-	MovePiece();
+	ChoisePiece(hwnd);	//	駒を選択
+	MovePiece();		//	駒を動かす
 }
 
 //	駒を選択
-void Player::ChoisePiece(HWND hwnd)
+void Player::ChoisePiece(HWND hwnd)	//	相手の駒を選べないようにする
 {
 	// RAYCAST
-	if (GetAsyncKeyState(VK_LBUTTON) & 1)
+	if (GetAsyncKeyState(VK_LBUTTON) & 1)	//	マウス左クリック
 	{
 		POINT p;
 		GetCursorPos(&p);
@@ -81,20 +82,24 @@ void Player::ChoisePiece(HWND hwnd)
 			//DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
 			DirectX::XMStoreFloat4x4(&pieceTransform, S * R * T);
 			
-			//	レイが当たっていたら
+			//	TOOD:レイキャスト レイが当たっていたら
 			if (piece->GetModel()->Raycast(l0, l, pieceTransform, intersectionPoint, intersectedNormal, intersectedMesh, intersectedMaterial))
 			{
-				OutputDebugStringA("Intersected : ");
-				OutputDebugStringA(intersectedMesh.c_str());
-				OutputDebugStringA(" : ");
-				OutputDebugStringA(intersectedMaterial.c_str());
-				OutputDebugStringA("\n");
-				pieceManager.SetChoicePiece(i);	//	選んでいる駒をセット
+				//OutputDebugStringA("Intersected : ");
+				//OutputDebugStringA(intersectedMesh.c_str());
+				//OutputDebugStringA(" : ");
+				//OutputDebugStringA(intersectedMaterial.c_str());
+				//OutputDebugStringA("\n");
+				if (!piece->GetPieceInfo(i).isEnemy_)			//	選んだ駒が自分の駒なら
+				{
+					pieceManager.SetChoicePiece(i);				//	選んでいる駒をセット
+					Judge::Instance().SetDuringChoice(true);	//	選択中フラグtrue
+				}
 
 			}
 			else
 			{
-				OutputDebugStringA("Unintersected...\n");
+				//OutputDebugStringA("Unintersected...\n");
 			}
 		}
 	}
@@ -105,22 +110,36 @@ void Player::ChoisePiece(HWND hwnd)
 //	選んだ駒を登録したあとに呼ぶ
 void Player::MovePiece()
 {
-	if (PieceManager::Instance().GetChoicePiece() != nullptr)
+	PieceManager& pieceManager = PieceManager::Instance();
+	if (pieceManager.GetChoicePiece() != nullptr)
 	{
-		PieceManager& pieceManager = PieceManager::Instance();
 		Piece::DirectionInfo direction[8] = {};
 		int choicePieceIndex = pieceManager.GetChoicePieceIndex();
 		for (int i = 0; i < Piece::PIECE_DIRECTION_MAX; i++)	//	選択されている駒が動ける方向取得(PIECE_DIRECTION_MAXになるまでに0が入る場合もある)
 		{
 			direction[i] = pieceManager.GetChoicePiece()->GetPieceInfo(choicePieceIndex).direction_[i];
 		}
-		ShogiBoard::Instance().EmptySquareRender();	//	動けるマス、かつ、空いているマスにエフェクト出したい
-		
-		Piece* choicePiece = pieceManager.GetChoicePiece();	//	選んだ駒
-		choicePiece->Move(choicePieceIndex, direction[0].directionX_, direction[0].directionY_);	//	駒を動かす
-		choicePiece->PieceInfoUpdate(pieceManager.GetChoicePieceIndex());	//	駒を更新する
+		ShogiBoard::Instance().EmptySquareInit(direction);		//	動けるマス、かつ、空いているマスにエフェクト出したい
+		ShogiBoard::Instance().EmptySquareRender();
+
+		Piece* choicePiece = pieceManager.GetChoicePiece();		//	選んだ駒を取得
+
+		// TODO:置く場所を選んでから動くようにする
+		//if (Judge::Instance().GetDuringChoice()&& (GetAsyncKeyState(VK_LBUTTON) & 1))//	選択中かつ、左クリックしたら
+		//{
+			pieceManager.Move(choicePieceIndex, ChoiceSquare().x, ChoiceSquare().y);//	駒を動かす
+			choicePiece->PieceInfoUpdate(pieceManager.GetChoicePieceIndex());		//	駒を更新する
+			pieceManager.RemoveChoicePiece();										//	選択されている駒リセット
+		//}
 	}
 }
 
+//	TODO:置くマスを選択 今は全部{1,1}になってる
+DirectX::XMFLOAT2 Player::ChoiceSquare()
+{
+	PieceManager& pieceManager = PieceManager::Instance();
+
+	return { 1,1 };
+}
 
 

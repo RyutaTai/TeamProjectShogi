@@ -6,6 +6,7 @@
 #include "../Input/Gamepad.h"
 #include "../Others/MathHelper.h"
 #include "../Easing.h"
+#include "../Input/Input.h"
 //	コンストラクタ
 Camera::Camera()
 {
@@ -20,9 +21,9 @@ Camera::~Camera()
 void Camera::Initialize()
 {
 	eye_	= { 0.0f,	25.0f,	100.0f };	//	カメラの視点
-	focus_	= { 0,		0.0f,	0.0f };				//	カメラの注視点
-	up_		= { 0,		0.0f,	-0.0f };				//	カメラの上方向
-	angle_	= { -0.20f,		0,		0 };				//	カメラの回転値
+	focus_	= { 0,		0.0f,	0.0f };		//	カメラの注視点
+	up_		= { 0,		0.0f,	-0.0f };	//	カメラの上方向
+	angle_	= { -0.20f,		0,		0 };	//	カメラの回転値
 	fov_	= 60.0f;					//	視野角 60からだんだん30にする
 
 }
@@ -104,7 +105,7 @@ bool Camera::LaunchCameraMove(DirectX::XMFLOAT3 targetEye_, DirectX::XMFLOAT3 ta
 	return true;
 }
 
-bool Camera::CameraMove()
+bool Camera::CameraMove(const float& elapsedTime)
 {
 	if (!cameraMove)return false;
 
@@ -124,7 +125,7 @@ bool Camera::CameraMove()
 	angle_.z = Dante::Math::Easing::InSine(moveTimer, moveTime, moveTargetAngle.z, cashAngle.z);
 
 	//float time = HighResolutionTimer::Instance().GetDeltaTime();
-	moveTimer += HighResolutionTimer::Instance().GetDeltaTime();
+	moveTimer += elapsedTime;
 
     return true;
 }
@@ -133,14 +134,12 @@ bool Camera::CameraMove()
 void Camera::Update(float elapsedTime)
 {
 	// カメラを演出で移動中は動かない
-	if (!CameraMove())
+	if (!CameraMove(elapsedTime))
 	{
-
-		GamePad gamePad;
-		gamePad.Acquire();
-		float RX = gamePad.ThumbStateRx();
-		float RY = gamePad.ThumbStateRy();
-		float LY = gamePad.ThumbStateLy();
+		GamePad& gamePad = Input::Instance().GetGamePad();
+		float RX = gamePad.GetAxisRX();
+		float RY = gamePad.GetAxisRY();
+		float LY = gamePad.GetAxisLY();
 
 		//	カメラの回転速度
 		float aSpeed = rollSpeed_ * elapsedTime;
@@ -149,7 +148,8 @@ void Camera::Update(float elapsedTime)
 		//	カメラ移動(X軸、Y軸)
 		//	左のShiftキーと右スティック(IJKLキー)いずれかを押しているとき、
 		//	カメラの視点をスティックの入力値に合わせてX,Y軸方向に移動
-		if (gamePad.TriggerStateL() && (RX != 0 || RY != 0))
+		//if ((gamePad.GetButtonDown()&GamePad::BTN_LEFT_TRIGGER) && (RX != 0 || RY != 0))
+		if ((GetAsyncKeyState(VK_LSHIFT)) && (RX != 0 || RY != 0))
 		{
 			eyeOffset_.x -= RX * moveSpeed;
 			eyeOffset_.y += RY * moveSpeed;
@@ -164,7 +164,7 @@ void Camera::Update(float elapsedTime)
 
 		//	カメラ移動(Z軸)　左スティック(W,Aキー)の入力値に合わせてZ軸方向に移動
 		//	入力がなかったらリセット
-		if (gamePad.ThumbStateLy() != 0)//	左スティック
+		if (gamePad.GetAxisLY() != 0)//	左スティック
 		{
 			eyeOffset_.z -= LY * moveSpeed;
 		}
@@ -221,7 +221,8 @@ void Camera::Update(float elapsedTime)
 	//	カメラ移動(X軸、Y軸)
 	//	左のShiftキーと右スティック(IJKLキー)いずれかを押しているとき、
 	//	カメラの視点をスティックの入力値に合わせてX,Y軸方向に移動
-		if (gamePad.TriggerStateL() && (RX != 0 || RY != 0))
+		//if ((gamePad.GetButtonDown()&GamePad::BTN_LEFT_TRIGGER) && (RX != 0 || RY != 0))
+		if ((GetAsyncKeyState(VK_LSHIFT)) && (RX != 0 || RY != 0))
 		{
 			eyeOffset_.x -= RX * moveSpeed;
 			eyeOffset_.y += RY * moveSpeed;
@@ -236,7 +237,7 @@ void Camera::Update(float elapsedTime)
 
 		//	カメラ移動(Z軸)　左スティック(W,Aキー)の入力値に合わせてZ軸方向に移動
 		//	入力がなかったらリセット
-		if (gamePad.ThumbStateLy() != 0)//	左スティック
+		if (gamePad.GetAxisLY() != 0)//	左スティック
 		{
 			eyeOffset_.z -= LY * moveSpeed;
 		}

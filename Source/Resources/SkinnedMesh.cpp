@@ -261,7 +261,7 @@ void SkinnedMesh::CreateComObjects(ID3D11Device* device, const char* fbxFilename
 		hr = device->CreateBuffer(&bufferDesc, &subresourceData, mesh.indexBuffer_.ReleaseAndGetAddressOf());
 		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 
-	/*	if (!usedAsCollider)
+	/*	if (!usedAsCollider) // TODO:レイキャスト
 		{
 			mesh.vertices_.clear();
 			mesh.indices_.clear();
