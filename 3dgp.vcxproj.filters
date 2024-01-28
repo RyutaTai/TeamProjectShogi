@@ -56,6 +56,9 @@
     <Filter Include="TAI\Graphics\Debug">
       <UniqueIdentifier>{578c91de-a1c1-43cd-b882-0bfa8ee49f62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TAI\Resources\Effect">
+      <UniqueIdentifier>{71e5d91b-5cd7-46d2-8d17-e06f8eb88b9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\Framework.cpp">
@@ -186,6 +189,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\DebugRenderer.cpp">
       <Filter>TAI\Graphics\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Microphone.cpp">
+      <Filter>TAI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collision.cpp">
+      <Filter>TAI\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -330,6 +339,12 @@
     </ClInclude>
     <ClInclude Include="Source\Graphics\DebugRenderer.h">
       <Filter>TAI\Graphics\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\Microphone.h">
+      <Filter>TAI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collision.h">
+      <Filter>TAI\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

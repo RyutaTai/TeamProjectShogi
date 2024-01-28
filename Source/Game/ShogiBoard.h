@@ -3,13 +3,12 @@
 #include "GameObject.h"
 #include "../Game/Piece.h"
 #include "../Game/PieceManager.h"
-#include "Slime.h"
 
 class ShogiBoard : public GameObject
 {
 public:
 	ShogiBoard(const char* fileName, bool triangulate = false, bool usedAsCollider = false);
-	ShogiBoard() {}
+	ShogiBoard(){}
 	~ShogiBoard();
 
 	//	唯一のインスタンス取得

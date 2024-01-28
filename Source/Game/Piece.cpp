@@ -1,12 +1,10 @@
 #include "Piece.h"
 
-#include "PieceManager.h"
 #include "Stage.h"
-#include "../Others/MathHelper.h"
 #include "ShogiBoard.h"
 #include "../Easing.h"
+#include "../Others/MathHelper.h"
 #include "../Core/HighResolutionTimer.h"
-
 #include "../Core/Framework.h"
 
 int Piece::num = 0;	//	デバッグ用
@@ -37,7 +35,7 @@ void Piece::Initialize(int index)
 	//	敵のときだけモデルの向きを反転させる
 	if (pieceInfo_[index].isEnemy_)GetTransform()->SetRotationY(DirectX::XMConvertToRadians(180.0f));
 
-	SetState(PIECE_STATE::NORMAL);	//	駒のステート初期化
+	SetState(PIECE_STATE::IDLE);	//	駒のステート初期化
 	airPos_ = 20.0f;				//	空中制限位置初期化
 }
 
@@ -171,8 +169,9 @@ void Piece::SetPieceDirection(int index)	//　初期化以外に成った時も呼ぶ
 		break;
 	}
 }
-
+///////////////////////////////
 //	更新処理
+////////////////////////////////
 void Piece::Update(float elapsedTime,int index)
 {
 	if (!this->pieceInfo_[index].isEnemy_)	//	TODO:自分の駒なら相手の駒に吹っ飛ぶようにする
@@ -192,7 +191,7 @@ void Piece::Update(float elapsedTime,int index)
 	}
 	else	//	敵の駒なら
 	{
-		SetState(PIECE_STATE::STOP);	//	制動ステートへ遷移
+		//SetState(PIECE_STATE::STOP);	//	制動ステートへ遷移
 	}
 	UpdateVelocity(elapsedTime);
 }
@@ -230,7 +229,7 @@ void Piece::Move(int index)
 	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + velocity_);
 }
 
-//	ターゲットに向かって飛ぶ
+//	TODO:ターゲットに向かって飛ぶ
 void Piece::MoveToTarget()
 {
 
@@ -408,11 +407,64 @@ void Piece::UpdateHorizontalMove(float elapsedTime)
 	}
 }
 
+//////////////////////////////
+//ステート関係
+/////////////////////////////
+
 //	ステートセット
 void Piece::SetState(PIECE_STATE pieceState)
 {
 	pieceState_ = pieceState;
 }
+
+//	待機ステートへ遷移
+void Piece::TransitionIdleState()
+{
+	pieceState_ = PIECE_STATE::IDLE;
+}
+
+//	待機ステート更新処理
+void Piece:: UpdateIdleState(float elapsedTime)
+{
+
+}
+
+//	上昇ステートへ遷移
+void Piece::TransitionUpState()
+{
+	pieceState_ = PIECE_STATE::UP;
+}
+
+//	上昇ステート更新処理
+void Piece::UpdateUpState(float elapsedTime)
+{
+
+}
+
+//	制動ステートへ遷移
+void Piece::TransitionStopState() 
+{
+	pieceState_ = PIECE_STATE::STOP;
+}
+
+//	制動ステート更新処理
+void Piece::UpdateStopState(float elapsedTime) 
+{
+
+}
+
+//	突撃ステートへ遷移
+void Piece::TransitionThrustState()
+{
+	pieceState_ = PIECE_STATE::THRUST;
+}
+
+//	突撃ステート更新処理
+void Piece::UpdateThrustState(float elapsedTime)
+{
+
+}
+
 
 ///////////////////////////////////////////////////////////
 
@@ -526,8 +578,8 @@ void Piece::SetDebugStr()
 	//	駒のステート
 	switch (this->pieceState_)
 	{
-	case PIECE_STATE::NORMAL:
-		pieceStateStr_ = u8"NORMAL";
+	case PIECE_STATE::IDLE:
+		pieceStateStr_ = u8"IDLE";
 		break;
 	case PIECE_STATE::UP:
 		pieceStateStr_ = u8"UP";

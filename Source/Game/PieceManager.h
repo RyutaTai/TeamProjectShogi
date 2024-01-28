@@ -2,6 +2,7 @@
 
 #include <set>
 
+#include "../Game/Judge.h"
 #include "../Game/Piece.h"
 
 //	«Šû‚Ì‹îŠÇ—ƒNƒ‰ƒX

@@ -7,6 +7,7 @@
 #include "../Others/MathHelper.h"
 #include "../Easing.h"
 #include "../Input/Input.h"
+
 //	コンストラクタ
 Camera::Camera()
 {
@@ -133,6 +134,7 @@ bool Camera::CameraMove(const float& elapsedTime)
 //	更新処理
 void Camera::Update(float elapsedTime)
 {
+#ifdef _DEBUG
 	// カメラを演出で移動中は動かない
 	if (!CameraMove(elapsedTime))
 	{
@@ -244,6 +246,10 @@ void Camera::Update(float elapsedTime)
 		else	eyeOffset_.z = 0;
 
 	}
+#else	//	RELEASE
+	CameraMove(elapsedTime);
+
+#endif // DEBUG
 
 	//	カメラ回転値を回転行列に変換
 	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle_.x, angle_.y, angle_.z);

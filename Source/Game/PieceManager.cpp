@@ -1,9 +1,8 @@
 #include "PieceManager.h"
 
-#include "../Game/ShogiBoard.h"
-#include "Judge.h"
 #include "../Input/GamePad.h"
 #include "../Input/Input.h"
+#include "../Game/ShogiBoard.h"
 
 //	初期化
 void PieceManager::Initialize()
@@ -25,7 +24,6 @@ void PieceManager::Update(float elapsedTime, float gameIntervalTimer)
 
 	
 	//	自分の駒の吹っ飛ばし処理
-	//TODO:GamePadクラス変える
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	if ((gamePad.GetButtonDown() & GamePad::BTN_SPACE) && gameIntervalTimer == 0
 		&& (pushCount_<PUSH_MAX))	//	スペースキー

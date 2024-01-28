@@ -1,10 +1,8 @@
 #include "Microphone.h"
 
+void CALLBACK WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
-void CALLBACK waveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
-
-
-
+//  コンストラクタ
 Microphone::Microphone()
 {
     // WAVEFORMATEX 構造体の初期化
@@ -19,12 +17,14 @@ Microphone::Microphone()
     
 }
 
+//  デストラクタ
 Microphone::~Microphone()
 {
-    stopRecording();
+    StopRecording();
 }
 
-void Microphone::recordThread(float timer)
+//  録音
+void Microphone::RecordThread(float timer)
 {
     // waveInStart で録音を開始
     MMRESULT result = waveInStart(_hWaveIn);
@@ -37,7 +37,8 @@ void Microphone::recordThread(float timer)
     _stoped = true;
 }
 
-void Microphone::startRecording(float timer)
+//  録音開始
+void Microphone::StartRecording(float timer)
 {
     // バッファの初期化
     _bufferData.resize(_bufferCount, std::vector<char>(_bufferSize));
@@ -48,7 +49,7 @@ void Microphone::startRecording(float timer)
     _started = true;
 
     // waveInOpen でマイクをオープン
-    waveInOpen(&_hWaveIn, WAVE_MAPPER, &_format, (DWORD_PTR)waveInProc, 0, CALLBACK_FUNCTION);
+    waveInOpen(&_hWaveIn, WAVE_MAPPER, &_format, (DWORD_PTR)WaveInProc, 0, CALLBACK_FUNCTION);
 
     // マイクがミュートか確認
     CheckMuteStatus();
@@ -65,10 +66,11 @@ void Microphone::startRecording(float timer)
         waveInAddBuffer(_hWaveIn, &_bufferHeaders[i], sizeof(WAVEHDR));
     }
     
-    _recordingThread = std::thread(&Microphone::recordThread, this, timer);
+    _recordingThread = std::thread(&Microphone::RecordThread, this, timer);
 }
 
-void Microphone::stopRecording() {
+//  録音終了
+void Microphone::StopRecording() {
     // スレッド待ち
     if (_recordingThread.joinable()) {
         _recordingThread.join();
@@ -86,11 +88,11 @@ void Microphone::stopRecording() {
     _timer = 0;
 }
 
-void CALLBACK waveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
+void CALLBACK WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
     // dwParam1 には録音データが含まれている
     if (uMsg == WIM_DATA) {
         WAVEHDR* pWaveHdr = reinterpret_cast<WAVEHDR*>(dwParam1);
-        Microphone::instance().setIsRecording(false);
+        Microphone::Instance().SetIsRecording(false);
         // pWaveHdr->lpData が録音データへのポインタ
         // pWaveHdr->dwBufferLength がバッファのサイズ
 
@@ -107,13 +109,13 @@ void CALLBACK waveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR
         float decibels = 20.0 * log10(rms);
         if (decibels < 0)decibels = 0.0;
 
-        Microphone::param db;
+        Microphone::Param db;
         db._db = decibels;
 
 
-        Microphone::instance().Register(db, Microphone::instance()._mic);
-        Microphone::instance().setIsRecording(true);
-        Microphone::instance().setTimer(Microphone::instance().getTimer() + 1);
+        Microphone::Instance().Register(db, Microphone::Instance()._mic);
+        Microphone::Instance().SetIsRecording(true);
+        Microphone::Instance().SetTimer(Microphone::Instance().GetTimer() + 1);
 
         // 新しいバッファを指定して再度録音を開始する
         MMRESULT result = waveInAddBuffer(hwi, pWaveHdr, sizeof(WAVEHDR));
@@ -121,6 +123,7 @@ void CALLBACK waveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR
     }
 }
 
+// ミュートかどうか確認
 bool Microphone::CheckMuteStatus() {
     CoInitialize(nullptr);
 
@@ -168,10 +171,11 @@ bool Microphone::CheckMuteStatus() {
 }
 
 // ソート (昇順)
-auto sort_func = [](Microphone::param& lhs, Microphone::param& rhs)-> bool {
+auto sort_func = [](Microphone::Param& lhs, Microphone::Param& rhs)-> bool {
     return lhs._db < rhs._db;
 };
 
+// ソート(デシベルの最大値を取得)
 float Microphone::Sort()
 {
     std::sort(_mic.begin(), _mic.end(), sort_func);

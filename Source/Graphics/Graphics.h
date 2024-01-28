@@ -10,6 +10,7 @@
 #include "../Graphics/Shader.h"
 #include "../Graphics/DebugRenderer.h"
 
+#include <mutex>
 class Graphics
 {
 public://構造体
@@ -38,6 +39,8 @@ public:
 
 	DebugRenderer*			GetDebugRenderer()		{ return debugRenderer_.get(); }
 
+	std::mutex& GetMutex() { return mutex_; }			//ミューテックス取得
+
 private:
 	std::unique_ptr<Shader> shader_ = nullptr;
 	Microsoft::WRL::ComPtr <ID3D11Device>				device_;
@@ -55,5 +58,6 @@ private:
 private:
 	std::unique_ptr<DebugRenderer>						debugRenderer_;
 
+	std::mutex mutex_;
 };
 

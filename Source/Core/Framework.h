@@ -131,12 +131,12 @@ private:
 public:
 	CONST HWND hwnd_;
 	Graphics graphics_;
-
     static HighResolutionTimer tictoc_;
+
 private:
-	uint32_t frames_{ 0 };
-	float elapsedTime_{ 0.0f };
-	Input					input_;
+	uint32_t	frames_{ 0 };
+	float		elapsedTime_{ 0.0f };
+	Input		input_;
 
 };
 

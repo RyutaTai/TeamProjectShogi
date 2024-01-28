@@ -31,16 +31,16 @@ public:	//	普通の将棋
 	enum class DIRECTION_NAME		
 	{
 		BACK_LEFT=0,			//	左後ろ
-		BACK,				//	後ろ
-		BACK_RIGHT,			//	右後ろ
-		LEFT,				//	左
-		RIGHT,				//	右
-		FRONT_LEFT,			//	左前
-		FRONT,				//	前
-		FRONT_RIGHT,		//	右前
-		KEIMA_RIGHT,		//	自分の桂馬右方向
-		KEIMA_LEFT,			//	自分の桂馬右方向
-		NONE,				//	方向なし
+		BACK,					//	後ろ
+		BACK_RIGHT,				//	右後ろ
+		LEFT,					//	左
+		RIGHT,					//	右
+		FRONT_LEFT,				//	左前
+		FRONT,					//	前
+		FRONT_RIGHT,			//	右前
+		KEIMA_RIGHT,			//	自分の桂馬右方向
+		KEIMA_LEFT,				//	自分の桂馬右方向
+		NONE,					//	方向なし
 	};
 
 	//	駒の方向の情報
@@ -132,7 +132,7 @@ public:	//	普通の将棋
 public:	//	吹っ飛ばす将棋
 	enum class PIECE_STATE
 	{
-		NORMAL = 0,		//	通常
+		IDLE = 0,		//	通常
 		UP,				//	上昇
 		STOP,			//	制動
 		THRUST,			//	突っ込む
@@ -174,8 +174,18 @@ public:	//	吹っ飛ばす将棋
 	void UpdateVerticalVelocity(float elapsedFrame);			//	垂直速力更新処理
 	void UpdateVerticalMove(float elapsedTime);					//	垂直移動更新処理
 	virtual void OnLanding() {}									//	着地したときに呼ばれる
-	void SetState(PIECE_STATE state);							//	ステートセット
 
+	//	ステート関係
+	void SetState(PIECE_STATE state);							//	ステートセット
+	PIECE_STATE GetState() { return pieceState_; }				//	ステート取得
+	void TransitionIdleState();									//	待機ステートへ遷移
+	void UpdateIdleState(float elapsedTime);					//	待機ステート更新処理
+	void TransitionUpState();									//	上昇ステートへ遷移
+	void UpdateUpState(float elapsedTime);						//	上昇ステート更新処理
+	void TransitionStopState();									//	制動ステートへ遷移
+	void UpdateStopState(float elapsedTime);					//	制動ステート更新処理
+	void TransitionThrustState();								//	突撃ステートへ遷移
+	void UpdateThrustState(float elapsedTime);					//	突撃ステート更新処理
 
 private:	//	普通の将棋
 	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
@@ -210,7 +220,7 @@ private:	//デバッグ用
 	std::string typeStr_ = "";			//	駒の種類
 	std::string choiceStr_ = "";		//	選択されているか
 	std::string pieceStateStr_ = "";	//	駒のステート
-	std::string isEnemyStr_ = "";		//	自分の駒か敵の駒かか
+	std::string isEnemyStr_ = "";		//	自分の駒か敵の駒か
 
 };
 
