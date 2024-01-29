@@ -32,7 +32,7 @@ void PieceManager::Update(float elapsedTime, float gameIntervalTimer)
 		int index = 0;
 		for (Piece* piece : pieces_)
 		{
-			piece->SetState(Piece::PIECE_STATE::UP);	//	上昇ステートへ切り替え
+			piece->SetState(Piece::PIECE_STATE::IDLE);	//	上昇ステートへ切り替え
 			index += 1;
 		}
 		pushCount_++;

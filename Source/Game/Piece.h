@@ -130,12 +130,13 @@ public:	//	普通の将棋
 	};
 
 public:	//	吹っ飛ばす将棋
-	enum class PIECE_STATE
+	enum PIECE_STATE
 	{
 		IDLE = 0,		//	通常
 		UP,				//	上昇
 		STOP,			//	制動
 		THRUST,			//	突っ込む
+		BLOWN_AWAY,		//	吹っ飛ばされる
 	};
 
 public:
@@ -181,11 +182,13 @@ public:	//	吹っ飛ばす将棋
 	void TransitionIdleState();									//	待機ステートへ遷移
 	void UpdateIdleState(float elapsedTime);					//	待機ステート更新処理
 	void TransitionUpState();									//	上昇ステートへ遷移
-	void UpdateUpState(float elapsedTime);						//	上昇ステート更新処理
+	void UpdateUpState(float elapsedTime, int index);			//	上昇ステート更新処理
 	void TransitionStopState();									//	制動ステートへ遷移
 	void UpdateStopState(float elapsedTime);					//	制動ステート更新処理
 	void TransitionThrustState();								//	突撃ステートへ遷移
-	void UpdateThrustState(float elapsedTime);					//	突撃ステート更新処理
+	void UpdateThrustState(float elapsedTime, int index);		//	突撃ステート更新処理
+	void TransitionBlownState();								//	突撃ステートへ遷移
+	void UpdateBlownState(float elapsedTime, int index);		//	突撃ステート更新処理
 
 private:	//	普通の将棋
 	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
@@ -211,8 +214,11 @@ private:	//	駒を飛ばす用
 	float slopeRate = 1.0f;		//
 	PIECE_STATE pieceState_;	//	駒のステート
 
-	float upTimer_;				//	上昇する時間をカウント
-	float upMax_=2.0f;			//	上昇しきるまでの時間
+	float upTimer_ = 0.0f;		//	上昇する時間をカウント
+	float upMax_ = 2.0f;		//	上昇しきるまでの時間
+
+	float thrustTimer_ = 0.0f;	//	衝突するまでの時間をカウント
+	float thrustMax_ = 2.0f;	//	何秒で衝突したいか
 
 private:	//デバッグ用
 	static int num;						//	将棋の駒の要素番号

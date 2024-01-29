@@ -6,6 +6,8 @@
 #include "../Others/MathHelper.h"
 #include "../Core/HighResolutionTimer.h"
 #include "../Core/Framework.h"
+#include "../Collision/Collision.h"
+#include <random>
 
 int Piece::num = 0;	//	デバッグ用
 
@@ -174,27 +176,26 @@ void Piece::SetPieceDirection(int index)	//　初期化以外に成った時も呼ぶ
 ////////////////////////////////
 void Piece::Update(float elapsedTime,int index)
 {
-	if (!this->pieceInfo_[index].isEnemy_)	//	TODO:自分の駒なら相手の駒に吹っ飛ぶようにする
+	switch (Piece::GetState())	//	駒の状態で処理を分ける
 	{
-		//	上昇回数制限
-		if (this->pieceState_ == PIECE_STATE::UP)	//	上昇ステートのときだけ処理する
-		{
-			this->Up(upSpeed);
-		}
-		//	突っ込む処理
-		if (this->pieceState_ == PIECE_STATE::THRUST)
-		{
-			this->MoveToTarget();
-		}
-		//AddImpulse(impulse_);
-		//Move(index);
+	case PIECE_STATE::IDLE:		//	通常
+		UpdateIdleState(elapsedTime);
+		break;
+	case PIECE_STATE::UP:		//	上昇
+		UpdateUpState(elapsedTime, index);
+		break;
+	case PIECE_STATE::STOP:		//	制動
+		UpdateStopState(elapsedTime);
+		break;
+	case PIECE_STATE::THRUST:	//	突撃
+		UpdateThrustState(elapsedTime, index);
+		break;
 	}
-	else	//	敵の駒なら
-	{
-		//SetState(PIECE_STATE::STOP);	//	制動ステートへ遷移
-	}
+
 	UpdateVelocity(elapsedTime);
 }
+
+
 
 //衝撃を与える
 void Piece::AddImpulse(const DirectX::XMFLOAT3& impulse)
@@ -213,7 +214,7 @@ void Piece::Up(float speed)
 	// イージング関数でpositionを直接いじって駒を上昇させる
 	if (upTimer_ < upMax_)
 	{
-		float posY = Dante::Math::Easing::InSine(upTimer_, upMax_, 120.0f, 0.0f);
+		float posY = Dante::Math::Easing::InSine(upTimer_, upMax_, 20.0f, 0.0f);
 		this->GetTransform()->SetPositionY(posY);
 		upTimer_ += Framework::tictoc_.GetDeltaTime();
 	}
@@ -232,6 +233,77 @@ void Piece::Move(int index)
 //	TODO:ターゲットに向かって飛ぶ
 void Piece::MoveToTarget()
 {
+	DirectX::XMFLOAT3 myPos = this->GetTransform()->GetPosition();
+	DirectX::XMFLOAT3 targetPos = {};
+
+	std::vector<int>index;
+	for (int i = 0; i < PIECE_MAX; i++)//	敵の駒のインデックスを取得
+	{
+		if (pieceInfo_[i].isEnemy_ == true)
+		{
+			index.emplace_back(i);
+		}
+	}
+	int selectNo = 0;
+	std::random_device rnd;     // 非決定的な乱数生成器を生成
+	std::mt19937 mt(rnd());     //  メルセンヌ・ツイスタの32ビット版、引数は初期シード値
+	std::uniform_int_distribution<> randIndex(0, (index.size()-1)); // [0, index.size()] までの範囲の一様乱数
+	selectNo = randIndex(mt);
+	targetPos.x = ((float)pieceInfo_[index.at(selectNo)].posX_ + pieceOffset_.x) * range_;
+	targetPos.y = 0.0f;
+	targetPos.z = ((float)pieceInfo_[index.at(selectNo)].posY_ + pieceOffset_.z) * range_;
+
+	// イージング関数でpositionを直接いじって衝突させる
+	if (thrustTimer_ < thrustMax_)
+	{
+		float posX = Dante::Math::Easing::InSine(thrustTimer_, thrustMax_, targetPos.x, myPos.x);
+		float posY = Dante::Math::Easing::InSine(thrustTimer_, thrustMax_, targetPos.y, myPos.y);
+		float posZ = Dante::Math::Easing::InSine(thrustTimer_, thrustMax_, targetPos.z, myPos.z);
+		this->GetTransform()->SetPositionX(posX);
+		this->GetTransform()->SetPositionY(posY);
+		this->GetTransform()->SetPositionZ(posZ);
+		thrustTimer_ += Framework::tictoc_.GetDeltaTime();
+	}
+
+	//	TODO:駒の衝突処理(円柱と円柱)
+	//全ての敵との総当たりで衝突処理
+	PieceManager& pieceManager = PieceManager::Instance();
+	for (int i = 0; i < PIECE_MAX; i++)
+	{
+		Piece* piece = pieceManager.GetPiece(i);
+
+		//衝突処理
+		DirectX::XMFLOAT3 outPosition;
+		if (Collision::InterSectCylinderVsCyliner(
+			myPos,
+			radius_,
+			height_,
+			piece->GetTransform()->GetPosition(),
+			radius_,
+			height_,
+			outPosition))
+		{
+			//DirectX::XMFLOAT3 impulse;//吹き飛ばす力
+			//const float power = 1.0f;
+			//DirectX::XMFLOAT3 e = piece->GetTransform()->GetPosition();
+
+			//float vx = e.x - myPos.x;
+			//float vz = e.z - myPos.z;
+			//float lengthXZ = sqrtf(vx * vx + vz * vz);
+			//vx /= lengthXZ;
+			//vz /= lengthXZ;
+
+			//impulse.x = vx * power;
+			//impulse.y = 0;
+			////impulse.y = power * 0.2f;
+			//impulse.z = vz * power;
+
+			////piece->AddImpulse(impulse);
+
+			//押し出し後の位置設定
+			piece->GetTransform()->SetPosition(outPosition);
+		}
+	}
 
 }
 
@@ -262,11 +334,7 @@ void Piece::UpdateVelocity(float elapsedTime)
 void Piece::UpdateVerticalVelocity(float elapsedFrame)
 {
 	//重力処理
-	//this->velocity_.y += gravity_ * elapsedFrame;
-	if (pieceState_ == PIECE_STATE::STOP)
-	{
-		this->velocity_ = { 0,0,0 };
-	}
+	if(!isGround_)this->velocity_.y += gravity_ * elapsedFrame;
 }
 
 //	垂直移動更新処理
@@ -282,9 +350,28 @@ void Piece::UpdateVerticalMove(float elapsedTime)
 	this->GetTransform()->SetPositionY(position.y + this->velocity_.y);
 
 	//	地面判定
-	if (position.y < ShogiBoard::Instance().GetTransform()->GetPosition().y)
+	DirectX::XMFLOAT2 wall = { 12.0f,12.0f };	//	将棋盤の内側かどうかの判定
+	float tyasituY = -18.5f;	//	茶室の床のY座標(高さ)
+
+	//	将棋盤の上かどうか
+	if ((-wall.x < position.x && position.x < wall.x) && (-wall.y < position.z && position.z < wall.y))
 	{
-		this->GetTransform()->SetPositionY(ShogiBoard::Instance().GetTransform()->GetPosition().y);
+		if (position.y <= ShogiBoard::Instance().GetTransform()->GetPosition().y)
+		{
+			this->GetTransform()->SetPositionY(ShogiBoard::Instance().GetTransform()->GetPosition().y);
+			velocity_.y = 0.0f;
+
+			//	着地した
+			if (!isGround_)
+			{
+				OnLanding();
+			}
+			isGround_ = true;
+		}
+	}
+	else if (position.y <= tyasituY)	//	茶室の床についたら
+	{
+		this->GetTransform()->SetPositionY(tyasituY);
 		velocity_.y = 0.0f;
 
 		//	着地した
@@ -299,12 +386,12 @@ void Piece::UpdateVerticalMove(float elapsedTime)
 		isGround_ = false;
 	}
 
-	//	上限判定(上に行ったら止まる)
-	if (position.y > airPos_)
-	{
-		this->GetTransform()->SetPositionY(airPos_);
-		SetState(PIECE_STATE::STOP);	//	制動ステートへ切り替え
-	}
+	////	上限判定(上に行ったら止まる)
+	//if (position.y > airPos_)
+	//{
+	//	this->GetTransform()->SetPositionY(airPos_);
+	//	SetState(PIECE_STATE::STOP);	//	制動ステートへ切り替え
+	//}
 }
 
 //	水平速力更新処理
@@ -426,7 +513,8 @@ void Piece::TransitionIdleState()
 //	待機ステート更新処理
 void Piece:: UpdateIdleState(float elapsedTime)
 {
-
+	this->velocity_ = { 0,0,0 };
+	SetState(PIECE_STATE::UP);
 }
 
 //	上昇ステートへ遷移
@@ -436,8 +524,12 @@ void Piece::TransitionUpState()
 }
 
 //	上昇ステート更新処理
-void Piece::UpdateUpState(float elapsedTime)
+void Piece::UpdateUpState(float elapsedTime,int index)
 {
+	if (!this->pieceInfo_[index].isEnemy_)	//	TODO:自分の駒なら相手の駒に吹っ飛ぶようにする
+	{
+		this->Up(upSpeed);	//Up関数の中でThrustへの遷移をしてる
+	}
 
 }
 
@@ -450,7 +542,8 @@ void Piece::TransitionStopState()
 //	制動ステート更新処理
 void Piece::UpdateStopState(float elapsedTime) 
 {
-
+	this->velocity_ = { 0,0,0 };
+	SetState(PIECE_STATE::THRUST);
 }
 
 //	突撃ステートへ遷移
@@ -460,11 +553,26 @@ void Piece::TransitionThrustState()
 }
 
 //	突撃ステート更新処理
-void Piece::UpdateThrustState(float elapsedTime)
+void Piece::UpdateThrustState(float elapsedTime,int index)
 {
+	if (!this->pieceInfo_[index].isEnemy_)	//	TODO:自分の駒なら相手の駒に吹っ飛ぶようにする
+	{
+		this->MoveToTarget();
+	}
 
 }
 
+//	吹っ飛ばされるステート遷移
+void Piece::TransitionBlownState()
+{
+	pieceState_ = PIECE_STATE::BLOWN_AWAY;
+}
+
+//	吹っ飛ばされるステート更新
+void Piece::UpdateBlownState(float elapsedTime, int index)
+{
+
+}
 
 ///////////////////////////////////////////////////////////
 
