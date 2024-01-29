@@ -74,6 +74,7 @@ void SceneGame::Initialize()
 	//	ゲームインターバルタイマー初期化
 	gameIntervalTimer_ = 2.0f;
 
+	
 }
 
 //	終了化

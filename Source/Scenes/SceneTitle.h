@@ -35,7 +35,15 @@ private:
 		MAX,		       // スプライトの上限数
 	};
 	std::unique_ptr<Sprite> sprite_[SPRITE_TITLE::MAX];
+
+	enum class TITLE_SELECT
+	{
+		Play,
+		Tutorial,
+	}
+	titleSelect_ = TITLE_SELECT::Play;
 	
+
 	//	ローディングスレッド
 	static void LoadingThread(SceneTitle* scene);
 

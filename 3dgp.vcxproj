@@ -91,7 +91,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>USE_IMGUI;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.\cereal-master\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.¥DirectXTK-main¥Inc;.\External\Effekseer162a\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.\cereal-master\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.¥DirectXTK-main¥Inc</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -102,7 +102,7 @@
       </IgnoreSpecificDefaultLibraries>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(VC_LibraryPath_x86);.\External\Effekseer162a\lib\vs2019\MT\(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VC_LibraryPath_x86)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -117,13 +117,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc;.\External\Effekseer170e\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc;$(SolutionDir)External\Effekseer170e\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\debug;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Debug;.\External\Effekseer170e\lib\vs2022\MD\$(PlatformTarget)\$(Configuration);.%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\debug;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Debug;$(SolutionDir)External\Effekseer170e\lib\MD\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-md.lib;zlib-md.lib;libxml2-md.lib;xinput.lib;d3d11.lib;dxgi.lib;DirectXTK.lib;Effekseerd.lib;EffekseerRendererDX11d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
@@ -145,7 +145,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.\cereal-master\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.¥DirectXTK-main¥Inc;.\External\Effekseer162a\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.\cereal-master\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.2\include;.¥DirectXTK-main¥Inc</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -153,7 +153,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>;.\External\Effekseer162a\lib\vs2019\MT\(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>zlib-md.lib;libxml2-md.lib;libfbxsdk-md.lib;DirectXTK.lib;zlib-md.lib;libxml2-md.lib;libfbxsdk-md.lib</AdditionalDependencies>
     </Link>
     <FxCompile>
@@ -171,7 +172,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -179,8 +180,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\release;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Release;.\External\Effekseer170e\lib\vs2022\MD\$(PlatformTarget)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-md.lib;zlib-md.lib;libxml2-md.lib;xinput.lib;d3d11.lib;dxgi.lib;DirectXTK.lib;Effekseerd.lib;EffekseerRendererDX11d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\release;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;zlib-md.lib;libxml2-md.lib;xinput.lib;d3d11.lib;dxgi.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -209,10 +210,7 @@
     <ClCompile Include="Source\Game\PieceManager.cpp" />
     <ClCompile Include="Source\Game\Player.cpp" />
     <ClCompile Include="Source\Game\ShogiBoard.cpp" />
-    <ClCompile Include="Source\Game\Slime.cpp" />
-    <ClCompile Include="Source\Game\SlimeManager.cpp" />
     <ClCompile Include="Source\Game\Stage.cpp" />
-    <ClCompile Include="Source\Game\Judge.cpp" />
     <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\DebugRenderer.cpp" />
     <ClCompile Include="Source\Graphics\FrameBuffer.cpp" />
@@ -256,10 +254,7 @@
     <ClInclude Include="Source\Game\PieceManager.h" />
     <ClInclude Include="Source\Game\Player.h" />
     <ClInclude Include="Source\Game\ShogiBoard.h" />
-    <ClInclude Include="Source\Game\Slime.h" />
-    <ClInclude Include="Source\Game\SlimeManager.h" />
     <ClInclude Include="Source\Game\Stage.h" />
-    <ClInclude Include="Source\Game\Judge.h" />
     <ClInclude Include="Source\Graphics\Camera.h" />
     <ClInclude Include="Source\Graphics\DebugRenderer.h" />
     <ClInclude Include="Source\Graphics\FrameBuffer.h" />
