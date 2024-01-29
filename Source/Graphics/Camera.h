@@ -34,9 +34,9 @@ public:
 	void SetTarget(const DirectX::XMFLOAT3& target) { this->focus_ = target; }	//	ターゲット位置設定
 
 	Transform* GetTransform() { return &transform_; }
-	const DirectX::XMMATRIX& GetViewMatrix()		const{ return viewMatrix_; }		//	ビュー行列取得
-	const DirectX::XMMATRIX& GetProjectionMatrix()	const{ return projectionMatrix_; }	//	プロジェクション行列取得
-
+	const DirectX::XMMATRIX& GetViewMatrix()			const{ return viewMatrix_; }			//	ビュー行列取得
+	const DirectX::XMMATRIX& GetProjectionMatrix()		const{ return projectionMatrix_; }		//	プロジェクション行列取得
+	const DirectX::XMMATRIX& CalcViewProjectionMatrix();										//	ビュープロジェクション行列取得	
 	const DirectX::XMFLOAT3& GetEye()	const { return eye_; }		//	視点取得
 	const DirectX::XMFLOAT3& GetFocus() const { return focus_; }	//	注視点取得
 	const DirectX::XMFLOAT3& GetUp()	const { return up_; }		//	カメラ上方向取得
@@ -48,6 +48,7 @@ private:
 
 	DirectX::XMMATRIX viewMatrix_;							//	ビュー行列
 	DirectX::XMMATRIX projectionMatrix_;					//	プロジェクション行列
+	DirectX::XMMATRIX viewProjectionMatrix_;				//	ビュープロジェクション行列
 	DirectX::XMFLOAT3 eye_;									//	カメラの視点
 	DirectX::XMFLOAT3 focus_ = { 0,-10,10 };				//	カメラの注視点
 	DirectX::XMFLOAT3 angle_ = { 0,0,0 };					//	カメラの回転値
@@ -68,7 +69,7 @@ private:
 	DirectX::XMFLOAT3 right_;								//	カメラの右方向
 
 
-	bool CameraMove();
+	bool CameraMove(const float& elapsedTime);
 	bool cameraMove = false;
 	float moveTime;
 	float moveTimer;

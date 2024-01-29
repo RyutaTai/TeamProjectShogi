@@ -58,6 +58,17 @@ inline DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& f1, const DirectX::X
 	return ret;
 }
 
+inline DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& f1, const float& f2)
+{
+	DirectX::XMFLOAT3 ret{};
+	ret = f1;
+	ret.x += f2;
+	ret.y += f2;
+	ret.z += f2;
+
+	return ret;
+}
+
 inline DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& f1, const DirectX::XMFLOAT3& f2)
 {
 	DirectX::XMFLOAT3 ret{};

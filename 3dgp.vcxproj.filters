@@ -47,6 +47,15 @@
     <Filter Include="TAI\Game\ShogiGame\Character">
       <UniqueIdentifier>{51bcedd7-94a7-489b-8cb1-3087cb2e968a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TAI\Game\ShogiGame\Judge">
+      <UniqueIdentifier>{c174169b-750c-4bf5-b909-71c95797416a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TAI\Game\ShogiGame\Character\Slime">
+      <UniqueIdentifier>{cc2ed8d6-ca1f-4204-866c-e53d198dcfc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TAI\Graphics\Debug">
+      <UniqueIdentifier>{578c91de-a1c1-43cd-b882-0bfa8ee49f62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\Framework.cpp">
@@ -124,9 +133,6 @@
     <ClCompile Include="Source\Graphics\Camera.cpp">
       <Filter>TAI\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input\GamePad.cpp">
-      <Filter>TAI\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Stage.cpp">
       <Filter>TAI\Game</Filter>
     </ClCompile>
@@ -165,6 +171,21 @@
     </ClCompile>
     <ClCompile Include="Source\Input\Input.cpp">
       <Filter>TAI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Judge.cpp">
+      <Filter>TAI\Game\ShogiGame\Judge</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Slime.cpp">
+      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\SlimeManager.cpp">
+      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\GamePad.cpp">
+      <Filter>TAI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DebugRenderer.cpp">
+      <Filter>TAI\Graphics\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,9 +276,6 @@
     <ClInclude Include="Source\Graphics\Camera.h">
       <Filter>TAI\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Input\GamePad.h">
-      <Filter>TAI\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Stage.h">
       <Filter>TAI\Game</Filter>
     </ClInclude>
@@ -298,6 +316,21 @@
       <Filter>TAI\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\Easing.h" />
+    <ClInclude Include="Source\Game\Judge.h">
+      <Filter>TAI\Game\ShogiGame\Judge</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Slime.h">
+      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\SlimeManager.h">
+      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\GamePad.h">
+      <Filter>TAI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\DebugRenderer.h">
+      <Filter>TAI\Graphics\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source\Shaders\GeometricPrimitivePs.hlsl">

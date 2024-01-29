@@ -20,6 +20,7 @@ void SceneTitle::Initialize()
 	sprite_[SPRITE_TITLE::LoadingBar]->GetTransform()->SetPosition(DirectX::XMFLOAT2(0, 535));
 	sprite_[SPRITE_TITLE::LoadingCompleteBar]->GetTransform()->SetPosition(DirectX::XMFLOAT2(-1920, 535));
 
+
 	// オーディオ初期化
 	audioInstance_.Initialize();
 	bgm_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/BGM/009.wav");
@@ -50,17 +51,14 @@ void SceneTitle::Finalize()
 //	更新処理
 void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 {
-	GamePad gamePad;
-	gamePad.Acquire();
-	static const int BUTTON_MAX = 4;
+	GamePad& gamePad = Input::Instance().GetGamePad();
 
-	GamePad::Button anyButton[BUTTON_MAX] =
-	{ 
-		GamePad::Button::A,		//	Z
-		GamePad::Button::B,		//	X
-		GamePad::Button::X,		//	C
-		GamePad::Button::Y,		//	V
-	};
+	const GamePadButton anyButton =
+		GamePad::BTN_A  //Z
+		| GamePad::BTN_B  //X
+		| GamePad::BTN_X  //C
+		| GamePad::BTN_Y; //V
+
 
 	if(gamePad.ButtonState(GamePad::Button::LEFT))
 	{
@@ -73,6 +71,7 @@ void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 		}
 	}
 	if (gamePad.ButtonState(GamePad::Button::RIGHT))
+
 	{
 		sprite_[SPRITE_TITLE::Select]->GetTransform()->SetPosition(DirectX::XMFLOAT2(1015, 722));
 	}
@@ -103,16 +102,19 @@ void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 
     //	BGM再生
 	bgm_[0]->Play();
+
 }
 
 //	描画処理
 void SceneTitle::Render()
 {	
 	// タイトルスプライト描画
+
 	for (int sprite_i = 0; sprite_i < SPRITE_TITLE::MAX; sprite_i++)
 	{
 	    sprite_[sprite_i]->Render();
 	}
+
 }
 
 //	デバッグ描画

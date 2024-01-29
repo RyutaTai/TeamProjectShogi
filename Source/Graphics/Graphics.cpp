@@ -95,6 +95,9 @@ Graphics::Graphics(HWND hwnd)
 	bitBlockTransfer_ = std::make_unique<FullScreenQuad>(device_.Get());
 
 	shader_ = std::make_unique<Shader>();
+
+	//	デバッグプリミティブ
+	debugRenderer_ = std::make_unique<DebugRenderer>(device_.Get());
 }
 
 //	デストラクタ

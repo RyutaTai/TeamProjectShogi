@@ -1,6 +1,9 @@
 #include "PieceManager.h"
 
 #include "../Game/ShogiBoard.h"
+#include "Judge.h"
+#include "../Input/GamePad.h"
+#include "../Input/Input.h"
 
 //	初期化
 void PieceManager::Initialize()
@@ -11,15 +14,40 @@ void PieceManager::Initialize()
 		ShogiBoard::Instance().Initialize(pieceCount_);	//	将棋盤(board_)に駒を登録
 		pieceCount_ += 1;		//	駒の数をカウント
 	}
+	blowAway_ = false;
+	pushCount_ = 0;
 }
 
 //	更新処理
-void PieceManager::Update(float elapsedTime)
+void PieceManager::Update(float elapsedTime, float gameIntervalTimer)
 {
 	//	駒の更新処理
-	for (Piece* piece : pieces_)
+
+	
+	//	自分の駒の吹っ飛ばし処理
+	//TODO:GamePadクラス変える
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	if ((gamePad.GetButtonDown() & GamePad::BTN_SPACE) && gameIntervalTimer == 0
+		&& (pushCount_<PUSH_MAX))	//	スペースキー
 	{
-		piece->Update(elapsedTime);
+		blowAway_ = true;
+		int index = 0;
+		for (Piece* piece : pieces_)
+		{
+			piece->SetState(Piece::PIECE_STATE::UP);	//	上昇ステートへ切り替え
+			index += 1;
+		}
+		pushCount_++;
+	}
+
+	if (blowAway_)
+	{
+		int index = 0;
+		for (Piece* piece : pieces_)
+		{
+			piece->Update(elapsedTime, index);
+			index += 1;
+		}
 	}
 
 	//	破棄処理
@@ -57,6 +85,29 @@ void PieceManager::Clear()
 void PieceManager::Remove(Piece* piece)
 {
 	removes_.insert(piece);	//	破棄リストに追加
+}
+
+//	駒移動
+void PieceManager::Move(int index, int x, int y)
+{
+	pieces_.at(index)->Move(index, x, y);				//	PieceクラスのMove呼ぶ
+	pieces_.at(index)->pieceInfo_->isChoice_ = false;	//	選択フラグfalse
+	RemoveChoicePiece();								//	選択されている駒をnullptrにする
+	Judge::Instance().SetDuringChoice(false);			//	選択中フラグfalse
+}
+
+// 選択されている駒セット
+void PieceManager::SetChoicePiece(int index)
+{
+	choicePiece_= pieces_.at(index);	//	選択されている駒をセット
+	choiceIndex_ = index;				//	選択されている駒のインデックスをセット
+	pieces_.at(index)->pieceInfo_->isChoice_ = !pieces_.at(index)->pieceInfo_->isChoice_;	//	選択フラグ反転
+}
+
+//	選択されている駒リセット
+void PieceManager::RemoveChoicePiece()
+{
+	choicePiece_ = nullptr;				//	選択されている駒リセット
 }
 
 //	描画処理

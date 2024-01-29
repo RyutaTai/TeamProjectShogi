@@ -6,6 +6,7 @@
 #include "../Input/GamePad.h"
 #include "../Game/PieceManager.h"
 #include "../Game/Piece.h"
+#include "../Game/SlimeManager.h"
 
 //	初期化
 void SceneGame::Initialize()
@@ -45,7 +46,7 @@ void SceneGame::Initialize()
 		1,  // 玉
 	};
 
-	std::string filaname[maxIndex] =
+	std::string pieceFilaname[maxIndex] =
 	{
 		"./Resources/Model/Shogi/hohei.fbx",	// 歩
 		"./Resources/Model/Shogi/kakugyo.fbx",	// 角
@@ -57,17 +58,21 @@ void SceneGame::Initialize()
 		"./Resources/Model/Shogi/ohsho.fbx",	// 王
 		"./Resources/Model/Shogi/gyokusho.fbx",	// 玉
 	};
+	std::string slimeFilename = { "./Resources/Model/Slime/Slime.fbx" };
 
 	PieceManager& pieceManager = PieceManager::Instance();
 	for (int index = 0; index < maxIndex; index++)
 	{
 		for (int num = 0; num < pieceNum[index]; num++)
 		{
-			Piece* piece = new Piece(filaname[index].c_str(), true, true);	//	駒だけレイキャストtrue
+			Piece* piece = new Piece(pieceFilaname[index].c_str(), true, true);	//	駒だけレイキャストtrue
 			pieceManager.Register(piece);
 		}
 	}
 	pieceManager.Initialize();
+
+	//	ゲームインターバルタイマー初期化
+	gameIntervalTimer_ = 2.0f;
 
 }
 
@@ -82,7 +87,7 @@ void SceneGame::Finalize()
 	//		sprite_[i] = nullptr;
 	//	}
 	//}
-	stage_=nullptr;
+	stage_ = nullptr;
 	shogiBoard_ = nullptr;	//	ステージ終了化
 	//	エネミー終了化
 	PieceManager::Instance().Clear();
@@ -91,21 +96,20 @@ void SceneGame::Finalize()
 //	更新処理
 void SceneGame::Update(const float& elapsedTime,HWND hwnd)
 {
-	GamePad gamePad;
-	gamePad.Acquire();
+	GamePad& gamePad = Input::Instance().GetGamePad();
 
 	Camera::Instance().SetTarget(shogiBoard_.get()->GetTransform()->GetPosition());
 	Camera::Instance().Update(elapsedTime);
 
-#if 1 実験用
-	if (gamePad.ButtonState(GamePad::Button::A))
+#if 1 //実験用
+	if (gamePad.GetButtonDown() & GamePad::BTN_A)
 		Camera::Instance().LaunchCameraMove(DirectX::XMFLOAT3(0.0f, 25.0f, 3.0f), DirectX::XMFLOAT3(-1.5f, 0.0f, 0.0f), 3.0f);
 
 #endif
-
-
-	PieceManager::Instance().Update(elapsedTime);
-	player_.Update(elapsedTime,hwnd);
+	gameIntervalTimer_ -= elapsedTime;									//	ゲーム開始タイマーカウントダウン
+	if (gameIntervalTimer_ < 0)gameIntervalTimer_ = 0.0f;				//	
+	PieceManager::Instance().Update(elapsedTime,gameIntervalTimer_);	//	駒の更新処理
+	//player_.Update(elapsedTime,hwnd);									//	将棋ゲーム用	
 }
 
 //	描画処理
@@ -154,6 +158,12 @@ void SceneGame::Render()
 		Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
 		PieceManager::Instance().Render();
 
+	}
+
+	//	TODO:デバッグプリミティブ
+	{
+		// デバッグレンダラ描画実行
+		Graphics::Instance().GetDebugRenderer()->Render();
 	}
 
 }

@@ -11,6 +11,7 @@
 #include "../Core/HighResolutionTimer.h"
 #include "../Graphics/Graphics.h"
 #include "../../External/Imgui/ImGuiCtrl.h"
+#include "../Input/Input.h"
 
 CONST LONG SCREEN_WIDTH{ 1920 };
 CONST LONG SCREEN_HEIGHT{ 1080 };
@@ -131,11 +132,11 @@ public:
 	CONST HWND hwnd_;
 	Graphics graphics_;
 
+    static HighResolutionTimer tictoc_;
 private:
-	HighResolutionTimer& tictoc_ = HighResolutionTimer::Instance();
 	uint32_t frames_{ 0 };
 	float elapsedTime_{ 0.0f };
-
+	Input					input_;
 
 };
 

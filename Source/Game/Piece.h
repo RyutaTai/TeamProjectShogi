@@ -5,7 +5,8 @@
 //	将棋の駒クラス
 class Piece :public GameObject
 {
-public:	
+public:	//	普通の将棋	
+
 	//	構造体とか
 	enum class PIECE_TYPE		//	駒の種類を宣言する
 	{
@@ -29,7 +30,7 @@ public:
 	//	駒の進行方向名
 	enum class DIRECTION_NAME		
 	{
-		BACK_LEFT,			//	左後ろ
+		BACK_LEFT=0,			//	左後ろ
 		BACK,				//	後ろ
 		BACK_RIGHT,			//	右後ろ
 		LEFT,				//	左
@@ -51,7 +52,7 @@ public:
 	};
 
 	static const int PIECE_DIRECTION_MAX = 8;	//	１つの駒が持てる駒の方向の最大数
-	static const int DIRECTION_MAX = 12;		//	駒の方向の最大数
+	static const int DIRECTION_MAX = 11;		//	駒の方向の最大数
 	//	駒の情報
 	struct PieceInfo			
 	{
@@ -60,7 +61,7 @@ public:
 		PIECE_TYPE pieceType_;			//	駒の種類
 		bool isEnemy_;					//	敵の駒か、自分の駒か 敵ならtrue
 		bool isDead_;					//	場にあるかないか
-		bool isChoise_;					//	選択されているか
+		bool isChoice_;					//	選択されているか
 		DirectionInfo direction_[PIECE_DIRECTION_MAX];		//	駒の方向情報を持つ(方向の名前、動けるマスを持ってる) まだ関連付けしてない
 	};
 
@@ -77,8 +78,8 @@ public:
 		{DIRECTION_NAME::FRONT_LEFT,	-1.0f,	+1.0f},		//	左前
 		{DIRECTION_NAME::FRONT,			 0.0f,	+1.0f},		//	前
 		{DIRECTION_NAME::FRONT_RIGHT,	+1.0f,	+1.0f},		//	右前
-		{DIRECTION_NAME::KEIMA_RIGHT,	+2.0f,	+1.0f},		//	桂馬右方向
-		{DIRECTION_NAME::KEIMA_LEFT,	+2.0f,	+1.0f},		//	桂馬左方向
+		{DIRECTION_NAME::KEIMA_RIGHT,	+1.0f,	+2.0f},		//	桂馬右方向
+		{DIRECTION_NAME::KEIMA_LEFT,	-1.0f,	+2.0f},		//	桂馬左方向
 		{DIRECTION_NAME::NONE,			 0.0f,   0.0f},		//	方向なし
 	};
 	
@@ -128,33 +129,88 @@ public:
 
 	};
 
+public:	//	吹っ飛ばす将棋
+	enum class PIECE_STATE
+	{
+		NORMAL = 0,		//	通常
+		UP,				//	上昇
+		STOP,			//	制動
+		THRUST,			//	突っ込む
+	};
+
 public:
 	Piece(const char* fileName, bool triangulate = false, bool usedAsCollider = false);	//	コンストラクタ
 	~Piece();													//	デストラクタ
 
 	void Initialize(int index);									//	初期化　　位置設定とか
-	void Update(float elapsedTime);								//	更新処理
+	void Update(float elapsedTime,int index);					//	更新処理
 	void Render();												//	描画処理
 
 	void Destroy();												//	破棄処理
 
-	void SetPieceChoise(bool choise);										//	選択フラグセット
-	void SetPieceDirection(int index);										//	駒の方向direction_を駒の情報pieceInfo_に登録
-	PieceInfo GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
-
 	//	デバッグ用
 	void DrawDebug();											//	デバッグ描画
 	void SetDebugStr();											//	駒の種類を表示できるようtypeStr_にpieceType_をセット
+	void DrawDebugPrimitive();									//	デバッグプリミティブ描画
 
-private:
+public:	//	普通の将棋
+	void Move(int index,int x, int y);										//	移動処理 普通の将棋移動用
+
+	void SetChoicePiece(bool choice);										//	選択フラグセット
+	void SetPieceDirection(int index);										//	駒の方向direction_を駒の情報pieceInfo_に登録
+	void PieceInfoUpdate(int index);										//	駒データ更新
+	PieceInfo& GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
+	DirectX::XMFLOAT3 GetOffset() { return pieceOffset_; }					//	将棋の駒オフセット取得
+	float GetRange() { return range_; }										//	将棋の駒range取得				
+
+public:	//	吹っ飛ばす将棋
+	void Move(int index);										//	移動処理(吹っ飛ばし)
+	void MoveToTarget();										//	ターゲットに向かって飛ぶ
+	void AddImpulse(const DirectX::XMFLOAT3& impulse);			//	衝撃を与える
+	void Up(float speed);										//	上昇処理
+	void UpdateVelocity(float elapsedTime);						//	速力処理更新
+	void UpdateHorizontalVelocity(float elapsedFrame);			//	水平速力更新処理
+	void UpdateHorizontalMove(float elapsedTime);				//	水平移動更新処理	
+	void UpdateVerticalVelocity(float elapsedFrame);			//	垂直速力更新処理
+	void UpdateVerticalMove(float elapsedTime);					//	垂直移動更新処理
+	virtual void OnLanding() {}									//	着地したときに呼ばれる
+	void SetState(PIECE_STATE state);							//	ステートセット
+
+
+private:	//	普通の将棋
 	DirectX::XMFLOAT3 pieceOffset_ = { -5.0f, 0.0f, -5.0f };	//	駒を最初に描画するときのオフセット値(補正値)
 	float range_ = 2.4f;										//	駒と駒の間隔をどれくらい空けるか
 
+private:	//	駒を飛ばす用
+	float airPos_;				//	空中制限位置
+	DirectX::XMFLOAT3 velocity_	{ 0, 0, 0 };
+	DirectX::XMFLOAT3 impulse_	{0, 1, 1};
+	float radius_ = 0.9f;		//	半径
+	float height_ = 0.3f;		//	高さ
+	float gravity_ = -1.0f;		//	重力
+	float upSpeed = 1.0f;		//	上昇スピード
+	bool isGround_ = false;		//	接地フラグ
+
+	float friction = 0.5f;		//	摩擦力
+	float acceleration = 1.0f;	//	加速度
+	float maxMoveSpeed = 5.0f;	//	
+	float moveVecX = 0.0f;		//	x方向の移動ベクトル
+	float moveVecZ = 0.0f;		//	z方向の移動ベクトル
+	float airControl = 0.3f;	//	空気抵抗?
+	float stepOffset = 1.0f;	//
+	float slopeRate = 1.0f;		//
+	PIECE_STATE pieceState_;	//	駒のステート
+
+	float upTimer_;				//	上昇する時間をカウント
+	float upMax_=2.0f;			//	上昇しきるまでの時間
+
 private:	//デバッグ用
-	static int num;					//	将棋の駒の要素番号
-	int myNum_ = 0;					//	将棋の駒の要素番号
-	std::string typeStr_ = "";		//	駒の種類
-	std::string choiseStr_ = "";	//	選択されているか
+	static int num;						//	将棋の駒の要素番号
+	int myNum_ = 0;						//	将棋の駒の要素番号
+	std::string typeStr_ = "";			//	駒の種類
+	std::string choiceStr_ = "";		//	選択されているか
+	std::string pieceStateStr_ = "";	//	駒のステート
+	std::string isEnemyStr_ = "";		//	自分の駒か敵の駒かか
 
 };
 

@@ -1,6 +1,8 @@
 #include "Player.h"
 
 #include "../Input/Mouse.h"
+#include "../Game/ShogiBoard.h"
+#include "Judge.h"
 
 // RAYCAST
 // Convert a position in screen space to a position on near plane in world space.
@@ -33,15 +35,15 @@ Player::Player(const char* fileName, bool triangulate, bool usedAsCollider)
 //	 更新処理
 void Player::Update(float elapsedTime,HWND hwnd) 
 {
-	float time = HighResolutionTimer::Instance().GetDeltaTime();
-	ChoisePiece(hwnd);
+	ChoisePiece(hwnd);	//	駒を選択
+	MovePiece();		//	駒を動かす
 }
 
 //	駒を選択
-void Player::ChoisePiece(HWND hwnd)
+void Player::ChoisePiece(HWND hwnd)	//	相手の駒を選べないようにする
 {
 	// RAYCAST
-	if (GetAsyncKeyState(VK_LBUTTON) & 1)
+	if (GetAsyncKeyState(VK_LBUTTON) & 1)	//	マウス左クリック
 	{
 		POINT p;
 		GetCursorPos(&p);
@@ -52,9 +54,9 @@ void Player::ChoisePiece(HWND hwnd)
 		Graphics::Instance().GetDeviceContext()->RSGetViewports(&viewportCount, viewports);
 		UINT num_viewports{ 1 };
 
-		DirectX::XMFLOAT4X4 viewFloat4x4;
-		DirectX::XMStoreFloat4x4(&viewFloat4x4, Camera::Instance().GetViewMatrix());
-		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewFloat4x4);
+		DirectX::XMFLOAT4X4 viewProjectionMatrix;
+		DirectX::XMStoreFloat4x4(&viewProjectionMatrix, Camera::Instance().GetViewMatrix() * Camera::Instance().GetProjectionMatrix());
+		DirectX::XMFLOAT3 positionOnNearPlane = ConvertScreenToWorld(p.x, p.y, 0.0f, viewports[0], viewProjectionMatrix);
 
 		DirectX::XMFLOAT3 cameraPosition;
 		cameraPosition = { Camera::Instance().GetEye() };
@@ -62,30 +64,42 @@ void Player::ChoisePiece(HWND hwnd)
 		DirectX::XMFLOAT3 l0;
 		DirectX::XMStoreFloat3(&l0, L0);
 		DirectX::XMFLOAT3 l;
-		DirectX::XMStoreFloat3(&l, DirectX::XMVectorSubtract(L0, XMLoadFloat3(&positionOnNearPlane)));
+		DirectX::XMStoreFloat3(&l, DirectX::XMVectorSubtract(XMLoadFloat3(&positionOnNearPlane),  L0));
 
 		std::string intersectedMesh;
 		std::string intersectedMaterial;
 		DirectX::XMFLOAT3 intersectedNormal = {};
-
+		PieceManager& pieceManager = PieceManager::Instance();
+		Piece* piece;
 		for (int i = 0; i < Piece::PIECE_MAX; i++)
 		{
-			Piece* piece = PieceManager::Instance().GetPiece(i);
+			piece = pieceManager.GetPiece(i);
 			DirectX::XMFLOAT4X4 pieceTransform = {};
-			DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
-			//	レイが当たっていたら
+			const DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(piece->GetTransform()->GetScale().x, piece->GetTransform()->GetScale().y, piece->GetTransform()->GetScale().z)
+				* DirectX::XMMatrixScaling(piece->GetTransform()->GetScaleFactor(), piece->GetTransform()->GetScaleFactor(), piece->GetTransform()->GetScaleFactor()) };
+			const DirectX::XMMATRIX R{ DirectX::XMMatrixRotationRollPitchYaw(piece->GetTransform()->GetRotationX(), piece->GetTransform()->GetRotationY(), piece->GetTransform()->GetRotationZ()) };
+			const DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(piece->GetTransform()->GetPositionX(), piece->GetTransform()->GetPositionY(), piece->GetTransform()->GetPositionZ()) };
+			//DirectX::XMStoreFloat4x4(&pieceTransform, piece->GetTransform()->CalcWorld());
+			DirectX::XMStoreFloat4x4(&pieceTransform, S * R * T);
+			
+			//	TOOD:レイキャスト レイが当たっていたら
 			if (piece->GetModel()->Raycast(l0, l, pieceTransform, intersectionPoint, intersectedNormal, intersectedMesh, intersectedMaterial))
 			{
-				OutputDebugStringA("Intersected : ");
-				OutputDebugStringA(intersectedMesh.c_str());
-				OutputDebugStringA(" : ");
-				OutputDebugStringA(intersectedMaterial.c_str());
-				OutputDebugStringA("\n");
-				piece->SetPieceChoise(true);
+				//OutputDebugStringA("Intersected : ");
+				//OutputDebugStringA(intersectedMesh.c_str());
+				//OutputDebugStringA(" : ");
+				//OutputDebugStringA(intersectedMaterial.c_str());
+				//OutputDebugStringA("\n");
+				if (!piece->GetPieceInfo(i).isEnemy_)			//	選んだ駒が自分の駒なら
+				{
+					pieceManager.SetChoicePiece(i);				//	選んでいる駒をセット
+					Judge::Instance().SetDuringChoice(true);	//	選択中フラグtrue
+				}
+
 			}
 			else
 			{
-				OutputDebugStringA("Unintersected...\n");
+				//OutputDebugStringA("Unintersected...\n");
 			}
 		}
 	}
@@ -93,8 +107,39 @@ void Player::ChoisePiece(HWND hwnd)
 }
 
 //	選んだ駒を動かす
+//	選んだ駒を登録したあとに呼ぶ
 void Player::MovePiece()
 {
+	PieceManager& pieceManager = PieceManager::Instance();
+	if (pieceManager.GetChoicePiece() != nullptr)
+	{
+		Piece::DirectionInfo direction[8] = {};
+		int choicePieceIndex = pieceManager.GetChoicePieceIndex();
+		for (int i = 0; i < Piece::PIECE_DIRECTION_MAX; i++)	//	選択されている駒が動ける方向取得(PIECE_DIRECTION_MAXになるまでに0が入る場合もある)
+		{
+			direction[i] = pieceManager.GetChoicePiece()->GetPieceInfo(choicePieceIndex).direction_[i];
+		}
+		ShogiBoard::Instance().EmptySquareInit(direction);		//	動けるマス、かつ、空いているマスにエフェクト出したい
+		ShogiBoard::Instance().EmptySquareRender();
 
+		Piece* choicePiece = pieceManager.GetChoicePiece();		//	選んだ駒を取得
+
+		// TODO:置く場所を選んでから動くようにする
+		//if (Judge::Instance().GetDuringChoice()&& (GetAsyncKeyState(VK_LBUTTON) & 1))//	選択中かつ、左クリックしたら
+		//{
+			pieceManager.Move(choicePieceIndex, ChoiceSquare().x, ChoiceSquare().y);//	駒を動かす
+			choicePiece->PieceInfoUpdate(pieceManager.GetChoicePieceIndex());		//	駒を更新する
+			pieceManager.RemoveChoicePiece();										//	選択されている駒リセット
+		//}
+	}
 }
+
+//	TODO:置くマスを選択 今は全部{1,1}になってる
+DirectX::XMFLOAT2 Player::ChoiceSquare()
+{
+	PieceManager& pieceManager = PieceManager::Instance();
+
+	return { 1,1 };
+}
+
 

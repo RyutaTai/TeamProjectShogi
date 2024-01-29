@@ -20,25 +20,22 @@ public:
 	void Render()							override;
 	void DrawDebug()						override;
 
-	//	ターン切り替え (Player,Enemy,マイク入力の３つ？)
-	void ChangeTurn();
-
 private:
 	enum class SPRITE_GAME	//	スプライト
 	{
 		BACK,		//	背景画像
+		MIKE,		//	マイク画像
 		MAX,		//	スプライトの上限数
 	};
 
 	std::unique_ptr<Sprite> sprite_[static_cast<int>(SPRITE_GAME::MAX)];
-	std::unique_ptr<Stage>	stage_;
+	std::unique_ptr<Stage>	stage_;				//	茶室
 	std::unique_ptr<ShogiBoard>	shogiBoard_;	//	将棋盤
 	Microsoft::WRL::ComPtr<ID3D11Buffer> sceneConstantBuffer_;
-
-private:	//ゲーム用変数
-	bool	isMyTurn_ = true;			//	自分のターンかどうか
-	float	allottedTime = 30.0f;	//	各プレイヤーの一手ごとの持ち時間
 	Player player_;
+
+private:	//	ゲーム用
+	float gameIntervalTimer_;	//	ゲームがスタートするまでの時間
 
 };
 
