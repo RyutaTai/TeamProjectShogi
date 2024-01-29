@@ -43,6 +43,8 @@ public:
 	const DirectX::XMFLOAT3& GetFront() const { return front_; }	//	カメラ前方向取得
 	const DirectX::XMFLOAT3& GetRight() const { return right_; }	//	カメラ右方向取得
 
+	bool IsCameraMove() { return cameraMove; }	//	カメラ演出中かどうか
+
 private:
 	Transform transform_;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GamePad.h"
+
 #include <Windows.h>
 #include <mmsystem.h>
 #include <cmath>
@@ -10,8 +12,6 @@
 #include <thread>
 #include <future>
 #include <chrono>
-
-#include "GamePad.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -69,7 +69,6 @@ public:
 private:
     // ミュートかどうか確認
     bool CheckMuteStatus();
-
     // 録音
     void RecordThread(float timer);
 
@@ -83,7 +82,7 @@ private:
     float           _timer          = 0;
     bool            _muted          = true;     //  ミュート？
     bool            _isRecording    = false;    //  録音中か
-    bool            _started        = false;    //  ?
+    bool            _started        = false;    //  録音化したらtrue もう一度実行されるのを防ぐ
     bool            _stoped         = false;    //  スレッドが終了しているか？
 
     const int _bufferSize = 4096;               //  

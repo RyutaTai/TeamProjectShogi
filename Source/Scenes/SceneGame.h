@@ -21,12 +21,30 @@ public:
 	void Render()							override;
 	void DrawDebug()						override;
 
+	void Reset();
+
+	void TutorialUpdate();	//	TUTORIALステート更新処理
+	void StartUpdate();		//	STARTステート更新処理
+	void RecReadyUpdate();	//	RECREADYステート更新処理
+	void RecUpdate();		//	RECステート更新処理
+	void ResultUpdate();	//	RESULTステート更新処理
+
+private:
+	enum class RESULT_SELECT
+	{
+		ReStart,
+		Title,
+	}
+	resultSelect_ = RESULT_SELECT::ReStart;
 
 	//	ゲーム用変数
 private:
-	float gameIntervalTimer_;	//	ゲームがスタートするまでの時間
-	int tutorialCount = 1;		//	チュートリアルのページ数カウント
-
+	float gameIntervalTimer_;			//	ゲームがスタートするまでの時間
+	int tutorialCount = 1;				//	チュートリアルのページ数カウント
+	static const int TUTORIAL_MAX = 2;	//	チュートリアル最大数
+	bool isResultRender_ = false;		//	リザルト描画フラグ
+	float timer_ = 6;					//	タイマー
+	float decibel = 0;
 private:	//	スプライト
 	enum SPRITE_GAME	
 	{
@@ -37,6 +55,7 @@ private:	//	スプライト
 		RESULT,			//	リザルト
 		PIECE_COUNT,	//	テキスト落とした駒の数
 		db,				//	テキストdb数
+		SELECT,			//	選択
 		MAX,			//	スプライトの上限数
 	};
 
@@ -44,6 +63,7 @@ private:	//	スプライト
 	std::unique_ptr<Stage>		stage_;				//	茶室
 	std::unique_ptr<ShogiBoard> shogiBoard_;		//	将棋盤
 	Microsoft::WRL::ComPtr<ID3D11Buffer> sceneConstantBuffer_;
+
 
 private:	//	オーディオ
 	Audio audioInstance_ = Audio::Instance();

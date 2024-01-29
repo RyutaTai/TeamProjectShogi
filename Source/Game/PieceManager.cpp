@@ -18,14 +18,14 @@ void PieceManager::Initialize()
 }
 
 //	更新処理
-void PieceManager::Update(float elapsedTime, float gameIntervalTimer)
+void PieceManager::Update(float elapsedTime)
 {
 	//	駒の更新処理
 
 	
 	//	自分の駒の吹っ飛ばし処理
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	if ((gamePad.GetButtonDown() & GamePad::BTN_SPACE) && gameIntervalTimer == 0
+	if ((gamePad.GetButtonDown() & GamePad::BTN_SPACE)
 		&& (pushCount_<PUSH_MAX))	//	スペースキー
 	{
 		blowAway_ = true;

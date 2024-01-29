@@ -163,6 +163,8 @@ public:	//	普通の将棋
 	PieceInfo& GetPieceInfo(int index) { return this->pieceInfo_[index]; }	//	将棋の駒データ取得	
 	DirectX::XMFLOAT3 GetOffset() { return pieceOffset_; }					//	将棋の駒オフセット取得
 	float GetRange() { return range_; }										//	将棋の駒range取得				
+	DirectX::XMFLOAT3 GetImpulse() { return impulse_; }
+	
 
 public:	//	吹っ飛ばす将棋
 	void Move(int index);										//	移動処理(吹っ飛ばし)
@@ -196,8 +198,8 @@ private:	//	普通の将棋
 
 private:	//	駒を飛ばす用
 	float airPos_;				//	空中制限位置
-	DirectX::XMFLOAT3 velocity_	{ 0, 0, 0 };
-	DirectX::XMFLOAT3 impulse_	{0, 1, 1};
+	DirectX::XMFLOAT3 velocity_{ 0, 0, 0 };
+	DirectX::XMFLOAT3 impulse_{0, 1, 1};
 	float radius_ = 0.9f;		//	半径
 	float height_ = 0.3f;		//	高さ
 	float gravity_ = -1.0f;		//	重力

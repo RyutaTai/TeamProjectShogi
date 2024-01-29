@@ -13,7 +13,7 @@
 #include <mutex>
 class Graphics
 {
-public://ç\ë¢ëÃ
+public:	//	ç\ë¢ëÃ
 	struct SceneConstants
 	{
 		DirectX::XMFLOAT4X4 viewProjection_;

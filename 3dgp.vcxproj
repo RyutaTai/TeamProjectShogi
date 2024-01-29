@@ -117,13 +117,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc;$(SolutionDir)External\Effekseer170e\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\External\cereal-master\include;.\External\DirectXTK-main\Inc;.\External\Effekseer170e\include\Effekseer;.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\Effekseer170e\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\debug;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Debug;$(SolutionDir)External\Effekseer170e\lib\MD\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\debug;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Debug;C:\Users\2220412\Desktop\TeamProject_Shogi\External\Effekseer170e\lib\vs2022\MD\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-md.lib;zlib-md.lib;libxml2-md.lib;xinput.lib;d3d11.lib;dxgi.lib;DirectXTK.lib;Effekseerd.lib;EffekseerRendererDX11d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
@@ -172,7 +172,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\include;.\External\cereal-master\include;.\External\DirectXTK-main\Inc;.\External\Effekseer170e\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -180,8 +180,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\release;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-md.lib;zlib-md.lib;libxml2-md.lib;xinput.lib;d3d11.lib;dxgi.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\External\Autodesk\FBX\FBX_SDK\2020.2\lib\vs2019\x64\release;.\External\DirectXTK-main\Bin\Desktop_2019\x64\Release;C:\Users\2220412\Desktop\TeamProject_Shogi\External\Effekseer170e\lib\vs2022\MD\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;zlib-md.lib;libxml2-md.lib;xinput.lib;d3d11.lib;dxgi.lib;DirectXTK.lib;Effekseerd.lib;EffekseerRendererDX11d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -207,6 +207,7 @@
     <ClCompile Include="Source\Game\Character.cpp" />
     <ClCompile Include="Source\Game\Enemy.cpp" />
     <ClCompile Include="Source\Game\GameObject.cpp" />
+    <ClCompile Include="Source\Game\Judge.cpp" />
     <ClCompile Include="Source\Game\Piece.cpp" />
     <ClCompile Include="Source\Game\PieceManager.cpp" />
     <ClCompile Include="Source\Game\Player.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="Source\Game\Character.h" />
     <ClInclude Include="Source\Game\Enemy.h" />
     <ClInclude Include="Source\Game\GameObject.h" />
+    <ClInclude Include="Source\Game\Judge.h" />
     <ClInclude Include="Source\Game\Piece.h" />
     <ClInclude Include="Source\Game\PieceManager.h" />
     <ClInclude Include="Source\Game\Player.h" />
@@ -268,6 +270,7 @@
     <ClInclude Include="Source\Input\Input.h" />
     <ClInclude Include="Source\Input\Microphone.h" />
     <ClInclude Include="Source\Input\Mouse.h" />
+    <ClInclude Include="Source\Others\Converter.h" />
     <ClInclude Include="Source\Others\MathHelper.h" />
     <ClInclude Include="Source\Others\Misc.h" />
     <ClInclude Include="Source\Others\Transform.h" />

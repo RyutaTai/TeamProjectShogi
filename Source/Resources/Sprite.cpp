@@ -160,9 +160,9 @@ void Sprite::Render()
 	graphics.GetDeviceContext()->PSSetShaderResources(0, 1, shaderResourceView_.GetAddressOf());
 
 	// 各種ステートの設定
-	Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_OFF_ZW_OFF);
-	Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
-	Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::CULL_NONE);
+	//Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
+	//Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
+	//Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::CULL_NONE);
 
 	// --- 描画 (これより下に何も書かない) ---
 	graphics.GetDeviceContext()->Draw(4, 0);

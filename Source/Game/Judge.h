@@ -14,8 +14,9 @@ public:
 	{
 		TUTORIAL = 0, 	//	チュートリアル
 		START,			//	チュートリアル終わってすぐのゲーム画面
+		RECREADY,		//	録音準備
 		REC,			//	録音中
-		END,			//	ゲーム終了
+		RESULT,			//	ゲーム終了
 		MAX,			//	ステート最大数
 	};
 	

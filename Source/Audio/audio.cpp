@@ -44,6 +44,9 @@ Audio::Audio(IXAudio2* xaudio2, const wchar_t* filename)
 
 	hr = xaudio2->CreateSourceVoice(&sourceVoice_, (WAVEFORMATEX*)&wfx_);
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+
+	//ボイスディテールの取得
+	sourceVoice_->GetVoiceDetails(&detail_);
 }
 
 //	デストラクタ
@@ -68,7 +71,7 @@ void Audio::Initialize()
 }
 
 //	再生
-void Audio::Play(int loopCount)
+void Audio::Play(bool loop)
 {
 	HRESULT hr;
 
@@ -82,7 +85,13 @@ void Audio::Play(int loopCount)
 		return;
 	}
 
-	buffer_.LoopCount = loopCount;
+	if (loop)
+	{
+		buffer_.LoopCount = XAUDIO2_MAX_LOOP_COUNT;
+		buffer_.LoopBegin = detail_.InputSampleRate;
+	}
+	else buffer_.LoopCount = 0;
+
 	hr = sourceVoice_->SubmitSourceBuffer(&buffer_);
 	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 

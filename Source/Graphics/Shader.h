@@ -34,6 +34,7 @@ public:
 		ALPHA,
 		ADD,
 		SUBTRACT,
+		REV_SUBTRACT,	//	ReverseSubtract
 		MAX,
 	};
 

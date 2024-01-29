@@ -12,11 +12,12 @@
 #include "../Graphics/Graphics.h"
 #include "../../External/Imgui/ImGuiCtrl.h"
 #include "../Input/Input.h"
+#include "../Audio/Audio.h"
 
 CONST LONG SCREEN_WIDTH{ 1920 };
 CONST LONG SCREEN_HEIGHT{ 1080 };
 CONST BOOL FULLSCREEN{ FALSE };
-CONST LPCWSTR APPLICATION_NAME{ L"TAI" };
+CONST LPCWSTR APPLICATION_NAME{ L"ëÂê∫è´ä˚" };
 
 class Framework
 {
@@ -91,10 +92,12 @@ public:
 		case WM_CREATE:
 			break;
 		case WM_KEYDOWN:
-			if (wparam == VK_ESCAPE)
-			{
-				PostMessage(hwnd, WM_CLOSE, 0, 0);
-			}
+
+			// if (wparam == VK_ESCAPE)
+			// {
+			// 	PostMessage(hwnd, WM_CLOSE, 0, 0);
+			// }
+		
 			break;
 		case WM_ENTERSIZEMOVE:
 			tictoc_.Stop();
@@ -132,6 +135,9 @@ public:
 	CONST HWND hwnd_;
 	Graphics graphics_;
     static HighResolutionTimer tictoc_;
+
+	Audio audioInstance_ = Audio::Instance();
+	std::unique_ptr<Audio> bgm_;
 
 private:
 	uint32_t	frames_{ 0 };

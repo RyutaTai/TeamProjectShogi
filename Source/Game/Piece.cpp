@@ -7,6 +7,7 @@
 #include "../Core/HighResolutionTimer.h"
 #include "../Core/Framework.h"
 #include "../Collision/Collision.h"
+#include "../Input/Microphone.h"
 #include <random>
 
 int Piece::num = 0;	//	デバッグ用
@@ -191,11 +192,8 @@ void Piece::Update(float elapsedTime,int index)
 		UpdateThrustState(elapsedTime, index);
 		break;
 	}
-
 	UpdateVelocity(elapsedTime);
 }
-
-
 
 //衝撃を与える
 void Piece::AddImpulse(const DirectX::XMFLOAT3& impulse)
@@ -209,8 +207,8 @@ void Piece::AddImpulse(const DirectX::XMFLOAT3& impulse)
 //	上昇処理
 void Piece::Up(float speed)
 {
-	//TODO:上方向の力を設定
-	//this->velocity_.y = speed;
+	//	TODO:上方向の力を設定
+	//	this->velocity_.y = speed;
 	// イージング関数でpositionを直接いじって駒を上昇させる
 	if (upTimer_ < upMax_)
 	{
@@ -220,6 +218,8 @@ void Piece::Up(float speed)
 	}
 	else //	上昇が終わったら
 	{
+		// TODO::ここ問題
+		if(!Microphone::Instance().GetOnRecording())
 		this->SetState(PIECE_STATE::THRUST);
 	}
 }
@@ -266,7 +266,7 @@ void Piece::MoveToTarget()
 	}
 
 	//	TODO:駒の衝突処理(円柱と円柱)
-	//全ての敵との総当たりで衝突処理
+	//	全ての敵との総当たりで衝突処理
 	PieceManager& pieceManager = PieceManager::Instance();
 	for (int i = 0; i < PIECE_MAX; i++)
 	{
@@ -283,22 +283,34 @@ void Piece::MoveToTarget()
 			height_,
 			outPosition))
 		{
-			//DirectX::XMFLOAT3 impulse;//吹き飛ばす力
-			//const float power = 1.0f;
-			//DirectX::XMFLOAT3 e = piece->GetTransform()->GetPosition();
+			DirectX::XMVECTOR PositionA = DirectX::XMLoadFloat3(&myPos);
+			DirectX::XMVECTOR PositionB = DirectX::XMLoadFloat3(&piece->GetTransform()->GetPosition());
+			DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(PositionB, PositionA);
+			float VecY = DirectX::XMVectorGetY(Vec);
+			if (VecY < 0.1f)	//	駒の上に当たっていたら
+			{
+				velocity_.y = 0;
+			}
 
-			//float vx = e.x - myPos.x;
-			//float vz = e.z - myPos.z;
-			//float lengthXZ = sqrtf(vx * vx + vz * vz);
-			//vx /= lengthXZ;
-			//vz /= lengthXZ;
+			DirectX::XMFLOAT3 impulse;//吹き飛ばす力
+			const float power = 1.0f;
+			DirectX::XMFLOAT3 e = piece->GetTransform()->GetPosition();
 
-			//impulse.x = vx * power;
-			//impulse.y = 0;
-			////impulse.y = power * 0.2f;
-			//impulse.z = vz * power;
+			float vx = e.x - myPos.x;
+			float vz = e.z - myPos.z;
+			float lengthXZ = sqrtf(vx * vx + vz * vz);
+			vx /= lengthXZ;
+			vz /= lengthXZ;
 
-			////piece->AddImpulse(impulse);
+			impulse.x = vx * power;
+			impulse.y = 0;
+			//impulse.y = power * 0.2f;
+			impulse.z = vz * power;
+			// TODO:db値をimplseに反映させてもいいかも(y軸にも飛ばしたい)
+			float db = Microphone::Instance().Sort();
+			DirectX::XMStoreFloat3(&impulse, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&impulse), db));
+
+			piece->AddImpulse(impulse);
 
 			//押し出し後の位置設定
 			piece->GetTransform()->SetPosition(outPosition);
@@ -378,6 +390,7 @@ void Piece::UpdateVerticalMove(float elapsedTime)
 		if (!isGround_)
 		{
 			OnLanding();
+			PieceManager::Instance().SetRemainCount();	//	落ちている駒数取得	
 		}
 		isGround_ = true;
 	}
@@ -514,6 +527,7 @@ void Piece::TransitionIdleState()
 void Piece:: UpdateIdleState(float elapsedTime)
 {
 	this->velocity_ = { 0,0,0 };
+
 	SetState(PIECE_STATE::UP);
 }
 
@@ -557,7 +571,10 @@ void Piece::UpdateThrustState(float elapsedTime,int index)
 {
 	if (!this->pieceInfo_[index].isEnemy_)	//	TODO:自分の駒なら相手の駒に吹っ飛ぶようにする
 	{
-		this->MoveToTarget();
+		if (Microphone::Instance().ThreadStoped()) // 録音終了したら
+		{
+			this->MoveToTarget();
+		}
 	}
 
 }

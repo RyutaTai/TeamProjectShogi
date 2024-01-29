@@ -1,7 +1,7 @@
 #include"StaticMesh.h"
 
-#include<fstream>
-#include<filesystem>
+#include <fstream>
+#include <filesystem>
 
 #include "Texture.h"
 #include "../Graphics/Graphics.h"

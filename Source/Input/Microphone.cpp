@@ -40,13 +40,13 @@ void Microphone::RecordThread(float timer)
 //  録音開始
 void Microphone::StartRecording(float timer)
 {
+    _started = true;
+    _stoped = false;
     // バッファの初期化
     _bufferData.resize(_bufferCount, std::vector<char>(_bufferSize));
     _bufferHeaders.resize(_bufferCount);
     if (!_mic.empty())_mic.clear();
-    _mic.resize(0);
-    _stoped = false;
-    _started = true;
+        _mic.resize(0);
 
     // waveInOpen でマイクをオープン
     waveInOpen(&_hWaveIn, WAVE_MAPPER, &_format, (DWORD_PTR)WaveInProc, 0, CALLBACK_FUNCTION);

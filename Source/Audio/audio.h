@@ -3,6 +3,7 @@
 #include <xaudio2.h>
 #include <mmreg.h>
 #include <wrl.h>
+#include <stdint.h>
 
 #include "../Others/Misc.h"
 
@@ -22,7 +23,7 @@ public:
 
 	void Initialize();
 
-	void Play(int loopCount = 0/*255 : XAUDIO2_LOOP_INFINITE*/);			//	再生
+	void Play(bool loop);						//	再生
 	void Stop(bool playTails = true, bool waitForBufferToUnqueue = true);	//	停止
 	void Volume(float volume);												//	ボリューム設定
 	bool Queuing();
@@ -32,6 +33,7 @@ public:
 private:
 	WAVEFORMATEXTENSIBLE wfx_ = { 0 };
 	XAUDIO2_BUFFER buffer_ = { 0 };
+	XAUDIO2_VOICE_DETAILS detail_;
 
 	//	ソースボイス
 	//	各サウンドの波形を受け取って再生する機能を持ったオブジェクト

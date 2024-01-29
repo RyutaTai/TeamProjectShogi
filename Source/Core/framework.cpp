@@ -43,6 +43,10 @@ bool Framework::Initialize()
 
 	//	シーン初期化
 	SceneManager::Instance().ChangeScene(new SceneTitle());
+	
+	//	オーディオ
+	audioInstance_.Initialize();
+	bgm_= std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/BGM/Voltage.wav");
 
 	return true;
 }
@@ -54,6 +58,8 @@ void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 
 	//	Input初期化
 	input_.Update();
+
+	bgm_->Play(true);
 
 	//	シーンの更新
 	SceneManager::Instance().Update(elapsedTime,hwnd_);
@@ -91,6 +97,7 @@ void Framework::Render()
 //	終了化
 bool Framework::Uninitialize()
 {
+	bgm_->Stop();
 
 	return true;
 }

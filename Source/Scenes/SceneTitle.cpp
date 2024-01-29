@@ -12,23 +12,24 @@ extern LONG SCREEN_WIDTH{ 1920 };
 //	初期化
 void SceneTitle::Initialize()
 {
-    sprite_[SPRITE_TITLE::BACK] = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/TitleBuck.png");
-    sprite_[SPRITE_TITLE::Select] = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/Select.png");
-    sprite_[SPRITE_TITLE::LoadingBar] = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/LoadingBar.png");
+    sprite_[SPRITE_TITLE::BACK]         = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/TitleBuck.png");
+    sprite_[SPRITE_TITLE::Select]       = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/Select.png");
+    sprite_[SPRITE_TITLE::LoadingBar]   = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/LoadingBar.png");
     sprite_[SPRITE_TITLE::LoadingCompleteBar] = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/LoadingComplete.png");
+    sprite_[SPRITE_TITLE::TAIKYOKU]          = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/TAIKYOKU.png");
+    sprite_[SPRITE_TITLE::RULE]             = std::make_unique<Sprite>(Graphics::Instance().GetDevice(), L"./Resources/Image/Title/RULE.png");
+
     sprite_[SPRITE_TITLE::Select]->GetTransform()->SetPosition(DirectX::XMFLOAT2(522, 722));
     sprite_[SPRITE_TITLE::LoadingBar]->GetTransform()->SetPosition(DirectX::XMFLOAT2(0, 535));
     sprite_[SPRITE_TITLE::LoadingCompleteBar]->GetTransform()->SetPosition(DirectX::XMFLOAT2(-1920, 535));
 
-
     // オーディオ初期化
     audioInstance_.Initialize();
-    bgm_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/BGM/009.wav");
+    //bgm_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/BGM/009.wav");
 
     nextScene_ = new SceneGame();
 
     thread_ = new std::thread(LoadingThread, this);
-
 
     /*se_[0] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0footsteps-of-a-runner-on-gravel.wav");
     se_[1] = std::make_unique<Audio>(audioInstance_.GetXAudio2(), L"./Resources/Audio/SE/0footsteps-dry-leaves-g.wav");
@@ -68,9 +69,12 @@ void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 
 
     //	Enterキーを押したらゲームシーンへ切り替え
-    if (titleSelect_ == TITLE_SELECT::Play && gamePad.GetButtonDown() & GamePad::BTN_START)
+    if (gamePad.GetButtonDown() & GamePad::BTN_START)
     {
         now_loading = true;
+        if(titleSelect_ == TITLE_SELECT::Play)Judge::Instance().SetGameState(Judge::GAME_STATE::START);	//	ゲーム開始
+        if(titleSelect_ == TITLE_SELECT::Tutorial)Judge::Instance().SetGameState(Judge::GAME_STATE::TUTORIAL);	//	チュートリアル開始
+
     }
 
 
@@ -81,9 +85,11 @@ void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
         if (loading_complete)
             SceneManager::Instance().ChangeScene(nextScene_);
     }
-
+    // 終了処理
+    if( GetAsyncKeyState(VK_ESCAPE) & 0x8000 ) exit(0);
+    
     //	BGM再生
-    bgm_[0]->Play();
+    //bgm_[0]->Play();
 
 }
 
@@ -91,10 +97,17 @@ void SceneTitle::Update(const float& elapsedTime, HWND hwnd)
 void SceneTitle::Render()
 {
     // タイトルスプライト描画
+    Graphics::Instance().GetShader()->SetDepthStencilState(Shader::DEPTH_STENCIL_STATE::ZT_ON_ZW_ON);
+    Graphics::Instance().GetShader()->SetBlendState(Shader::BLEND_STATE::ALPHA);
+    Graphics::Instance().GetShader()->SetRasterizerState(Shader::RASTERIZER_STATE::CULL_NONE);
+    
     if (titleSelect_ == TITLE_SELECT::Play)
         sprite_[SPRITE_TITLE::Select]->GetTransform()->SetPosition(DirectX::XMFLOAT2(522, 722));
     else if (titleSelect_ == TITLE_SELECT::Tutorial)
         sprite_[SPRITE_TITLE::Select]->GetTransform()->SetPosition(DirectX::XMFLOAT2(1015, 722));
+
+    sprite_[SPRITE_TITLE::TAIKYOKU]->GetTransform()->SetPosition(DirectX::XMFLOAT2(522, 722));
+    sprite_[SPRITE_TITLE::RULE]->GetTransform()->SetPosition(DirectX::XMFLOAT2(1015, 722));
 
     for (int sprite_i = 0; sprite_i < SPRITE_TITLE::MAX; sprite_i++)
     {
@@ -148,7 +161,6 @@ void SceneTitle::LoadEasing()
     if (!nextScene_->IsReady() && pos.x > -800.0f)
     {
         pos.x += 0.1f;
-     
     }
     else if (nextScene_->IsReady())
         pos.x += 5.0f;

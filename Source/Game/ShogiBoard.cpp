@@ -3,7 +3,6 @@
 #include "../Graphics/Graphics.h"
 #include "Stage.h"
 #include "Judge.h"
-#include "SlimeManager.h"
 
 //	コンストラクタ
 ShogiBoard::ShogiBoard(const char* fileName, bool triangulate, bool usedAsCollider)
