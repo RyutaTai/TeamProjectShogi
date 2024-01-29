@@ -47,6 +47,7 @@
     <Filter Include="TAI\Game\ShogiGame\Character">
       <UniqueIdentifier>{51bcedd7-94a7-489b-8cb1-3087cb2e968a}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
     <Filter Include="TAI\Game\ShogiGame\Judge">
       <UniqueIdentifier>{c174169b-750c-4bf5-b909-71c95797416a}</UniqueIdentifier>
     </Filter>
@@ -59,6 +60,8 @@
     <Filter Include="TAI\Resources\Effect">
       <UniqueIdentifier>{71e5d91b-5cd7-46d2-8d17-e06f8eb88b9f}</UniqueIdentifier>
     </Filter>
+=======
+>>>>>>> TeamProjectShogi/Tomy
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\Framework.cpp">
@@ -136,6 +139,9 @@
     <ClCompile Include="Source\Graphics\Camera.cpp">
       <Filter>TAI\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Input\GamePad.cpp">
+      <Filter>TAI\Input</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Game\Stage.cpp">
       <Filter>TAI\Game</Filter>
     </ClCompile>
@@ -175,20 +181,8 @@
     <ClCompile Include="Source\Input\Input.cpp">
       <Filter>TAI\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Judge.cpp">
-      <Filter>TAI\Game\ShogiGame\Judge</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Slime.cpp">
-      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\SlimeManager.cpp">
-      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\GamePad.cpp">
-      <Filter>TAI\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\DebugRenderer.cpp">
-      <Filter>TAI\Graphics\Debug</Filter>
+      <Filter>TAI\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Input\Microphone.cpp">
       <Filter>TAI\Input</Filter>
@@ -285,6 +279,9 @@
     <ClInclude Include="Source\Graphics\Camera.h">
       <Filter>TAI\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Input\GamePad.h">
+      <Filter>TAI\Input</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Game\Stage.h">
       <Filter>TAI\Game</Filter>
     </ClInclude>
@@ -325,20 +322,8 @@
       <Filter>TAI\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\Easing.h" />
-    <ClInclude Include="Source\Game\Judge.h">
-      <Filter>TAI\Game\ShogiGame\Judge</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Slime.h">
-      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\SlimeManager.h">
-      <Filter>TAI\Game\ShogiGame\Character\Slime</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\GamePad.h">
-      <Filter>TAI\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\DebugRenderer.h">
-      <Filter>TAI\Graphics\Debug</Filter>
+      <Filter>TAI\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Input\Microphone.h">
       <Filter>TAI\Input</Filter>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <thread>
 
 #include "Scene.h"
 #include "../Resources/Sprite.h"
@@ -19,15 +20,45 @@ public:
 	void Render()							override;
 	void DrawDebug()						override;
 
+<<<<<<< HEAD
 private:	//	スプライト
 	enum class SPRITE_TITLE
+=======
+	Scene* nextScene_ = nullptr;
+	std::thread* thread_ = nullptr;
+
+private:
+
+	enum SPRITE_TITLE
+>>>>>>> TeamProjectShogi/Tomy
 	{
-		BACK,		//	背景画像
-		TEXT_KEY,	//	Push to ○○Key の表示
-		MAX,		//	スプライトの上限数
+		BACK,		       // 背景画像
+		LoadingBar,        // ロードバー
+		LoadingCompleteBar,// ロード完了バー
+		Select,            // 選択
+
+		MAX,		       // スプライトの上限数
 	};
-	std::unique_ptr<Sprite> sprite_[static_cast<int>(SPRITE_TITLE::MAX)];
+	std::unique_ptr<Sprite> sprite_[SPRITE_TITLE::MAX];
+
+	enum class TITLE_SELECT
+	{
+		Play,
+		Tutorial,
+	}
+	titleSelect_ = TITLE_SELECT::Play;
 	
+<<<<<<< HEAD
+=======
+
+	//	ローディングスレッド
+	static void LoadingThread(SceneTitle* scene);
+
+
+private:
+
+
+>>>>>>> TeamProjectShogi/Tomy
 private:	//	オーディオ
 	Audio audioInstance_ = Audio::Instance();
 	enum class AUDIO_SE_TITLE
@@ -45,5 +76,9 @@ private:	//	オーディオ
 	static const int BGM_MAX_	= 1;
 	std::unique_ptr<Audio> bgm_[BGM_MAX_];
 	std::unique_ptr<Audio> se_[SE_MAX_];
+
+	bool now_loading;
+	bool loading_complete;
+	void LoadEasing();
 };
 

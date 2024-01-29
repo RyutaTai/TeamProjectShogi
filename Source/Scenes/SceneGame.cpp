@@ -82,9 +82,14 @@ void SceneGame::Initialize()
 	//	ゲームインターバルタイマー初期化
 	gameIntervalTimer_ = 2.0f;
 
+<<<<<<< HEAD
 	//	ゲームステート初期化
 	Judge::Instance().SetGameState(Judge::GAME_STATE::TUTORIAL);	//	チュートリアル開始 
 	tutorialCount = 1;
+=======
+	
+}
+>>>>>>> TeamProjectShogi/Tomy
 
 	//TODO:処理分けたい
 	//if (gameState_==nullptr)	//	ローディングシーンからゲームシーンに来た場合

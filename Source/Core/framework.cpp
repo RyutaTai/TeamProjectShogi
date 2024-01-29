@@ -42,7 +42,7 @@ bool Framework::Initialize()
 	}
 
 	//	ƒV[ƒ“‰Šú‰»
-	SceneManager::Instance().ChangeScene(new SceneTitle);
+	SceneManager::Instance().ChangeScene(new SceneTitle());
 
 	return true;
 }
